@@ -20,6 +20,7 @@ kotlin {
 dependencies {
     compileOnly(libs.android.gradle.plugin)
     compileOnly(libs.android.tools.common)
+    compileOnly(libs.kotlin.gradle.plugin)
 }
 
 gradlePlugin {
@@ -27,6 +28,10 @@ gradlePlugin {
         register("androidApplicationCompose") {
             id = libs.plugins.hnote.android.application.compose.get().pluginId
             implementationClass = "AndroidApplicationComposeConventionPlugin"
+        }
+        register("androidApplication") {
+            id = libs.plugins.hnote.android.application.asProvider().get().pluginId
+            implementationClass = "AndroidApplicationConventionPlugin"
         }
     }
 }
