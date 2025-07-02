@@ -46,7 +46,7 @@ androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
 androidx-tracing-ktx = { group = "androidx.tracing", name = "tracing-ktx", version.ref = "androidx-tracing" }
-com-google-dagger-hilt-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "com-google-dagger" }
+com-google-dagger-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "com-google-dagger" }
 com-google-dagger-hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "com-google-dagger" }
 com-google-dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "com-google-dagger" }
 com-google-dagger-hilt-core = { group = "com.google.dagger", name = "hilt-core", version.ref = "com-google-dagger" }
@@ -74,9 +74,11 @@ org-jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.seriali
 # Plugins defined by this project
 hnote-android-application = { id = "hnote.android.application" }
 hnote-android-application-compose = { id = "hnote.android.application.compose" }
+hnote-android-application-flavors = { id = "hnote.android.application.flavors" }
+hnote-android-feature = { id = "hnote.android.feature" }
 hnote-android-library = { id = "hnote.android.library" }
 hnote-android-library-compose = { id = "hnote.android.library.compose" }
-hnote-android-feature = { id = "hnote.android.feature" }
 hnote-android-room = { id = "hnote.android.room" }
 hnote-android-test = { id = "hnote.android.test" }
 hnote-hilt = { id = "hnote.hilt" }
+hnote-jvm-library = { id = "hnote.jvm.library" }

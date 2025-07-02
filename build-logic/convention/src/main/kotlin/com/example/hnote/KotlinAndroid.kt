@@ -54,8 +54,9 @@ private inline fun <reified T : KotlinBaseExtension> Project.configureKotlin() =
     }.apply {
         jvmTarget.set(JvmTarget.JVM_11)
         allWarningsAsErrors.set(warningsAsErrors)
-        freeCompilerArgs.add(
+        freeCompilerArgs.addAll(
             "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+            "-Xconsistent-data-class-copy-visibility"
         )
     }
 }
