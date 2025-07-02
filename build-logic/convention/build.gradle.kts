@@ -34,7 +34,7 @@ gradlePlugin {
             implementationClass = "AndroidApplicationComposeConventionPlugin"
         }
         register("androidLibrary") {
-            id = libs.plugins.hnote.android.library.get().pluginId
+            id = libs.plugins.hnote.android.library.asProvider().get().pluginId
             implementationClass = "AndroidLibraryConventionPlugin"
         }
         register("androidLibraryCompose") {

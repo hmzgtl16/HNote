@@ -13,7 +13,6 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
         with(target) {
             apply(plugin = "com.android.library")
             apply(plugin = "org.jetbrains.kotlin.android")
-            apply(plugin = "nowinandroid.android.lint")
 
             extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
@@ -25,8 +24,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                         .drop(1)
                         .distinct()
                         .joinToString(separator = "_")
-                        .lowercase()
-                        .plus("_")
+                        .lowercase() + "_"
             }
             dependencies {
                 add("androidTestImplementation", libs.findLibrary("kotlin.test").get())
