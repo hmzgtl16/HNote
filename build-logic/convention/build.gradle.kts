@@ -18,5 +18,15 @@ kotlin {
 }
 
 dependencies {
+    compileOnly(libs.android.gradle.plugin)
+    compileOnly(libs.android.tools.common)
+}
 
+gradlePlugin {
+    plugins {
+        register("androidApplicationCompose") {
+            id = libs.plugins.hnote.android.application.compose.get().pluginId
+            implementationClass = "AndroidApplicationComposeConventionPlugin"
+        }
+    }
 }
