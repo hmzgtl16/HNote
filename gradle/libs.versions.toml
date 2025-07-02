@@ -60,9 +60,16 @@ com-google-devtools-ksp-gradle-plugin = { group = "com.google.devtools.ksp", nam
 org-jetbrains-kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 
 [plugins]
-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin" }
-kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "org-jetbrains-kotlin" }
+androidx-room = { id = "androidx.room", version.ref = "androidx-room" }
+com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
+com-android-library = { id = "com.android.library", version.ref = "android-gradle-plugin" }
+com-android-test = { id = "com.android.test", version.ref = "android-gradle-plugin" }
+com-google-dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "com-google-dagger" }
+com-google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "com-google-devtools-ksp" }
+org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin" }
+org-jetbrains-kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "org-jetbrains-kotlin" }
+org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "org-jetbrains-kotlin" }
+org-jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "org-jetbrains-kotlin" }
 
 # Plugins defined by this project
 hnote-android-application = { id = "hnote.android.application" }
