@@ -51,5 +51,13 @@ gradlePlugin {
             id = libs.plugins.hnote.hilt.get().pluginId
             implementationClass = "HiltConventionPlugin"
         }
+        register("androidRoom") {
+            id = libs.plugins.hnote.android.room.get().pluginId
+            implementationClass = "AndroidRoomConventionPlugin"
+        }
+        register("androidTest") {
+            id = libs.plugins.hnote.android.test.get().pluginId
+            implementationClass = "AndroidTestConventionPlugin"
+        }
     }
 }

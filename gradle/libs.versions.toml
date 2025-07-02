@@ -70,4 +70,6 @@ hnote-android-application-compose = { id = "hnote.android.application.compose" }
 hnote-android-library = { id = "hnote.android.library" }
 hnote-android-library-compose = { id = "hnote.android.library.compose" }
 hnote-android-feature = { id = "hnote.android.feature" }
+hnote-android-room = { id = "hnote.android.room" }
+hnote-android-test = { id = "hnote.android.test" }
 hnote-hilt = { id = "hnote.hilt" }
