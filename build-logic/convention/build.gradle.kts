@@ -25,21 +25,29 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        register("androidApplicationCompose") {
-            id = libs.plugins.hnote.android.application.compose.get().pluginId
-            implementationClass = "AndroidApplicationComposeConventionPlugin"
-        }
         register("androidApplication") {
             id = libs.plugins.hnote.android.application.asProvider().get().pluginId
             implementationClass = "AndroidApplicationConventionPlugin"
+        }
+        register("androidApplicationCompose") {
+            id = libs.plugins.hnote.android.application.compose.get().pluginId
+            implementationClass = "AndroidApplicationComposeConventionPlugin"
         }
         register("androidLibrary") {
             id = libs.plugins.hnote.android.library.get().pluginId
             implementationClass = "AndroidLibraryConventionPlugin"
         }
+        register("androidLibraryCompose") {
+            id = libs.plugins.hnote.android.library.compose.get().pluginId
+            implementationClass = "AndroidLibraryComposeConventionPlugin"
+        }
         register("androidFeature") {
             id = libs.plugins.hnote.android.feature.get().pluginId
             implementationClass = "AndroidFeatureConventionPlugin"
+        }
+        register("hilt") {
+            id = libs.plugins.hnote.hilt.get().pluginId
+            implementationClass = "HiltConventionPlugin"
         }
     }
 }

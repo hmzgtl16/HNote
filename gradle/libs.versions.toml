@@ -40,4 +40,6 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "or
 hnote-android-application = { id = "hnote.android.application" }
 hnote-android-application-compose = { id = "hnote.android.application.compose" }
 hnote-android-library = { id = "hnote.android.library" }
+hnote-android-library-compose = { id = "hnote.android.library.compose" }
 hnote-android-feature = { id = "hnote.android.feature" }
+hnote-hilt = { id = "hnote.hilt" }
