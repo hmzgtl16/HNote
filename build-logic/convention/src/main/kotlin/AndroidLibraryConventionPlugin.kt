@@ -27,8 +27,8 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                         .lowercase() + "_"
             }
             dependencies {
-                add("androidTestImplementation", libs.findLibrary("kotlin.test").get())
-                add("testImplementation", libs.findLibrary("kotlin.test").get())
+                add("androidTestImplementation", libs.findLibrary("org.jetbrains.kotlin.test").get())
+                add("testImplementation", libs.findLibrary("org.jetbrains.kotlin.test").get())
                 add("implementation", libs.findLibrary("androidx.tracing.ktx").get())
             }
         }

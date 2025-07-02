@@ -1,0 +1,47 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+plugins {
+    alias(libs.plugins.hnote.android.library)
+    alias(libs.plugins.hnote.hilt)
+    alias(libs.plugins.com.google.protobuf)
+}
+
+android {
+    namespace = "com.example.hnote.core.datastore"
+
+    defaultConfig {
+        consumerProguardFiles("consumer-rules.pro")
+    }
+
+    testOptions {
+        unitTests {
+            isReturnDefaultValues = true
+        }
+    }
+}
+
+protobuf {
+
+    protoc {
+        artifact = libs.com.google.protobuf.protoc.get().toString()
+    }
+
+    generateProtoTasks {
+        all().forEach { task ->
+            task.builtins {
+                register("java") {
+                    option("lite")
+                }
+                register("kotlin") {
+                    option("lite")
+                }
+            }
+        }
+    }
+}
+
+dependencies {
+    api(libs.androidx.dataStore)
+
+
+}

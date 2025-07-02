@@ -3,6 +3,7 @@ import com.example.hnote.BuildType
 plugins {
     alias(libs.plugins.hnote.android.application)
     alias(libs.plugins.hnote.android.application.compose)
+    alias(libs.plugins.hnote.android.application.flavors)
     alias(libs.plugins.hnote.hilt)
     alias(libs.plugins.org.jetbrains.kotlin.serialization)
 }
