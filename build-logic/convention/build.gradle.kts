@@ -37,5 +37,9 @@ gradlePlugin {
             id = libs.plugins.hnote.android.library.get().pluginId
             implementationClass = "AndroidLibraryConventionPlugin"
         }
+        register("androidFeature") {
+            id = libs.plugins.hnote.android.feature.get().pluginId
+            implementationClass = "AndroidFeatureConventionPlugin"
+        }
     }
 }
