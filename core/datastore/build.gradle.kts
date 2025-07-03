@@ -42,6 +42,7 @@ dependencies {
     api(libs.androidx.dataStore)
 
     implementation(projects.core.common)
+    implementation(projects.core.model)
 
     implementation(libs.com.google.protobuf.kotlin.lite)
 }
