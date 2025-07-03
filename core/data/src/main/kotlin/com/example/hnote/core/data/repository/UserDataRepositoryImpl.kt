@@ -1,10 +1,14 @@
 package com.example.hnote.core.data.repository
 
+import com.example.hnote.core.datastore.PreferencesDataSource
 import com.example.hnote.core.model.Theme
 import com.example.hnote.core.model.UserData
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class UserDataRepositoryImpl : UserDataRepository {
+class UserDataRepositoryImpl @Inject constructor(
+    private val userPreferenceSource: PreferencesDataSource
+) : UserDataRepository {
 
     override val userData: Flow<UserData>
         get() = TODO("Not yet implemented")
@@ -16,6 +20,6 @@ class UserDataRepositoryImpl : UserDataRepository {
     override suspend fun setDynamicColorPreference(useDynamicColor: Boolean) {
         TODO("Not yet implemented")
     }
-    
+
 
 }
