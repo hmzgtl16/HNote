@@ -16,7 +16,7 @@ data class NoteEntity(
     val type: NoteType,
     val reminder: Instant? = null,
     val reminderMode: ReminderRepeatMode? = null,
-    val isCompleted: Boolean? = null,
+    val completed: Boolean? = null,
     val createdAt: Instant,
     val updatedAt: Instant
 )
