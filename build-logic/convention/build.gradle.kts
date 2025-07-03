@@ -18,10 +18,11 @@ kotlin {
 }
 
 dependencies {
+    compileOnly(libs.androidx.room.gradle.plugin)
     compileOnly(libs.com.android.tools.build.gradle.plugin)
     compileOnly(libs.com.android.tools.common)
+    compileOnly(libs.com.google.devtools.ksp.gradle.plugin)
     compileOnly(libs.org.jetbrains.kotlin.gradle.plugin)
-    compileOnly(libs.androidx.room.gradle.plugin)
 }
 
 gradlePlugin {

@@ -10,12 +10,13 @@ import androidx.room.Update
 import com.example.hnote.core.database.model.ItemEntity
 import com.example.hnote.core.database.model.NoteEntity
 import com.example.hnote.core.database.model.NoteWithItems
+import com.example.hnote.core.database.util.NoteType
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NoteDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertNote(note: NoteEntity): Long
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertNote(note: NoteEntity)
 
     @Update
     suspend fun updateNote(note: NoteEntity)
@@ -30,17 +31,17 @@ interface NoteDao {
     suspend fun getNoteById(noteId: Long): NoteEntity?
 
     @Transaction
-    @Query("SELECT * FROM notes WHERE id = :noteId AND type = 'LIST'")
+    @Query("SELECT * FROM notes WHERE id = :noteId")
     suspend fun getNoteWithItems(noteId: Long): NoteWithItems?
 
     @Transaction
-    @Query("SELECT * FROM notes WHERE type = 'LIST'")
-    fun getAllChecklistNotes(): Flow<List<NoteWithItems>>
+    @Query("SELECT * FROM notes WHERE type = :type ORDER BY updatedAt DESC")
+    fun getAllChecklistNotes(type: NoteType = NoteType.CHECK_LIST): Flow<List<NoteWithItems>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertItem(item: ItemEntity): Long
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertItems(items: List<ItemEntity>)
 
     @Update

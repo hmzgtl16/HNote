@@ -1,10 +1,8 @@
 package com.example.hnote.core.database.util
 
 import androidx.room.TypeConverter
-import kotlin.time.ExperimentalTime
-import kotlin.time.Instant
+import kotlinx.datetime.Instant
 
-@OptIn(ExperimentalTime::class)
 internal class InstantConverter {
     @TypeConverter
     fun longToInstant(value: Long?): Instant? =

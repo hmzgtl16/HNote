@@ -21,11 +21,9 @@ import com.example.hnote.core.database.util.ReminderRepeatModeConverter
     exportSchema = true
 )
 @TypeConverters(
-    value = [
         InstantConverter::class,
         NoteTypeConverter::class,
         ReminderRepeatModeConverter::class
-    ]
 )
 internal abstract class ApplicationDatabase : RoomDatabase() {
     abstract fun noteDao(): NoteDao

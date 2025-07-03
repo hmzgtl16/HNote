@@ -1,9 +1,9 @@
 package com.example.hnote.core.database.util
 
 enum class NoteType {
-    Simple,
-    Reminder,
-    Checklist
+    SIMPLE,
+    REMINDER,
+    CHECK_LIST
 }
 
 fun Int.asNoteType(): NoteType =

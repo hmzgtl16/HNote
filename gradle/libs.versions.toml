@@ -19,7 +19,7 @@ com-google-protobuf-plugin = "0.9.5"
 com-google-protobuf = "4.31.1"
 org-jetbrains-kotlin = "2.2.0"
 org-jetbrains-kotlinx-coroutines = "1.10.2"
-org-jetbrains-kotlinx-datetime = "0.7.0"
+org-jetbrains-kotlinx-datetime = "0.6.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
