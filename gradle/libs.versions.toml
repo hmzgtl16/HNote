@@ -10,6 +10,8 @@ activityCompose = "1.10.1"
 androidx-compose-bom = "2025.06.01"
 androidx-dataStore = "1.1.7"
 androidx-room = "2.7.2"
+androidx-test-core = "1.6.1"
+androidx-test-runner = "1.6.2"
 androidx-tracing = "1.3.0"
 com-google-dagger = "2.56.2"
 com-google-devtools-ksp = "2.2.0-2.0.2"
@@ -50,6 +52,11 @@ androidx-compose-ui-testManifest = { group = "androidx.compose.ui", name = "ui-t
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidx-room" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "androidx-room" }
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "androidx-room" }
+androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidx-test-core" }
+androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidx-test-runner" }
 androidx-dataStore = { group = "androidx.datastore", name = "datastore", version.ref = "androidx-dataStore" }
 androidx-tracing-ktx = { group = "androidx.tracing", name = "tracing-ktx", version.ref = "androidx-tracing" }
 com-google-dagger-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "com-google-dagger" }
