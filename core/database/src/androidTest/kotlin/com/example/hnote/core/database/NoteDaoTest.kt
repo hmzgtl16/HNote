@@ -214,7 +214,7 @@ class NoteDaoTest {
 
         assertNotNull(actual = updatedItem)
         assertEquals(expected = "Updated Potato", actual = updatedItem.content)
-        assertEquals(expected = true, actual = updatedItem.isCompleted)
+        assertEquals(expected = true, actual = updatedItem.checked)
     }
 
     @Test
@@ -386,7 +386,7 @@ private fun testNoteEntity(
     type = type,
     reminder = reminder,
     reminderMode = reminderMode,
-    isCompleted = isCompleted,
+    completed = isCompleted,
     createdAt = createdAt,
     updatedAt = updatedAt
 )
@@ -399,6 +399,6 @@ private fun testItemEntity(
 ): ItemEntity = ItemEntity(
     id = id,
     content = content,
-    isCompleted = isCompleted,
+    checked = isCompleted,
     noteId = noteId
 )
