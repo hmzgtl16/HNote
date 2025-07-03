@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     alias(libs.plugins.hnote.android.library)
     alias(libs.plugins.hnote.hilt)
