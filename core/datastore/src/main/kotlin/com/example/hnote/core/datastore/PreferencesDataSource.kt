@@ -1,6 +1,7 @@
 package com.example.hnote.core.datastore
 
 import androidx.datastore.core.DataStore
+import com.example.hnote.core.model.Theme
 import com.example.hnote.core.model.UserData
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.map
@@ -15,4 +16,12 @@ class PreferencesDataSource @Inject constructor(
                 it.useDynamicUiTheme
             )
         }
+
+    suspend fun setTheme(theme: Theme) {
+        userPreferences.updateData {
+            it.copy {
+                uiThemeConfig = theme.asProto()
+            }
+        }
+    }
 }
