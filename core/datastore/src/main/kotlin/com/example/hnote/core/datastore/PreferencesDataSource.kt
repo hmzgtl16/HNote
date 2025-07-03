@@ -25,8 +25,6 @@ class PreferencesDataSource @Inject constructor(
         }
     }
 
-
-
     suspend fun setDynamicColor(useDynamicColor: Boolean) {
         userPreferences.updateData {
             it.copy { useDynamicUiTheme = useDynamicColor }

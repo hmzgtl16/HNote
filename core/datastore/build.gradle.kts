@@ -45,4 +45,6 @@ dependencies {
     implementation(projects.core.model)
 
     implementation(libs.com.google.protobuf.kotlin.lite)
+
+    testImplementation(libs.org.jetbrains.kotlinx.coroutines.test)
 }
