@@ -13,7 +13,7 @@ class PreferencesDataSource @Inject constructor(
         .map {
             UserData(
                 theme = it.uiThemeConfig.asTheme(),
-                it.useDynamicUiTheme
+                useDynamicColor = it.useDynamicUiTheme
             )
         }
 
@@ -22,6 +22,14 @@ class PreferencesDataSource @Inject constructor(
             it.copy {
                 uiThemeConfig = theme.asProto()
             }
+        }
+    }
+
+
+
+    suspend fun setDynamicColor(useDynamicColor: Boolean) {
+        userPreferences.updateData {
+            it.copy { useDynamicUiTheme = useDynamicColor }
         }
     }
 }
