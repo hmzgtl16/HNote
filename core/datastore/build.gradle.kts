@@ -41,5 +41,7 @@ protobuf {
 dependencies {
     api(libs.androidx.dataStore)
 
+    implementation(projects.core.common)
+
     implementation(libs.com.google.protobuf.kotlin.lite)
 }
