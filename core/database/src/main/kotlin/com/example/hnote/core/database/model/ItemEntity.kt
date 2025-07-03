@@ -9,6 +9,6 @@ data class ItemEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
     val content: String,
-    val isCompleted: Boolean = false,
+    val checked: Boolean = false,
     @ColumnInfo(index = true) val noteId: Long
 )
