@@ -10,16 +10,13 @@ class UserDataRepositoryImpl @Inject constructor(
     private val userPreferenceSource: PreferencesDataSource
 ) : UserDataRepository {
 
-    override val userData: Flow<UserData>
-        get() = TODO("Not yet implemented")
+    override val userData: Flow<UserData> = userPreferenceSource.userData
 
     override suspend fun setTheme(theme: Theme) {
-        TODO("Not yet implemented")
+        userPreferenceSource.setTheme(theme = theme)
     }
 
     override suspend fun setDynamicColorPreference(useDynamicColor: Boolean) {
-        TODO("Not yet implemented")
+        userPreferenceSource.setDynamicColor(useDynamicColor = useDynamicColor)
     }
-
-
 }
