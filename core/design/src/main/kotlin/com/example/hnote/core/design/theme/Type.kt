@@ -22,7 +22,7 @@ val fontFamily = FontFamily(
     Font(googleFont = googleFont, fontProvider = provider)
 )
 
-internal val AppTypography = Typography(
+internal val typography = Typography(
     displayLarge = TextStyle(
         fontFamily = fontFamily,
         fontWeight = FontWeight.Normal,
