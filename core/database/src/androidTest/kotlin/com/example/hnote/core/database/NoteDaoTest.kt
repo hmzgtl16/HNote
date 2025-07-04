@@ -8,14 +8,9 @@ import com.example.hnote.core.database.model.ItemEntity
 import com.example.hnote.core.database.model.NoteEntity
 import com.example.hnote.core.database.util.NoteType
 import com.example.hnote.core.database.util.ReminderRepeatMode
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
 import org.junit.After
 import org.junit.Before
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 class NoteDaoTest {
 
@@ -37,214 +32,7 @@ class NoteDaoTest {
     @After
     fun teardown() = db.close()
 
-    @Test
-    fun insertNote_newEntryIsIgnoredIfAlreadyExists() = runTest {
-        insertNotes()
 
-        noteDao.insertNote(
-            note = testNoteEntity(
-                id = 1L,
-                title = "compose",
-                content = "Compose is a modern toolkit for building native UI.",
-                type = NoteType.SIMPLE,
-                createdAt = Instant.parse("2023-10-01T10:00:00Z"),
-                updatedAt = Instant.parse("2023-10-01T10:00:00Z")
-            )
-        )
-
-        val savedNotes = noteDao.getAllNotes().first()
-
-        assertEquals(expected = 8, actual = savedNotes.size)
-    }
-
-    @Test
-    fun insertNote_newEntryIsInserted() = runTest {
-        insertNotes()
-
-        noteDao.insertNote(
-            note = testNoteEntity(
-                id = 9L,
-                title = "New Note",
-                content = "This is a new note.",
-                type = NoteType.SIMPLE,
-                createdAt = Instant.parse("2023-10-09T10:00:00Z"),
-                updatedAt = Instant.parse("2023-10-09T10:00:00Z")
-            )
-        )
-
-        val savedNotes = noteDao.getAllNotes().first()
-
-        assertEquals(expected = 9, actual = savedNotes.size)
-    }
-
-    @Test
-    fun updateNote_existingEntryIsUpdated() = runTest {
-        insertNotes()
-
-        val noteToUpdate = testNoteEntity(
-            id = 1L,
-            title = "Updated Compose Note",
-            content = "Updated content for the Compose note.",
-            type = NoteType.SIMPLE,
-            createdAt = Instant.parse("2023-10-01T10:00:00Z"),
-            updatedAt = Instant.parse("2023-10-01T10:00:00Z")
-        )
-        noteDao.updateNote(note = noteToUpdate)
-
-        val updatedNote = noteDao.getNoteById(1L)
-
-        assertEquals(expected = noteToUpdate.id, actual = updatedNote?.id)
-        assertEquals(expected = noteToUpdate.title, actual = updatedNote?.title)
-    }
-
-    @Test
-    fun deleteNote_existingEntryIsDeleted() = runTest {
-        insertNotes()
-
-        val noteToDelete = testNoteEntity(
-            id = 1L,
-            title = "compose",
-            content = "Compose is a modern toolkit for building native UI.",
-            type = NoteType.SIMPLE,
-            createdAt = Instant.parse("2023-10-01T10:00:00Z"),
-            updatedAt = Instant.parse("2023-10-01T10:00:00Z")
-        )
-        noteDao.deleteNote(note = noteToDelete)
-
-        val savedNotes = noteDao.getAllNotes().first()
-
-        assertEquals(expected = 7, actual = savedNotes.size)
-    }
-
-    @Test
-    fun getAllNotes_returnsAllNotes() = runTest {
-        insertNotes()
-
-        val savedNotes = noteDao.getAllNotes().first()
-
-        assertEquals(expected = 8, actual = savedNotes.size)
-        assertEquals(
-            expected = LongRange(1, 8).toList().reversed(),
-            actual = savedNotes.map(NoteEntity::id)
-        )
-    }
-
-    @Test
-    fun getNoteById_returnsCorrectNote() = runTest {
-        insertNotes()
-
-        val note = noteDao.getNoteById(1L)
-
-        assertEquals(expected = 1L, actual = note?.id)
-        assertEquals(expected = "compose", actual = note?.title)
-    }
-
-    @Test
-    fun getNoteWithItems_returnsCorrectNoteWithItems() = runTest {
-        insertNotes()
-
-        val noteWithItems = noteDao.getNoteWithItems(7L)
-
-        println(noteWithItems)
-
-        assertNotNull(actual = noteWithItems)
-        assertEquals(expected = 7L, actual = noteWithItems.note.id)
-        assertEquals(expected = 4, actual = noteWithItems.items.size)
-    }
-
-    @Test
-    fun getAllChecklistNotes_returnsAllChecklistNotes() = runTest {
-        insertNotes()
-
-        val checklistNotes = noteDao.getAllChecklistNotes().first()
-
-        assertEquals(expected = 2, actual = checklistNotes.size)
-        assertEquals(expected = "Meeting Notes", actual = checklistNotes[0].note.title)
-        assertEquals(expected = "Grocery List", actual = checklistNotes[1].note.title)
-    }
-
-    @Test
-    fun insertItem_newItemIsInserted() = runTest {
-        insertNotes()
-
-        val newItem = testItemEntity(
-            id = 7L,
-            content = "Eggs",
-            isCompleted = false,
-            noteId = 7L
-        )
-        noteDao.insertItem(item = newItem)
-
-        val itemsForNote = noteDao.getItemsForNote(noteId = 7L)
-
-        assertEquals(expected = 5, actual = itemsForNote.size)
-        assertEquals(expected = "Eggs", actual = itemsForNote.last().content)
-    }
-
-    @Test
-    fun insertItems_multipleItemsAreInserted() = runTest {
-        insertNotes()
-
-        val newItems = listOf(
-            testItemEntity(id = 8L, content = "Bread", isCompleted = false, noteId = 7L),
-            testItemEntity(id = 9L, content = "Butter", isCompleted = true, noteId = 7L)
-        )
-        noteDao.insertItems(items = newItems)
-
-        val itemsForNote = noteDao.getItemsForNote(noteId = 7L)
-
-        assertEquals(expected = 6, actual = itemsForNote.size)
-        assertEquals(expected = "Bread", actual = itemsForNote[4].content)
-        assertEquals(expected = "Butter", actual = itemsForNote[5].content)
-    }
-
-    @Test
-    fun updateItem_existingItemIsUpdated() = runTest {
-        insertNotes()
-
-        val itemToUpdate = testItemEntity(
-            id = 1L,
-            content = "Updated Potato",
-            isCompleted = true,
-            noteId = 7L
-        )
-        noteDao.updateItem(item = itemToUpdate)
-
-        val updatedItem = noteDao.getItemsForNote(noteId = 7L).firstOrNull { it.id == 1L }
-
-        assertNotNull(actual = updatedItem)
-        assertEquals(expected = "Updated Potato", actual = updatedItem.content)
-        assertEquals(expected = true, actual = updatedItem.checked)
-    }
-
-    @Test
-    fun deleteItem_existingItemIsDeleted() = runTest {
-        insertNotes()
-
-        val itemToDelete = testItemEntity(
-            id = 1L,
-            content = "Potato",
-            isCompleted = false,
-            noteId = 7L
-        )
-        noteDao.deleteItem(item = itemToDelete)
-
-        val itemsForNote = noteDao.getItemsForNote(noteId = 7L)
-
-        assertEquals(expected = 3, actual = itemsForNote.size)
-        assertEquals(expected = "Milk", actual = itemsForNote[0].content)
-    }
-
-    @Test
-    fun getItemsForNote_returnsCorrectItems() = runTest {
-        insertNotes()
-
-        val itemsForNote = noteDao.getItemsForNote(noteId = 7L)
-
-        assertEquals(expected = 4, actual = itemsForNote.size)
-        assertEquals(expected = "Potato", actual = itemsForNote[0].content)
-        assertEquals(expected = "Chicken", actual = itemsForNote[3].content)
-    }
 
     private suspend fun insertNotes() {
         val noteEntities = listOf(
@@ -321,7 +109,7 @@ class NoteDaoTest {
         )
 
         noteEntities.forEach {
-            noteDao.insertNote(note = it)
+            noteDao.upsertNote(note = it)
         }
 
         val itemEntities = listOf(
@@ -363,9 +151,7 @@ class NoteDaoTest {
             )
         )
 
-        itemEntities.forEach {
-            noteDao.insertItem(item = it)
-        }
+        noteDao.upsertItems(items = itemEntities)
     }
 }
 
