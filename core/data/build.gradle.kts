@@ -18,4 +18,6 @@ dependencies {
     api(projects.core.common)
     api(projects.core.database)
     api(projects.core.datastore)
+
+    testImplementation(libs.org.jetbrains.kotlinx.coroutines.test)
 }
