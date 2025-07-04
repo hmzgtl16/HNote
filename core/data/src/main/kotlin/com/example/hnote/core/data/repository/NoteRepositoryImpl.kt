@@ -1,0 +1,64 @@
+package com.example.hnote.core.data.repository
+
+import com.example.hnote.core.data.util.toEntity
+import com.example.hnote.core.data.util.toItemEntities
+import com.example.hnote.core.data.util.toModel
+import com.example.hnote.core.database.dao.NoteDao
+import com.example.hnote.core.database.model.NoteWithItems
+import com.example.hnote.core.model.Item
+import com.example.hnote.core.model.Note
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import javax.inject.Inject
+
+class NoteRepositoryImpl @Inject constructor(
+    private val noteDao: NoteDao
+) : NoteRepository {
+
+    override val notes: Flow<List<Note>> =
+        noteDao.getAllNotes()
+            .map { it.map(NoteWithItems::toModel) }
+
+    override suspend fun getNoteById(id: Long): Flow<Note?> =
+        noteDao.getNoteById(id = id)
+            .map { it?.toModel() }
+
+    override suspend fun addNote(note: Note) {
+        noteDao.upsertNoteWithItems(
+            note = note.toEntity(),
+            items = note.toItemEntities()
+        )
+    }
+
+    override suspend fun updateNote(note: Note) {
+        noteDao.upsertNoteWithItems(
+            note = note.toEntity(),
+            items = note.toItemEntities()
+        )
+    }
+
+    override suspend fun updateNotes(notes: List<Note>) {
+        notes.forEach {
+            noteDao.upsertNoteWithItems(
+                note = it.toEntity(),
+                items = it.toItemEntities()
+            )
+        }
+    }
+
+    override suspend fun deleteNote(note: Note) {
+        noteDao.deleteNote(note = note.toEntity())
+    }
+
+    override suspend fun deleteNotes(notes: List<Note>) {
+        noteDao.deleteNotes(notes = notes.map(Note::toEntity))
+    }
+
+    override suspend fun deleteItem(item: Item) {
+        noteDao.deleteItem(item = item.toEntity())
+    }
+
+    override suspend fun deleteItems(items: List<Item>) {
+        noteDao.deleteItems(items = items.map(Item::toEntity))
+    }
+}
