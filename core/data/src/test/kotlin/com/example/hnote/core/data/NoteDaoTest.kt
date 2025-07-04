@@ -19,14 +19,16 @@ class NoteDaoTest : NoteDao {
 
     override suspend fun upsertNote(note: NoteEntity): Long {
         noteEntitiesStateFlow.update { it ->
-            (it + note).distinctBy { entity -> entity.id }
+            (it.filter { entity -> entity.id != note.id } + note)
+                .distinctBy { entity -> entity.id }
         }
         return note.id.takeIf { it != 0L } ?: noteEntitiesStateFlow.value.size.toLong()
     }
 
     override suspend fun upsertItems(items: List<ItemEntity>) =
         itemEntitiesStateFlow.update { it ->
-            (it + items).distinctBy { entity -> entity.id }
+            (it.filter { entity -> entity.id !in items.map(ItemEntity::id) } + items)
+                .distinctBy { entity -> entity.id }
         }
 
     override suspend fun upsertNoteWithItems(note: NoteEntity, items: List<ItemEntity>) {

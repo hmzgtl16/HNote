@@ -1,0 +1,272 @@
+package com.example.hnote.core.data
+
+import com.example.hnote.core.data.repository.NoteRepository
+import com.example.hnote.core.data.repository.NoteRepositoryImpl
+import com.example.hnote.core.database.dao.NoteDao
+import com.example.hnote.core.model.Item
+import com.example.hnote.core.model.Note
+import com.example.hnote.core.model.NoteType
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertContains
+import kotlin.test.assertTrue
+
+class NoteRepositoryTest {
+
+    private val testScope = TestScope(UnconfinedTestDispatcher())
+
+    private lateinit var repository: NoteRepository
+
+    private lateinit var noteDao: NoteDao
+
+    @BeforeTest
+    fun setup() {
+        noteDao = NoteDaoTest()
+        repository = NoteRepositoryImpl(noteDao = noteDao)
+    }
+
+    @Test
+    fun testAddNote() = testScope.runTest {
+        val note = Note(
+            id = 1,
+            title = "Test Note",
+            content = "This is a test note.",
+            type = NoteType.SIMPLE
+        )
+        repository.addNote(note = note)
+        val notes = repository.notes.first()
+
+        assertContains(iterable = notes, element = note)
+    }
+
+    @Test
+    fun testAddNoteWithItems() = testScope.runTest {
+        val note = Note(
+            id = 1,
+            title = "Test Note with Items",
+            content = "This is a test note with items.",
+            type = NoteType.CHECK_LIST,
+            items = listOf(
+                Item(id = 1L, content = "Item 1"),
+                Item(id = 2L, content = "Item 2"),
+                Item(id = 3L, content = "Item 3")
+            )
+        )
+        repository.addNote(note = note)
+
+        val notes = repository.notes.first()
+
+        assertContains(iterable = notes, element = note)
+        assertTrue(actual = notes.first().items.isNotEmpty())
+    }
+
+    @Test
+    fun testUpdateNote() = testScope.runTest {
+        val note = Note(
+            id = 1,
+            title = "Test Note",
+            content = "This is a test note.",
+            type = NoteType.SIMPLE
+        )
+        repository.addNote(note = note)
+
+        val updatedNote = note.copy(title = "Updated Test Note")
+        repository.updateNote(note = updatedNote)
+
+        val notes = repository.notes.first()
+
+        assertContains(iterable = notes, element = updatedNote)
+    }
+
+    @Test
+    fun testUpdateNoteWithItems() = testScope.runTest {
+        val note = Note(
+            id = 1,
+            title = "Test Note with Items",
+            content = "This is a test note with items.",
+            type = NoteType.CHECK_LIST,
+            items = listOf(
+                Item(id = 1L, content = "Item 1"),
+                Item(id = 2L, content = "Item 2"),
+                Item(id = 3L, content = "Item 3")
+            )
+        )
+        repository.addNote(note = note)
+
+        val updatedNote = note.copy(
+            title = "Updated Test Note with Items",
+            items = note.items.map { it.copy(content = "${it.content} (updated)") }
+        )
+        repository.updateNote(note = updatedNote)
+
+        val notes = repository.notes.first()
+
+        assertContains(iterable = notes, element = updatedNote)
+    }
+
+    @Test
+    fun testUpdateNotes() = testScope.runTest {
+        val note1 = Note(
+            id = 1,
+            title = "Test Note 1",
+            content = "This is a test note 1.",
+            type = NoteType.SIMPLE
+        )
+        val note2 = Note(
+            id = 2,
+            title = "Test Note 2",
+            content = "This is a test note 2.",
+            type = NoteType.SIMPLE
+        )
+        repository.addNote(note = note1)
+        repository.addNote(note = note2)
+
+        val updatedNote1 = note1.copy(title = "Updated Test Note 1")
+        val updatedNote2 = note2.copy(title = "Updated Test Note 2")
+        repository.updateNotes(notes = listOf(updatedNote1, updatedNote2))
+
+        val notes = repository.notes.first()
+
+        assertContains(iterable = notes, element = updatedNote1)
+        assertContains(iterable = notes, element = updatedNote2)
+    }
+
+    @Test
+    fun testUpdateNotesWithItems() = testScope.runTest {
+        val note1 = Note(
+            id = 1,
+            title = "Test Note 1 with Items",
+            content = "This is a test note 1 with items.",
+            type = NoteType.CHECK_LIST,
+            items = listOf(
+                Item(id = 1L, content = "Item 1"),
+                Item(id = 2L, content = "Item 2")
+            )
+        )
+        val note2 = Note(
+            id = 2,
+            title = "Test Note 2 with Items",
+            content = "This is a test note 2 with items.",
+            type = NoteType.CHECK_LIST,
+            items = listOf(
+                Item(id = 3L, content = "Item 3"),
+                Item(id = 4L, content = "Item 4")
+            )
+        )
+        repository.addNote(note = note1)
+        repository.addNote(note = note2)
+
+        val updatedNote1 = note1.copy(
+            title = "Updated Test Note 1 with Items",
+            items = note1.items.map { it.copy(content = "${it.content} (updated)") }
+        )
+        val updatedNote2 = note2.copy(
+            title = "Updated Test Note 2 with Items",
+            items = note2.items.map { it.copy(content = "${it.content} (updated)") }
+        )
+        repository.updateNotes(notes = listOf(updatedNote1, updatedNote2))
+
+        val notes = repository.notes.first()
+
+        assertContains(iterable = notes, element = updatedNote1)
+        assertContains(iterable = notes, element = updatedNote2)
+    }
+
+    @Test
+    fun testDeleteNote() = testScope.runTest {
+        val note = Note(
+            id = 1,
+            title = "Test Note",
+            content = "This is a test note.",
+            type = NoteType.SIMPLE
+        )
+        repository.addNote(note = note)
+        repository.deleteNote(note = note)
+
+        val notes = repository.notes.first()
+
+        assertTrue(actual = !notes.contains(element = note))
+    }
+
+    @Test
+    fun testDeleteNotes() = testScope.runTest {
+        val note1 = Note(
+            id = 1,
+            title = "Test Note 1",
+            content = "This is a test note 1.",
+            type = NoteType.SIMPLE
+        )
+        val note2 = Note(
+            id = 2,
+            title = "Test Note 2",
+            content = "This is a test note 2.",
+            type = NoteType.SIMPLE
+        )
+        val note3 = Note(
+            id = 3,
+            title = "Test Note 3",
+            content = "This is a test note 3.",
+            type = NoteType.SIMPLE
+        )
+        repository.addNote(note = note1)
+        repository.addNote(note = note2)
+        repository.addNote(note = note3)
+
+        repository.deleteNotes(notes = listOf(note1, note2))
+
+        val notes = repository.notes.first()
+
+        assertContains(iterable = notes, element = note3)
+        assertTrue(actual = !notes.containsAll(listOf(note1, note2)))
+    }
+
+    @Test
+    fun testDeleteItem() = testScope.runTest {
+        val note = Note(
+            id = 1,
+            title = "Test Note with Items",
+            content = "This is a test note with items.",
+            type = NoteType.CHECK_LIST,
+            items = listOf(
+                Item(id = 1L, content = "Item 1"),
+                Item(id = 2L, content = "Item 2")
+            )
+        )
+        repository.addNote(note = note)
+
+        val itemToDelete = note.items.first()
+        repository.deleteItem(item = itemToDelete)
+
+        val notes = repository.notes.first()
+
+        assertTrue(actual = notes.first().items.none { it.id == itemToDelete.id })
+    }
+
+    @Test
+    fun testDeleteItems() = testScope.runTest {
+        val note = Note(
+            id = 1,
+            title = "Test Note with Items",
+            content = "This is a test note with items.",
+            type = NoteType.CHECK_LIST,
+            items = listOf(
+                Item(id = 1L, content = "Item 1"),
+                Item(id = 2L, content = "Item 2"),
+                Item(id = 3L, content = "Item 3")
+            )
+        )
+        repository.addNote(note = note)
+
+        val itemsToDelete = note.items.take(2)
+        repository.deleteItems(items = itemsToDelete)
+
+        val notes = repository.notes.first()
+
+        assertTrue(actual = notes.first().items.none { it.id in itemsToDelete.map(Item::id) })
+    }
+}
+
