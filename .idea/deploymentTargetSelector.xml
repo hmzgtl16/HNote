@@ -5,19 +5,19 @@
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="deleteItem_existingItemIsDeleted()">
+      <SelectionState runConfigName="upsertItemsEmptyList()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="getItemsForNote_returnsCorrectItems()">
+      <SelectionState runConfigName="upsertNoteWithItemsNewNoteInsertionWithEmptyItemsList()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="getAllChecklistNotes_returnsAllChecklistNotes()">
+      <SelectionState runConfigName="upsertNoteWithItemsNewNoteInsertionWithItemsList()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="getNoteWithItems_returnsCorrectNoteWithItems()">
+      <SelectionState runConfigName="upsertNoteWithItemsExistingNoteUpdate()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="NoteDaoTest">
+      <SelectionState runConfigName="upsertNoteWithItemsExistingNoteUpdateWithItemsList()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

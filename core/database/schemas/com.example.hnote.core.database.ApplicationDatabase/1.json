@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "7483decfd76485bb4121850275b86137",
+    "identityHash": "b2c35e790b775e71fa31442896b4430d",
     "entities": [
       {
         "tableName": "notes",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `content` TEXT NOT NULL, `pinned` INTEGER NOT NULL, `backgroundColor` INTEGER, `type` INTEGER NOT NULL, `reminder` INTEGER, `reminderMode` INTEGER, `isCompleted` INTEGER, `createdAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `content` TEXT NOT NULL, `pinned` INTEGER NOT NULL, `backgroundColor` INTEGER, `type` INTEGER NOT NULL, `reminder` INTEGER, `reminderMode` INTEGER, `completed` INTEGER, `createdAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -54,8 +54,8 @@
             "affinity": "INTEGER"
           },
           {
-            "fieldPath": "isCompleted",
-            "columnName": "isCompleted",
+            "fieldPath": "completed",
+            "columnName": "completed",
             "affinity": "INTEGER"
           },
           {
@@ -80,7 +80,7 @@
       },
       {
         "tableName": "items",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `content` TEXT NOT NULL, `isCompleted` INTEGER NOT NULL, `noteId` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `content` TEXT NOT NULL, `checked` INTEGER NOT NULL, `noteId` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -95,8 +95,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "isCompleted",
-            "columnName": "isCompleted",
+            "fieldPath": "checked",
+            "columnName": "checked",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -152,7 +152,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7483decfd76485bb4121850275b86137')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b2c35e790b775e71fa31442896b4430d')"
     ]
   }
 }

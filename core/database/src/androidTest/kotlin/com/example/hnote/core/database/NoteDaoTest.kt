@@ -8,16 +8,22 @@ import com.example.hnote.core.database.model.ItemEntity
 import com.example.hnote.core.database.model.NoteEntity
 import com.example.hnote.core.database.util.NoteType
 import com.example.hnote.core.database.util.ReminderRepeatMode
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
-import org.junit.After
-import org.junit.Before
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
+import kotlin.test.assertNull
 
 class NoteDaoTest {
 
     private lateinit var db: ApplicationDatabase
     private lateinit var noteDao: NoteDao
 
-    @Before
+    @BeforeTest
     fun setup() {
         db = run {
             val context = ApplicationProvider.getApplicationContext<Context>()
@@ -29,10 +35,259 @@ class NoteDaoTest {
         noteDao = db.noteDao()
     }
 
-    @After
+    @AfterTest
     fun teardown() = db.close()
 
+    @Test
+    fun upsertNoteNewNoteInsertion() = runTest {
+        val note = testNoteEntity(
+            title = "Test Note",
+            content = "This is a test note.",
+            type = NoteType.SIMPLE,
+            createdAt = Instant.parse("2023-10-01T10:00:00Z"),
+            updatedAt = Instant.parse("2023-10-01T10:00:00Z")
+        )
 
+        val actual = noteDao.upsertNote(note)
+        assertNotEquals(0L, actual)
+    }
+
+    @Test
+    fun upsertNoteExistingNoteUpdate() = runTest {
+        val note = testNoteEntity(
+            title = "Test Note",
+            content = "This is a test note.",
+            type = NoteType.SIMPLE,
+            createdAt = Instant.parse("2023-10-01T10:00:00Z"),
+            updatedAt = Instant.parse("2023-10-01T10:00:00Z")
+        )
+
+        val initialId = noteDao.upsertNote(note)
+        val updatedNote = note.copy(
+            id = initialId,
+            title = "Updated Test Note",
+            content = "This is an updated test note.",
+            updatedAt = Instant.parse("2023-10-02T10:00:00Z")
+        )
+        val updatedId = noteDao.upsertNote(updatedNote)
+
+        assertEquals(expected = -1L, actual = updatedId)
+    }
+
+    @Test
+    fun upsertNoteWithItemsNewNoteInsertionWithEmptyItemsList() = runTest {
+        val note = testNoteEntity(
+            title = "Test Note",
+            content = "This is a test note.",
+            type = NoteType.SIMPLE,
+            createdAt = Instant.parse("2023-10-01T10:00:00Z"),
+            updatedAt = Instant.parse("2023-10-01T10:00:00Z")
+        )
+
+        val items = emptyList<ItemEntity>()
+
+        noteDao.upsertNoteWithItems(note = note, items = items)
+
+        val noteWithItems = noteDao.getAllNotes().first()
+
+        assertEquals(expected = 1, actual = noteWithItems.size)
+        assertEquals(expected = note.title, actual = noteWithItems.first().note.title)
+        assertEquals(expected = 0, actual = noteWithItems.first().items.size)
+    }
+
+    @Test
+    fun upsertNoteWithItemsNewNoteInsertionWithItemsList() = runTest {
+        val note = testNoteEntity(
+            title = "Test Note",
+            content = "This is a test note.",
+            type = NoteType.SIMPLE,
+            createdAt = Instant.parse("2023-10-01T10:00:00Z"),
+            updatedAt = Instant.parse("2023-10-01T10:00:00Z")
+        )
+
+        val items = listOf(
+            testItemEntity(content = "Item 1"),
+            testItemEntity(content = "Item 2")
+        )
+
+        noteDao.upsertNoteWithItems(note = note, items = items)
+
+        val noteWithItems = noteDao.getAllNotes().first()
+
+        assertEquals(expected = 1, actual = noteWithItems.size)
+        assertEquals(expected = note.title, actual = noteWithItems.first().note.title)
+        assertEquals(expected = 2, actual = noteWithItems.first().items.size)
+    }
+
+    @Test
+    fun upsertNoteWithItemsExistingNoteUpdateWithEmptyItemsList() = runTest {
+        val note = testNoteEntity(
+            title = "Test Note",
+            content = "This is a test note.",
+            type = NoteType.SIMPLE,
+            createdAt = Instant.parse("2023-10-01T10:00:00Z"),
+            updatedAt = Instant.parse("2023-10-01T10:00:00Z")
+        )
+
+        val initialId = noteDao.upsertNote(note)
+        val updatedNote = note.copy(
+            id = initialId,
+            title = "Updated Test Note",
+            content = "This is an updated test note.",
+            updatedAt = Instant.parse("2023-10-02T10:00:00Z")
+        )
+        val items = emptyList<ItemEntity>()
+
+        noteDao.upsertNoteWithItems(note = updatedNote, items = items)
+
+        val noteWithItems = noteDao.getAllNotes().first()
+
+        assertEquals(expected = 1, actual = noteWithItems.size)
+        assertEquals(expected = updatedNote.title, actual = noteWithItems.first().note.title)
+        assertEquals(expected = 0, actual = noteWithItems.first().items.size)
+    }
+
+    @Test
+    fun upsertNoteWithItemsExistingNoteUpdateWithItemsList() = runTest {
+        val note = testNoteEntity(
+            title = "Test Note",
+            content = "This is a test note.",
+            type = NoteType.SIMPLE,
+            createdAt = Instant.parse("2023-10-01T10:00:00Z"),
+            updatedAt = Instant.parse("2023-10-01T10:00:00Z")
+        )
+
+        val initialId = noteDao.upsertNote(note)
+        val updatedNote = note.copy(
+            id = initialId,
+            title = "Updated Test Note",
+            content = "This is an updated test note.",
+            updatedAt = Instant.parse("2023-10-02T10:00:00Z")
+        )
+        val items = listOf(
+            testItemEntity(content = "Updated Item 1"),
+            testItemEntity(content = "Updated Item 2")
+        )
+
+        noteDao.upsertNoteWithItems(note = updatedNote, items = items)
+
+        val noteWithItems = noteDao.getAllNotes().first()
+
+        assertEquals(expected = 1, actual = noteWithItems.size)
+        assertEquals(expected = updatedNote.title, actual = noteWithItems.first().note.title)
+        assertEquals(expected = 2, actual = noteWithItems.first().items.size)
+    }
+
+    @Test
+    fun deleteNote() = runTest {
+        val note = testNoteEntity(
+            title = "Test Note",
+            content = "This is a test note.",
+            type = NoteType.SIMPLE,
+            createdAt = Instant.parse("2023-10-01T10:00:00Z"),
+            updatedAt = Instant.parse("2023-10-01T10:00:00Z")
+        )
+
+        noteDao.upsertNoteWithItems(note = note, items = emptyList())
+
+        val notes = noteDao.getAllNotes().first()
+
+        noteDao.deleteNote(note = notes.first().note)
+
+        val deletedNote = noteDao.getNoteById(id = notes.first().note.id)
+
+        assertNull(actual = deletedNote)
+    }
+
+    @Test
+    fun deleteNotes() = runTest {
+        val note1 = testNoteEntity(
+            title = "Test Note 1",
+            content = "This is the first test note.",
+            type = NoteType.SIMPLE,
+            createdAt = Instant.parse("2023-10-01T10:00:00Z"),
+            updatedAt = Instant.parse("2023-10-01T10:00:00Z")
+        )
+        val note2 = testNoteEntity(
+            title = "Test Note 2",
+            content = "This is the second test note.",
+            type = NoteType.SIMPLE,
+            createdAt = Instant.parse("2023-10-02T10:00:00Z"),
+            updatedAt = Instant.parse("2023-10-02T10:00:00Z")
+        )
+        val note3 = testNoteEntity(
+            title = "Test Note 3",
+            content = "This is the third test note.",
+            type = NoteType.SIMPLE,
+            createdAt = Instant.parse("2023-10-03T10:00:00Z"),
+            updatedAt = Instant.parse("2023-10-03T10:00:00Z")
+        )
+
+        noteDao.upsertNoteWithItems(note = note1, items = emptyList())
+        noteDao.upsertNoteWithItems(note = note2, items = emptyList())
+        noteDao.upsertNoteWithItems(note = note3, items = emptyList())
+
+        val notes = noteDao.getAllNotes().first()
+
+        noteDao.deleteNotes(notes = listOf(notes.first().note, notes.last().note))
+
+        val remainingNotes = noteDao.getAllNotes().first()
+
+        assertEquals(expected = 1, actual = remainingNotes.size)
+        assertEquals(expected = note2.title, actual = remainingNotes.first().note.title)
+    }
+
+    @Test
+    fun deleteItem() = runTest {
+        val note = testNoteEntity(
+            title = "Test Note",
+            content = "This is a test note.",
+            type = NoteType.SIMPLE,
+            createdAt = Instant.parse("2023-10-01T10:00:00Z"),
+            updatedAt = Instant.parse("2023-10-01T10:00:00Z")
+        )
+        val items = listOf(
+            testItemEntity(content = "Item 1"),
+            testItemEntity(content = "Item 2"),
+            testItemEntity(content = "Item 3")
+        )
+
+        noteDao.upsertNoteWithItems(note = note, items = items)
+
+        val notes = noteDao.getAllNotes().first()
+
+        noteDao.deleteItem(item = notes.first().items.first())
+
+        val notesAfterDeletion = noteDao.getAllNotes().first()
+
+        assertEquals(expected = 2, actual = notesAfterDeletion.first().items.size)
+    }
+
+    @Test
+    fun deleteItems() = runTest {
+        val note = testNoteEntity(
+            title = "Test Note",
+            content = "This is a test note.",
+            type = NoteType.SIMPLE,
+            createdAt = Instant.parse("2023-10-01T10:00:00Z"),
+            updatedAt = Instant.parse("2023-10-01T10:00:00Z")
+        )
+        val items = listOf(
+            testItemEntity(content = "Item 1"),
+            testItemEntity(content = "Item 2"),
+            testItemEntity(content = "Item 3")
+        )
+
+        noteDao.upsertNoteWithItems(note = note, items = items)
+
+        val notes = noteDao.getAllNotes().first()
+
+        noteDao.deleteItems(items = notes.first().items)
+
+        val notesAfterDeletion = noteDao.getAllNotes().first()
+
+        assertEquals(expected = 0, actual = notesAfterDeletion.first().items.size)
+    }
 
     private suspend fun insertNotes() {
         val noteEntities = listOf(
@@ -181,7 +436,7 @@ private fun testItemEntity(
     id: Long = 0L,
     content: String,
     isCompleted: Boolean = false,
-    noteId: Long
+    noteId: Long = 0L
 ): ItemEntity = ItemEntity(
     id = id,
     content = content,

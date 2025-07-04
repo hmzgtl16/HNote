@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "items")
 data class ItemEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Long,
+    val id: Long = 0L,
     val content: String,
     val checked: Boolean = false,
     @ColumnInfo(index = true) val noteId: Long
