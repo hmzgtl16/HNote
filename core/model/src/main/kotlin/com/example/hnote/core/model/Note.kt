@@ -11,8 +11,8 @@ data class Note(
     val backgroundColor: Int? = null,
     val type: NoteType,
     val reminder: Instant? = null,
-    val reminderMode: ReminderRepeatMode? = null,
-    val isCompleted: Boolean? = null,
+    val reminderRepeatMode: ReminderRepeatMode? = null,
+    val completed: Boolean? = null,
     val items: List<Item> = emptyList(),
     val created: Instant = Clock.System.now(),
     val updated: Instant = Clock.System.now()
