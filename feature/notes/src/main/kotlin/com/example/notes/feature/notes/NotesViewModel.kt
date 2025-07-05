@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class NotesViewModel @Inject constructor(
     private val noteRepository: NoteRepository,
-    getNotesUseCase: GetNotesUseCase,
+    getNotesUseCase: GetNotesUseCase
 ) : ViewModel() {
 
     val uiState: StateFlow<NotesUiState> = getNotesUseCase.invoke()
