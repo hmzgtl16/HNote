@@ -200,7 +200,7 @@ fun NoteCard(
 
 @ThemePreviews
 @Composable
-fun NoteCardPreview(
+fun SelectedNoteCardWithSelectionPreview(
     @PreviewParameter(NotesPreviewParameterProvider::class)
     notes: Map<Boolean, List<Note>>,
 ) {
@@ -213,6 +213,58 @@ fun NoteCardPreview(
             onSelectedChanged = {},
             onNoteClick = {},
             onPinClick = {}
+        )
+    }
+}
+
+@ThemePreviews
+@Composable
+fun NoteCardWithSelectionPreview(
+    @PreviewParameter(NotesPreviewParameterProvider::class)
+    notes: Map<Boolean, List<Note>>,
+) {
+    AppTheme {
+        NoteCard(
+            note = notes[true]!![1],
+            multiSelectionEnabled = true,
+            enableMultiSelection = {},
+            selected = false,
+            onSelectedChanged = {},
+            onNoteClick = {},
+            onPinClick = {}
+        )
+    }
+}
+
+@ThemePreviews
+@Composable
+fun NoteCardWithoutSelectionPreview(
+    @PreviewParameter(NotesPreviewParameterProvider::class)
+    notes: Map<Boolean, List<Note>>,
+) {
+    AppTheme {
+        NoteCard(
+            note = notes[true]!![1],
+            multiSelectionEnabled = false,
+            enableMultiSelection = {},
+            selected = false,
+            onSelectedChanged = {},
+            onNoteClick = {},
+            onPinClick = {}
+        )
+    }
+}
+
+@ThemePreviews
+@Composable
+fun NoteCardPreview(
+    @PreviewParameter(NotesPreviewParameterProvider::class)
+    notes: Map<Boolean, List<Note>>,
+) {
+    AppTheme {
+        NoteCard(
+            note = notes[true]!![1],
+            onNoteClick = {}
         )
     }
 }
