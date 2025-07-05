@@ -6,7 +6,9 @@ import com.example.hnote.core.database.model.NoteWithItems
 import com.example.hnote.core.model.Item
 import com.example.hnote.core.model.Note
 import com.example.hnote.core.model.NoteType
+import com.example.hnote.core.model.Reminder
 import com.example.hnote.core.model.ReminderRepeatMode
+import kotlinx.datetime.Instant
 import com.example.hnote.core.database.util.NoteType as NoteTypeEntity
 import com.example.hnote.core.database.util.ReminderRepeatMode as ReminderRepeatModeEntity
 
@@ -19,9 +21,9 @@ fun Note.toEntity(): NoteEntity = NoteEntity(
     createdAt = created,
     updatedAt = updated,
     type = type.toEntity(),
-    reminder = reminder,
-    reminderMode = reminderRepeatMode?.toEntity(),
-    completed = completed
+    reminder = reminder?.reminder,
+    reminderMode = reminder?.reminderRepeatMode?.toEntity(),
+    completed = reminder?.completed
 )
 
 fun Note.toItemEntities(): List<ItemEntity> = items
@@ -49,9 +51,11 @@ fun NoteWithItems.toModel(): Note = Note(
     created = note.createdAt,
     updated = note.updatedAt,
     type = note.type.toModel(),
-    reminder = note.reminder,
-    reminderRepeatMode = note.reminderMode?.toModel(),
-    completed = note.completed,
+    reminder = Reminder(
+        reminder = note.reminder ?: Instant.DISTANT_FUTURE,
+        reminderRepeatMode = note.reminderMode?.toModel() ?: ReminderRepeatMode.NONE,
+        completed = note.completed ?: false
+    ),
     items = items.map(ItemEntity::toModel)
 )
 
