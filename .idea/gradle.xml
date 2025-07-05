@@ -35,6 +35,8 @@
             <option value="$PROJECT_DIR$/core/design" />
             <option value="$PROJECT_DIR$/core/model" />
             <option value="$PROJECT_DIR$/core/ui" />
+            <option value="$PROJECT_DIR$/feature" />
+            <option value="$PROJECT_DIR$/feature/note" />
           </set>
         </option>
       </GradleProjectSettings>
