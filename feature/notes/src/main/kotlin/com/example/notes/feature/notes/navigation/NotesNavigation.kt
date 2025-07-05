@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import com.example.notes.feature.notes.NotesRoute
 import kotlinx.serialization.Serializable
 
 @Serializable
