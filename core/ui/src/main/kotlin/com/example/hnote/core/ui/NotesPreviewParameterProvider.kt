@@ -79,7 +79,7 @@ class NotesPreviewParameterProvider : PreviewParameterProvider<Map<Boolean, List
                             Item(
                                 id = 3L,
                                 content = "Item 3",
-                                checked = false
+                                checked = true
                             )
                         )
                     ),
