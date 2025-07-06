@@ -3,10 +3,13 @@ package com.example.hnote.core.ui
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -30,6 +33,7 @@ import com.example.hnote.core.design.component.ThemePreviews
 import com.example.hnote.core.design.icon.AppIcons
 import com.example.hnote.core.design.theme.AppTheme
 import com.example.hnote.core.design.theme.LocalTintTheme
+import com.example.hnote.core.model.Item
 import com.example.hnote.core.model.Note
 
 @Composable
@@ -135,6 +139,30 @@ fun NoteCard(
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
+
+                    note.reminder?.let {
+                        ReminderCard(reminder = it)
+                    }
+
+                    LazyColumn(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(
+                            space = 4.dp,
+                            alignment = Alignment.Top
+                        ),
+                        contentPadding = PaddingValues(vertical = 8.dp),
+                        content = {
+                            items(
+                                items = note.items,
+                                key = Item::id
+                            ) {
+                                ItemCard(
+                                    item = it,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
+                        }
+                    )
                 }
             )
         }
@@ -206,7 +234,7 @@ fun SelectedNoteCardWithSelectionPreview(
 ) {
     AppTheme {
         NoteCard(
-            note = notes[true]!![1],
+            note = notes[true]!![6],
             multiSelectionEnabled = true,
             enableMultiSelection = {},
             selected = true,
@@ -225,7 +253,7 @@ fun NoteCardWithSelectionPreview(
 ) {
     AppTheme {
         NoteCard(
-            note = notes[true]!![1],
+            note = notes[true]!![5],
             multiSelectionEnabled = true,
             enableMultiSelection = {},
             selected = false,
@@ -240,7 +268,7 @@ fun NoteCardWithSelectionPreview(
 @Composable
 fun NoteCardWithoutSelectionPreview(
     @PreviewParameter(NotesPreviewParameterProvider::class)
-    notes: Map<Boolean, List<Note>>,
+    notes: Map<Boolean, List<Note>>
 ) {
     AppTheme {
         NoteCard(
