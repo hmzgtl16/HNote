@@ -21,8 +21,8 @@ fun Note.toEntity(): NoteEntity = NoteEntity(
     createdAt = created,
     updatedAt = updated,
     type = type.toEntity(),
-    reminder = reminder?.reminder,
-    reminderMode = reminder?.reminderRepeatMode?.toEntity(),
+    reminder = reminder?.time,
+    reminderMode = reminder?.repeatMode?.toEntity(),
     completed = reminder?.completed
 )
 
@@ -52,8 +52,8 @@ fun NoteWithItems.toModel(): Note = Note(
     updated = note.updatedAt,
     type = note.type.toModel(),
     reminder = Reminder(
-        reminder = note.reminder ?: Instant.DISTANT_FUTURE,
-        reminderRepeatMode = note.reminderMode?.toModel() ?: ReminderRepeatMode.NONE,
+        time = note.reminder ?: Instant.DISTANT_FUTURE,
+        repeatMode = note.reminderMode?.toModel() ?: ReminderRepeatMode.NONE,
         completed = note.completed ?: false
     ),
     items = items.map(ItemEntity::toModel)
