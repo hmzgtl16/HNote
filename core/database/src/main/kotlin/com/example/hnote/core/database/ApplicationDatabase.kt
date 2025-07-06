@@ -33,5 +33,4 @@ internal abstract class ApplicationDatabase : RoomDatabase() {
     abstract fun searchQueryDao(): SearchQueryDao
     abstract fun noteFtsDao(): NoteFtsDao
     abstract fun itemFtsDao(): ItemFtsDao
-
 }
