@@ -3,11 +3,13 @@ package com.example.hnote.core.data.util
 import com.example.hnote.core.database.model.ItemEntity
 import com.example.hnote.core.database.model.NoteEntity
 import com.example.hnote.core.database.model.NoteWithItems
+import com.example.hnote.core.database.model.SearchQueryEntity
 import com.example.hnote.core.model.Item
 import com.example.hnote.core.model.Note
 import com.example.hnote.core.model.NoteType
 import com.example.hnote.core.model.Reminder
 import com.example.hnote.core.model.ReminderRepeatMode
+import com.example.hnote.core.model.SearchQuery
 import kotlinx.datetime.Instant
 import com.example.hnote.core.database.util.NoteType as NoteTypeEntity
 import com.example.hnote.core.database.util.ReminderRepeatMode as ReminderRepeatModeEntity
@@ -86,3 +88,13 @@ fun ReminderRepeatModeEntity.toModel(): ReminderRepeatMode = when (this) {
     ReminderRepeatModeEntity.MONTHLY -> ReminderRepeatMode.MONTHLY
     ReminderRepeatModeEntity.YEARLY -> ReminderRepeatMode.YEARLY
 }
+
+fun SearchQuery.toEntity(): SearchQueryEntity = SearchQueryEntity(
+    text = query,
+    queried = queried
+)
+
+fun SearchQueryEntity.toModel(): SearchQuery = SearchQuery(
+    query = text,
+    queried = queried
+)
