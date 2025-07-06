@@ -20,5 +20,5 @@ interface SearchQueryDao {
     suspend fun deleteAll()
 
     @Delete
-    suspend fun delete(searchQueryEntity: SearchQueryEntity)
+    suspend fun delete(searchQuery: SearchQueryEntity)
 }
