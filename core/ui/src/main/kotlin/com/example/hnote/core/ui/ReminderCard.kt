@@ -33,8 +33,8 @@ fun ReminderCard(
 ) {
     val formattedTime = remember(reminder.time) {
         reminder.time
-            .toLocalDateTime(TimeZone.currentSystemDefault())
-            .format(formatter)
+            .toLocalDateTime(timeZone = TimeZone.currentSystemDefault())
+            .format(format = formatter)
     }
 
     val isExpired = remember(reminder.time) {
