@@ -50,6 +50,8 @@ android {
 dependencies {
     implementation(projects.feature.notes)
 
+    implementation(projects.core.design)
+
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3.adaptive)
     implementation(libs.androidx.navigation.compose)
