@@ -3,6 +3,7 @@ package com.example.hnote.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
+import com.example.hnote.feature.note.navigation.noteScreen
 import com.example.hnote.ui.AppState
 import com.example.notes.feature.notes.navigation.NotesRoute
 import com.example.notes.feature.notes.navigation.notesScreen
@@ -22,6 +23,10 @@ fun AppNavHost(
             notesScreen(
                 onNoteClick = {},
                 onShowSnackbar = onShowSnackbar,
+            )
+            noteScreen(
+                onBackClick = navController::navigateUp,
+                onShowSnackbar = onShowSnackbar
             )
         }
     )

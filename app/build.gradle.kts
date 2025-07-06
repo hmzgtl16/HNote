@@ -49,6 +49,7 @@ android {
 
 dependencies {
     implementation(projects.feature.notes)
+    implementation(projects.feature.note)
 
     implementation(projects.core.design)
 
