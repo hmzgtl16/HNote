@@ -3,6 +3,8 @@ package com.example.hnote.core.database.di
 import android.content.Context
 import androidx.room.Room
 import com.example.hnote.core.database.ApplicationDatabase
+import com.example.hnote.core.database.util.ItemCallback
+import com.example.hnote.core.database.util.NoteCallback
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,6 +24,9 @@ internal object DatabaseModule {
         context = context,
         klass = ApplicationDatabase::class.java,
         name = "hnote_database"
-    ).build()
+    )
+        .addCallback(callback = NoteCallback)
+        .addCallback(callback = ItemCallback)
+        .build()
 
 }
