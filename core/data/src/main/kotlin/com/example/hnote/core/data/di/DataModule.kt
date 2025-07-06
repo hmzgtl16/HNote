@@ -2,6 +2,8 @@ package com.example.hnote.core.data.di
 
 import com.example.hnote.core.data.repository.NoteRepository
 import com.example.hnote.core.data.repository.NoteRepositoryImpl
+import com.example.hnote.core.data.repository.SearchRepository
+import com.example.hnote.core.data.repository.SearchRepositoryImpl
 import com.example.hnote.core.data.repository.UserDataRepository
 import com.example.hnote.core.data.repository.UserDataRepositoryImpl
 import dagger.Binds
@@ -22,4 +24,10 @@ abstract class DataModule {
     internal abstract fun bindsNoteRepository(
         noteRepository: NoteRepositoryImpl
     ): NoteRepository
+
+    @Binds
+    internal abstract fun bindsSearchRepository(
+        searchRepository: SearchRepositoryImpl
+    ): SearchRepository
+
 }
