@@ -12,7 +12,7 @@ import kotlinx.datetime.format.MonthNames
 import kotlinx.datetime.format.char
 import kotlinx.datetime.toLocalDateTime
 
-private val formatter =
+val formatter =
     LocalDateTime.Format {
         date(
             format = LocalDate.Format {

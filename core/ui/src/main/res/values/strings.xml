@@ -2,4 +2,10 @@
 <resources>
     <string name="core_ui_note_untitled">Untitled note</string>
     <string name="core_ui_palette_modal_bottom_sheet_title">Background color</string>
+    <string name="core_ui_repeat_mode_none">Once</string>
+    <string name="core_ui_repeat_mode_daily">Daily</string>
+    <string name="core_ui_repeat_mode_weekly">Weekly</string>
+    <string name="core_ui_repeat_mode_monthly">Monthly</string>
+    <string name="core_ui_repeat_mode_yearly">Yearly</string>
+    <string name="core_ui_reminder_expired">Expired</string>
 </resources>
