@@ -4,6 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.hnote.core.database.dao.NoteDao
+import com.example.hnote.core.database.dao.SearchQueryDao
 import com.example.hnote.core.database.model.ItemEntity
 import com.example.hnote.core.database.model.NoteEntity
 import com.example.hnote.core.database.model.SearchQueryEntity
@@ -27,4 +28,5 @@ import com.example.hnote.core.database.util.ReminderRepeatModeConverter
 )
 internal abstract class ApplicationDatabase : RoomDatabase() {
     abstract fun noteDao(): NoteDao
+    abstract fun searchQueryDao(): SearchQueryDao
 }
