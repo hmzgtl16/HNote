@@ -4,6 +4,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.example.hnote.core.model.Item
 import com.example.hnote.core.model.Note
 import com.example.hnote.core.model.NoteType
+import com.example.hnote.core.model.Reminder
 import com.example.hnote.core.model.ReminderRepeatMode
 import kotlinx.datetime.Instant
 
@@ -45,9 +46,11 @@ class NotesPreviewParameterProvider : PreviewParameterProvider<Map<Boolean, List
                         content = "Content of note 5",
                         type = NoteType.REMINDER,
                         pinned = true,
-                        reminder = Instant.parse("2024-10-01T12:00:00Z"),
-                        reminderRepeatMode = ReminderRepeatMode.NONE,
-                        completed = false,
+                        reminder = Reminder(
+                            time = Instant.parse("2024-10-01T12:00:00Z"),
+                            repeatMode = ReminderRepeatMode.NONE,
+                            completed = false
+                        )
                     ),
                     Note(
                         id = 6L,
@@ -55,9 +58,11 @@ class NotesPreviewParameterProvider : PreviewParameterProvider<Map<Boolean, List
                         content = "Content of note 6",
                         type = NoteType.REMINDER,
                         pinned = true,
-                        reminder = Instant.parse("2024-10-01T12:00:00Z"),
-                        reminderRepeatMode = ReminderRepeatMode.DAILY,
-                        completed = true,
+                        reminder = Reminder(
+                            time = Instant.parse("2024-10-01T12:00:00Z"),
+                            repeatMode = ReminderRepeatMode.DAILY,
+                            completed = true
+                        )
                     ),
                     Note(
                         id = 7L,
@@ -129,8 +134,11 @@ class NotesPreviewParameterProvider : PreviewParameterProvider<Map<Boolean, List
                         content = "Content of note 11",
                         type = NoteType.SIMPLE,
                         pinned = false,
-                        reminder = Instant.parse("2024-10-01T12:00:00Z"),
-                        reminderRepeatMode = ReminderRepeatMode.DAILY
+                        reminder = Reminder(
+                            time = Instant.parse("2024-10-01T12:00:00Z"),
+                            repeatMode = ReminderRepeatMode.DAILY,
+                            completed = false
+                        )
                     ),
                     Note(
                         id = 12L,
@@ -138,8 +146,11 @@ class NotesPreviewParameterProvider : PreviewParameterProvider<Map<Boolean, List
                         content = "Content of note 12",
                         type = NoteType.SIMPLE,
                         pinned = false,
-                        reminder = Instant.parse("2024-10-01T12:00:00Z"),
-                        reminderRepeatMode = ReminderRepeatMode.WEEKLY
+                        reminder = Reminder(
+                            time = Instant.parse("2024-10-01T12:00:00Z"),
+                            repeatMode = ReminderRepeatMode.WEEKLY,
+                            completed = true
+                        )
                     ),
                     Note(
                         id = 13L,
