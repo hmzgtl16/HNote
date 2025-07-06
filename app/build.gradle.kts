@@ -51,6 +51,7 @@ dependencies {
     implementation(projects.feature.notes)
 
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.material3.adaptive)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.org.jetbrains.kotlinx.serialization.json)
 }
