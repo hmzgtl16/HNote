@@ -29,5 +29,4 @@ abstract class DataModule {
     internal abstract fun bindsSearchRepository(
         searchRepository: SearchRepositoryImpl
     ): SearchRepository
-
 }
