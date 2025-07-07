@@ -1,5 +1,6 @@
 package com.example.hnote.navigation
 
+import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
@@ -15,6 +16,7 @@ import com.example.notes.feature.notes.navigation.notesScreen
 fun AppNavHost(
     appState: AppState,
     onShowSnackbar: suspend (String, String?) -> Boolean,
+    windowAdaptiveInfo: WindowAdaptiveInfo,
     modifier: Modifier = Modifier
 ) {
     val navController = appState.navController
