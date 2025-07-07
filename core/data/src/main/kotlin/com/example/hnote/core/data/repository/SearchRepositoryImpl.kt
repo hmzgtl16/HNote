@@ -14,39 +14,27 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapLatest
 import javax.inject.Inject
 
 class SearchRepositoryImpl @Inject constructor(
     private val noteDao: NoteDao,
     private val searchQueryDao: SearchQueryDao,
-    private val noteFtsDao: NoteFtsDao,
-    private val itemFtsDao: ItemFtsDao
+    private val noteFtsDao: NoteFtsDao
 ) : SearchRepository {
     override suspend fun getSearchContents(searchQuery: SearchQuery): Flow<SearchResult> {
         val noteIds = noteFtsDao.searchAllNotes(text = "*${searchQuery.query}*")
-        val itemIds = itemFtsDao.searchAllItems(text = "*${searchQuery.query}*")
+        val noteIdsWithItems = noteFtsDao.searchAllItems(text = "*${searchQuery.query}*")
 
-        val noteFlow = noteIds
-            .mapLatest(List<Long>::toSet)
+        val noteFlow = combine(
+            flow = noteIds,
+            flow2 = noteIdsWithItems
+        ) { ids, idsWithItems -> (ids + idsWithItems).toSet() }
             .distinctUntilChanged()
             .flatMapLatest(noteDao::getNotesByIds)
-        val itemFlow = itemIds
-            .mapLatest { it.toSet() }
-            .distinctUntilChanged()
-            .flatMapLatest(noteDao::getItemsByIds)
 
-        return combine(
-            flow = noteFlow,
-            flow2 = itemFlow,
-            transform = { noteList, itemList ->
-                val notes = (noteList + itemList)
-                    .distinctBy { it.note.id }
-                    .map(NoteWithItems::toModel)
-
-                SearchResult(notes = notes)
-            }
-        )
+        return noteFlow
+            .map { it.map(NoteWithItems::toModel) }
+            .map(::SearchResult)
     }
 
     override fun getAllSearchQueries(limit: Int): Flow<List<SearchQuery>> =
