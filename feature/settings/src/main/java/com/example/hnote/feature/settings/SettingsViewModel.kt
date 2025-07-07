@@ -21,7 +21,7 @@ class SettingsViewModel @Inject constructor(
     val uiState: StateFlow<SettingsUiState> = userDataRepository.userData
         .map {
             SettingsUiState.Success(
-                uiTheme = it.theme,
+                theme = it.theme,
                 useDynamicColor = it.useDynamicColor
             )
         }
