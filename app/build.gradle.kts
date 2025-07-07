@@ -53,6 +53,7 @@ dependencies {
     implementation(projects.feature.search)
     implementation(projects.feature.settings)
 
+    implementation(projects.core.data)
     implementation(projects.core.design)
 
     implementation(libs.androidx.activity.compose)
