@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
+import com.example.hnote.feature.search.navigation.navigateToSearch
+import com.example.hnote.feature.settings.navigation.navigateToSettings
 import kotlinx.coroutines.CoroutineScope
 
 @Stable
@@ -12,6 +14,8 @@ class AppState(
     val coroutineScope: CoroutineScope
 ) {
 
+    fun navigateToSearch() = navController.navigateToSearch()
+    fun navigateToSettings() = navController.navigateToSettings()
 }
 
 @Composable
