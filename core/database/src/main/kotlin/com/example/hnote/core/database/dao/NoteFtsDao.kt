@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NoteFtsDao {
-    @Query("SELECT note_fts_id FROM notes_fts, items_fts WHERE notes_fts MATCH :text or (items_fts MATCH :text and items_fts.item_fts_noteId = notes_fts.note_fts_id)")
+    @Query("SELECT note_fts_id FROM notes_fts, items_fts WHERE notes_fts MATCH :text or (items_fts MATCH :text and items_fts.item_fts_note_id = notes_fts.note_fts_id)")
     fun searchAllNotes(text: String): Flow<List<Long>>
 }
