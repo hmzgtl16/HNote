@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object NotesRoute
 
-fun NavController.navigateToNotes(navOptions: NavOptions) =
+fun NavController.navigateToNotes(navOptions: NavOptions? = null) =
     navigate(route = NotesRoute, navOptions = navOptions)
 
 fun NavGraphBuilder.notesScreen(

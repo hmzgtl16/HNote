@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object SearchRoute
 
-fun NavController.navigateToSearch(navOptions: NavOptions) {
+fun NavController.navigateToSearch(navOptions: NavOptions? = null) {
     navigate(route = SearchRoute, navOptions = navOptions)
 }
 
