@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import com.example.hnote.feature.note.navigation.navigateToNote
 import com.example.hnote.feature.note.navigation.noteScreen
 import com.example.hnote.feature.search.navigation.searchScreen
+import com.example.hnote.feature.settings.navigation.settingsDialog
 import com.example.hnote.ui.AppState
 import com.example.notes.feature.notes.navigation.NotesRoute
 import com.example.notes.feature.notes.navigation.notesScreen
@@ -33,6 +34,9 @@ fun AppNavHost(
             searchScreen(
                 onBackClick = navController::navigateUp,
                 onNoteClick = navController::navigateToNote
+            )
+            settingsDialog(
+                onDismiss = navController::navigateUp
             )
         }
     )
