@@ -2,7 +2,6 @@ package com.example.hnote.core.data.repository
 
 import com.example.hnote.core.data.util.toEntity
 import com.example.hnote.core.data.util.toModel
-import com.example.hnote.core.database.dao.ItemFtsDao
 import com.example.hnote.core.database.dao.NoteDao
 import com.example.hnote.core.database.dao.NoteFtsDao
 import com.example.hnote.core.database.dao.SearchQueryDao
