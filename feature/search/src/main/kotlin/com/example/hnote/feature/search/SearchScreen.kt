@@ -1,5 +1,6 @@
 package com.example.hnote.feature.search
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,7 +39,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.hnote.core.design.component.AppBackground
 import com.example.hnote.core.design.component.AppIconButton
-import com.example.hnote.core.design.component.AppLoadingWheel
 import com.example.hnote.core.design.component.AppSearchBar
 import com.example.hnote.core.design.component.AppTextButton
 import com.example.hnote.core.design.icon.AppIcons
@@ -54,8 +54,8 @@ import com.example.hnote.core.ui.SearchResultPreviewParameterProvider
 
 @Composable
 internal fun SearchRoute(
-    navigateBack: () -> Unit,
-    navigateToNote: (id: Long) -> Unit,
+    onBackClick: () -> Unit,
+    onNoteClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SearchViewModel = hiltViewModel(),
 ) {
@@ -63,6 +63,8 @@ internal fun SearchRoute(
     val recentSearchQueriesUiState by viewModel.recentSearchQueriesUiState.collectAsStateWithLifecycle()
     val searchResultUiState by viewModel.searchResultUiState.collectAsStateWithLifecycle()
     val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
+
+    BackHandler(onBack = onBackClick)
 
     SearchScreen(
         modifier = modifier,
@@ -73,8 +75,8 @@ internal fun SearchRoute(
         onSearchTriggered = viewModel::onSearchTriggered,
         onClearRecentSearch = viewModel::clearRecentSearch,
         onClearAllRecentSearches = viewModel::clearAllRecentSearches,
-        onBackClick = navigateBack,
-        onNoteClick = navigateToNote
+        onBackClick = onBackClick,
+        onNoteClick = onNoteClick
     )
 }
 
@@ -268,15 +270,6 @@ fun RecentSearches(
                 }
             )
         }
-    )
-}
-
-@Composable
-fun SearchResultLoading(modifier: Modifier = Modifier) {
-
-    AppLoadingWheel(
-        modifier = modifier,
-        contentDescription = stringResource(id = R.string.feature_search_loading_search_result)
     )
 }
 
