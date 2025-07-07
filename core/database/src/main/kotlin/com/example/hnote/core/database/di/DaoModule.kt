@@ -1,7 +1,6 @@
 package com.example.hnote.core.database.di
 
 import com.example.hnote.core.database.ApplicationDatabase
-import com.example.hnote.core.database.dao.ItemFtsDao
 import com.example.hnote.core.database.dao.NoteDao
 import com.example.hnote.core.database.dao.NoteFtsDao
 import com.example.hnote.core.database.dao.SearchQueryDao
@@ -24,8 +23,4 @@ internal object DaoModule {
     @Provides
     fun provideNoteFtsDao(database: ApplicationDatabase): NoteFtsDao =
         database.noteFtsDao()
-
-    @Provides
-    fun provideItemFtsDao(database: ApplicationDatabase): ItemFtsDao =
-        database.itemFtsDao()
 }
