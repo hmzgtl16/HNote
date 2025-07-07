@@ -57,6 +57,8 @@ dependencies {
     implementation(projects.core.design)
 
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.core)
+    implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.compose.material3.adaptive)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.org.jetbrains.kotlinx.serialization.json)
