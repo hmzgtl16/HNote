@@ -50,8 +50,4 @@ interface NoteDao {
     @Transaction
     @Query("SELECT * FROM notes WHERE id IN (:ids)")
     fun getNotesByIds(ids: Set<Long>): Flow<List<NoteWithItems>>
-
-    @Transaction
-    @Query("SELECT * FROM items WHERE id IN (:ids)")
-    fun getItemsByIds(ids: Set<Long>): Flow<List<NoteWithItems>>
 }
