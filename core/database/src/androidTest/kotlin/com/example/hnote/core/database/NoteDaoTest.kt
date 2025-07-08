@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.example.hnote.core.database.dao.NoteDao
 import com.example.hnote.core.database.model.ItemEntity
 import com.example.hnote.core.database.model.NoteEntity
+import com.example.hnote.core.database.model.ReminderEntity
 import com.example.hnote.core.database.util.NoteType
 import com.example.hnote.core.database.util.ReminderRepeatMode
 import kotlinx.coroutines.flow.first
@@ -86,7 +87,7 @@ class NoteDaoTest {
 
         val items = emptyList<ItemEntity>()
 
-        noteDao.upsertNoteWithItems(note = note, items = items)
+        noteDao.upsertNoteWithItems(note = note, reminder = null, items = items)
 
         val noteWithItems = noteDao.getAllNotes().first()
 
@@ -110,7 +111,7 @@ class NoteDaoTest {
             testItemEntity(content = "Item 2")
         )
 
-        noteDao.upsertNoteWithItems(note = note, items = items)
+        noteDao.upsertNoteWithItems(note = note, reminder = null, items = items)
 
         val noteWithItems = noteDao.getAllNotes().first()
 
@@ -138,7 +139,7 @@ class NoteDaoTest {
         )
         val items = emptyList<ItemEntity>()
 
-        noteDao.upsertNoteWithItems(note = updatedNote, items = items)
+        noteDao.upsertNoteWithItems(note = updatedNote, reminder = null, items = items)
 
         val noteWithItems = noteDao.getAllNotes().first()
 
@@ -169,7 +170,7 @@ class NoteDaoTest {
             testItemEntity(content = "Updated Item 2")
         )
 
-        noteDao.upsertNoteWithItems(note = updatedNote, items = items)
+        noteDao.upsertNoteWithItems(note = updatedNote, reminder = null, items = items)
 
         val noteWithItems = noteDao.getAllNotes().first()
 
@@ -188,7 +189,7 @@ class NoteDaoTest {
             updatedAt = Instant.parse("2023-10-01T10:00:00Z")
         )
 
-        noteDao.upsertNoteWithItems(note = note, items = emptyList())
+        noteDao.upsertNoteWithItems(note = note, reminder = null, items = emptyList())
 
         val notes = noteDao.getAllNotes().first()
 
@@ -223,9 +224,9 @@ class NoteDaoTest {
             updatedAt = Instant.parse("2023-10-03T10:00:00Z")
         )
 
-        noteDao.upsertNoteWithItems(note = note1, items = emptyList())
-        noteDao.upsertNoteWithItems(note = note2, items = emptyList())
-        noteDao.upsertNoteWithItems(note = note3, items = emptyList())
+        noteDao.upsertNoteWithItems(note = note1, reminder = null, items = emptyList())
+        noteDao.upsertNoteWithItems(note = note2, reminder = null, items = emptyList())
+        noteDao.upsertNoteWithItems(note = note3, reminder = null, items = emptyList())
 
         val notes = noteDao.getAllNotes().first()
 
@@ -252,7 +253,7 @@ class NoteDaoTest {
             testItemEntity(content = "Item 3")
         )
 
-        noteDao.upsertNoteWithItems(note = note, items = items)
+        noteDao.upsertNoteWithItems(note = note, reminder = null, items = items)
 
         val notes = noteDao.getAllNotes().first()
 
@@ -278,7 +279,7 @@ class NoteDaoTest {
             testItemEntity(content = "Item 3")
         )
 
-        noteDao.upsertNoteWithItems(note = note, items = items)
+        noteDao.upsertNoteWithItems(note = note, reminder = null, items = items)
 
         val notes = noteDao.getAllNotes().first()
 
@@ -296,9 +297,6 @@ private fun testNoteEntity(
     title: String,
     content: String,
     type: NoteType,
-    reminder: Instant? = null,
-    reminderMode: ReminderRepeatMode? = null,
-    isCompleted: Boolean? = null,
     createdAt: Instant,
     updatedAt: Instant,
 ): NoteEntity = NoteEntity(
@@ -306,11 +304,22 @@ private fun testNoteEntity(
     title = title,
     content = content,
     type = type,
-    reminder = reminder,
-    reminderMode = reminderMode,
-    completed = isCompleted,
     createdAt = createdAt,
     updatedAt = updatedAt
+)
+
+private fun testReminderEntity(
+    id: Long = 0L,
+    time: Instant,
+    reminderMode: ReminderRepeatMode = ReminderRepeatMode.NONE,
+    isCompleted: Boolean = false,
+    noteId: Long = 0L
+): ReminderEntity = ReminderEntity(
+    id = id,
+    time = time,
+    repeatMode = reminderMode,
+    completed = isCompleted,
+    noteId = noteId
 )
 
 private fun testItemEntity(
