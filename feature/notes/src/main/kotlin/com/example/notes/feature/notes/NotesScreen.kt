@@ -355,7 +355,6 @@ fun NotesScreenContent(
                 content = {
 
                     if (multiSelectionEnabled) {
-
                         AppTriStateCheckbox(
                             state = allNotesSelected,
                             onClick = {
@@ -384,10 +383,8 @@ fun NotesScreenContent(
                         verticalItemSpacing = 16.dp,
                         state = staggeredGridState,
                         content = {
-
-                            uiState.notes.forEach { (isPinned, notes) ->
-
-                                if (isPinned) {
+                            uiState.notes.forEach { (pinned, notes) ->
+                                if (pinned) {
                                     item(
                                         span = StaggeredGridItemSpan.FullLine,
                                         content = {
@@ -403,7 +400,7 @@ fun NotesScreenContent(
                                     )
                                 }
 
-                                if (!isPinned && notes.isNotEmpty()) {
+                                if (!pinned && notes.isNotEmpty()) {
                                     item(
                                         span = StaggeredGridItemSpan.FullLine,
                                         content = {
@@ -421,10 +418,9 @@ fun NotesScreenContent(
 
                                 items(
                                     items = notes,
-                                    key = { it.id },
+                                    key = Note::id,
                                     contentType = { "Note" },
                                     itemContent = {
-
                                         NoteCard(
                                             note = it,
                                             multiSelectionEnabled = multiSelectionEnabled,
