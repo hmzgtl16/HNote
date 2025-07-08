@@ -2,7 +2,8 @@ package com.example.hnote.core.data.util
 
 import com.example.hnote.core.database.model.ItemEntity
 import com.example.hnote.core.database.model.NoteEntity
-import com.example.hnote.core.database.model.NoteWithItems
+import com.example.hnote.core.database.model.NoteWithItemsAndReminder
+import com.example.hnote.core.database.model.ReminderEntity
 import com.example.hnote.core.database.model.SearchQueryEntity
 import com.example.hnote.core.model.Item
 import com.example.hnote.core.model.Note
@@ -10,41 +11,59 @@ import com.example.hnote.core.model.NoteType
 import com.example.hnote.core.model.Reminder
 import com.example.hnote.core.model.ReminderRepeatMode
 import com.example.hnote.core.model.SearchQuery
-import kotlinx.datetime.Instant
 import com.example.hnote.core.database.util.NoteType as NoteTypeEntity
 import com.example.hnote.core.database.util.ReminderRepeatMode as ReminderRepeatModeEntity
 
 fun Note.toEntity(): NoteEntity = NoteEntity(
-    id = this.id,
-    title = this.title,
-    content = this.content,
-    pinned = this.pinned,
+    id = id,
+    title = title,
+    content = content,
+    pinned = pinned,
     backgroundColor = backgroundColor,
     createdAt = created,
     updatedAt = updated,
-    type = type.toEntity(),
-    reminder = reminder?.time,
-    reminderMode = reminder?.repeatMode?.toEntity(),
-    completed = reminder?.completed
+    type = type.toEntity()
 )
 
 fun Note.toItemEntities(): List<ItemEntity> = items
     .map { it.toEntity(noteId = id) }
 
-fun Item.toEntity(noteId: Long = 0L): ItemEntity = ItemEntity(
-    id = this.id,
-    content = this.content,
-    checked = this.checked,
+fun Note.toReminderEntity(): ReminderEntity? = reminder?.let {
+    ReminderEntity(
+        time = it.time,
+        repeatMode = it.repeatMode.toEntity(),
+        completed = it.completed,
+        noteId = id
+    )
+}
+
+fun Reminder.toEntity(noteId: Long = 0L): ReminderEntity = ReminderEntity(
+    time = time,
+    repeatMode = repeatMode.toEntity(),
+    completed = completed,
     noteId = noteId
 )
 
-fun ItemEntity.toModel(): Item = Item(
-    id = this.id,
-    content = this.content,
-    checked = this.checked
+fun Item.toEntity(noteId: Long = 0L): ItemEntity = ItemEntity(
+    id = id,
+    content = content,
+    checked = checked,
+    noteId = noteId
 )
 
-fun NoteWithItems.toModel(): Note = Note(
+fun ReminderEntity.toModel(): Reminder = Reminder(
+    time = time,
+    repeatMode = repeatMode.toModel(),
+    completed = completed
+)
+
+fun ItemEntity.toModel(): Item = Item(
+    id = id,
+    content = content,
+    checked = checked
+)
+
+fun NoteWithItemsAndReminder.toModel(): Note = Note(
     id = note.id,
     title = note.title,
     content = note.content,
@@ -53,11 +72,7 @@ fun NoteWithItems.toModel(): Note = Note(
     created = note.createdAt,
     updated = note.updatedAt,
     type = note.type.toModel(),
-    reminder = Reminder(
-        time = note.reminder ?: Instant.DISTANT_FUTURE,
-        repeatMode = note.reminderMode?.toModel() ?: ReminderRepeatMode.NONE,
-        completed = note.completed ?: false
-    ),
+    reminder = reminder?.toModel(),
     items = items.map(ItemEntity::toModel)
 )
 
