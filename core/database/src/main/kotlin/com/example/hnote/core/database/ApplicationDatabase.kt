@@ -10,6 +10,7 @@ import com.example.hnote.core.database.model.ItemEntity
 import com.example.hnote.core.database.model.ItemFtsEntity
 import com.example.hnote.core.database.model.NoteEntity
 import com.example.hnote.core.database.model.NoteFtsEntity
+import com.example.hnote.core.database.model.ReminderEntity
 import com.example.hnote.core.database.model.SearchQueryEntity
 import com.example.hnote.core.database.util.InstantConverter
 import com.example.hnote.core.database.util.NoteTypeConverter
@@ -18,6 +19,7 @@ import com.example.hnote.core.database.util.ReminderRepeatModeConverter
 @Database(
     entities = [
         NoteEntity::class,
+        ReminderEntity::class,
         ItemEntity::class,
         SearchQueryEntity::class,
         NoteFtsEntity::class,
