@@ -7,7 +7,8 @@ import androidx.room.Transaction
 import androidx.room.Upsert
 import com.example.hnote.core.database.model.ItemEntity
 import com.example.hnote.core.database.model.NoteEntity
-import com.example.hnote.core.database.model.NoteWithItems
+import com.example.hnote.core.database.model.NoteWithItemsAndReminder
+import com.example.hnote.core.database.model.ReminderEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -17,11 +18,19 @@ interface NoteDao {
     suspend fun upsertNote(note: NoteEntity): Long
 
     @Upsert
+    suspend fun upsertReminder(reminder: ReminderEntity): Long
+
+    @Upsert
     suspend fun upsertItems(items: List<ItemEntity>)
 
     @Transaction
-    suspend fun upsertNoteWithItems(note: NoteEntity, items: List<ItemEntity>) {
+    suspend fun upsertNoteWithItems(
+        note: NoteEntity,
+        reminder: ReminderEntity?,
+        items: List<ItemEntity>
+    ) {
         val noteId = upsertNote(note).takeUnless { it == -1L } ?: note.id
+        reminder?.let { upsertReminder(it.copy(noteId = noteId)) }
         items
             .map { it.copy(noteId = noteId) }
             .also { upsertItems(items = it) }
@@ -41,13 +50,13 @@ interface NoteDao {
 
     @Transaction
     @Query("SELECT * FROM notes ORDER BY pinned DESC, updatedAt DESC")
-    fun getAllNotes(): Flow<List<NoteWithItems>>
+    fun getAllNotes(): Flow<List<NoteWithItemsAndReminder>>
 
     @Transaction
     @Query("SELECT * FROM notes WHERE id = :id")
-    fun getNoteById(id: Long): Flow<NoteWithItems?>
+    fun getNoteById(id: Long): Flow<NoteWithItemsAndReminder?>
 
     @Transaction
     @Query("SELECT * FROM notes WHERE id IN (:ids)")
-    fun getNotesByIds(ids: Set<Long>): Flow<List<NoteWithItems>>
+    fun getNotesByIds(ids: Set<Long>): Flow<List<NoteWithItemsAndReminder>>
 }
