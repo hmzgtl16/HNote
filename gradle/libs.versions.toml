@@ -17,6 +17,7 @@ androidx-room = "2.7.2"
 androidx-test-core = "1.6.1"
 androidx-test-runner = "1.6.2"
 androidx-tracing = "1.3.0"
+com-github-commandiron-wheel-picker-compose = "1.1.11"
 com-google-dagger = "2.56.2"
 com-google-devtools-ksp = "2.2.0-2.0.2"
 com-google-protobuf-plugin = "0.9.5"
@@ -71,6 +72,7 @@ androidx-room-runtime = { group = "androidx.room", name = "room-runtime", versio
 androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidx-test-core" }
 androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidx-test-runner" }
 androidx-tracing-ktx = { group = "androidx.tracing", name = "tracing-ktx", version.ref = "androidx-tracing" }
+com-github-commandiron-wheelPickerCompose = { group = "com.github.commandiron", name = "WheelPickerCompose", version.ref = "com-github-commandiron-wheel-picker-compose" }
 com-google-dagger-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "com-google-dagger" }
 com-google-dagger-hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "com-google-dagger" }
 com-google-dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "com-google-dagger" }
