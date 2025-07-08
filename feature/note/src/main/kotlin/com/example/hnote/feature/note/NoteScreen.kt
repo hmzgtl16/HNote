@@ -13,7 +13,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,12 +32,15 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.hnote.core.design.component.AppAlertDialog
+import com.example.hnote.core.design.component.AppBackground
+import com.example.hnote.core.design.component.AppBottomAppBar
 import com.example.hnote.core.design.component.AppIconButton
-import com.example.hnote.core.design.component.AppIconToggleButton
 import com.example.hnote.core.design.component.AppOutlinedTextField
 import com.example.hnote.core.design.component.AppTextButton
-import com.example.hnote.core.design.component.AppTopAppBar
+import com.example.hnote.core.design.component.ThemePreviews
 import com.example.hnote.core.design.icon.AppIcons
+import com.example.hnote.core.design.theme.AppTheme
+import com.example.hnote.core.ui.DevicePreviews
 import com.example.hnote.core.ui.PaletteModalBottomSheet
 import com.example.hnote.core.ui.formatter
 import kotlinx.datetime.Instant
@@ -129,35 +131,44 @@ internal fun NoteScreen(
         modifier = modifier.fillMaxSize(),
         containerColor = if (backgroundColor != null) Color(color = backgroundColor)
         else MaterialTheme.colorScheme.background,
-        topBar = {
-            AppTopAppBar(
-                title = {},
-                navigationIcon = {
+        bottomBar = {
+            AppBottomAppBar(
+                actions = {
                     AppIconButton(
-                        onClick = onBackClick,
+                        onClick = {},
                         icon = {
                             Icon(
-                                imageVector = AppIcons.Back,
+                                imageVector = AppIcons.Undo,
                                 contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onSurface,
                             )
                         }
                     )
-                },
-                actions = {
 
-                    AppIconToggleButton(
-                        checked = pinned,
-                        onCheckedChange = { onPinnedChange(it) },
+                    AppIconButton(
+                        onClick = {},
                         icon = {
                             Icon(
-                                imageVector = AppIcons.PinBorder,
-                                contentDescription = null
+                                imageVector = AppIcons.Redo,
+                                contentDescription = null,
                             )
-                        },
-                        checkedIcon = {
+                        }
+                    )
+
+                    AppIconButton(
+                        onClick = { },
+                        icon = {
                             Icon(
-                                imageVector = AppIcons.Pin,
+                                imageVector = AppIcons.Checked,
+                                contentDescription = null,
+                            )
+                        }
+                    )
+
+                    AppIconButton(
+                        onClick = { },
+                        icon = {
+                            Icon(
+                                imageVector = AppIcons.Reminder,
                                 contentDescription = null
                             )
                         }
@@ -168,7 +179,7 @@ internal fun NoteScreen(
                         icon = {
                             Icon(
                                 imageVector = AppIcons.Palette,
-                                contentDescription = null,
+                                contentDescription = null
                             )
                         }
                     )
@@ -178,7 +189,7 @@ internal fun NoteScreen(
                         icon = {
                             Icon(
                                 imageVector = AppIcons.Copy,
-                                contentDescription = null,
+                                contentDescription = null
                             )
                         }
                     )
@@ -188,15 +199,13 @@ internal fun NoteScreen(
                         icon = {
                             Icon(
                                 imageVector = AppIcons.Delete,
-                                contentDescription = null,
+                                contentDescription = null
                             )
                         }
                     )
                 },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = if (backgroundColor != null) Color(color = backgroundColor)
-                    else Color.Transparent
-                )
+                containerColor = backgroundColor?.let { Color(color = backgroundColor) }
+                    ?: Color.Transparent
             )
         },
         content = {
@@ -341,3 +350,30 @@ internal fun NoteScreen(
     }
 }
 
+@ThemePreviews
+@DevicePreviews
+@Composable
+internal fun NoteScreenPreview() {
+    AppTheme {
+        AppBackground {
+            NoteScreen(
+                title = "",
+                onTitleChange = {},
+                description = "",
+                onDescriptionChange = {},
+                backgroundColor = null,
+                onBackgroundColorChange = {},
+                pinned = false,
+                onPinnedChange = {},
+                lastEdit = null,
+                paletteVisibility = false,
+                onPaletteVisibilityChange = {},
+                deleteDialogVisibility = false,
+                onDeleteDialogVisibilityChange = {},
+                onCopyClick = {},
+                onDeleteClick = {},
+                onBackClick = {}
+            )
+        }
+    }
+}
