@@ -8,4 +8,9 @@
     <string name="core_ui_repeat_mode_monthly">Monthly</string>
     <string name="core_ui_repeat_mode_yearly">Yearly</string>
     <string name="core_ui_reminder_expired">Expired</string>
+    <string name="feature_task_reminder_picker_delete">Delete</string>
+    <string name="feature_task_reminder_picker_cancel">Cancel</string>
+    <string name="feature_task_reminder_picker_title">Set reminder</string>
+    <string name="feature_task_reminder_picker_confirm">Confirm</string>
+    <string name="feature_task_reminder_picker_repeat_mode">Repeat</string>
 </resources>
