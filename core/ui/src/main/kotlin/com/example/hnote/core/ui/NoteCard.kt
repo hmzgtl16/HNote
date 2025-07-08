@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -147,19 +145,14 @@ fun NoteCard(
 
                     if (note.items.isNotEmpty()) {
                         Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .verticalScroll(state = rememberScrollState()),
+                            modifier = Modifier.fillMaxWidth(),
                             verticalArrangement = Arrangement.spacedBy(
                                 space = 4.dp,
                                 alignment = Alignment.Top
                             ),
                             content = {
                                 note.items.forEach {
-                                    ItemCard(
-                                        item = it,
-                                        modifier = Modifier.fillMaxWidth()
-                                    )
+                                    ItemCard(item = it)
                                 }
                             }
                         )
@@ -176,7 +169,6 @@ fun NoteCard(
     onNoteClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
     ElevatedCard(
         onClick = { onNoteClick(note.id) },
         colors = if (note.backgroundColor != null)
@@ -187,12 +179,10 @@ fun NoteCard(
             .wrapContentHeight(align = Alignment.Top)
             .semantics { onClick(label = "Open Note", action = null) },
         content = {
-
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 content = {
-
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -202,7 +192,6 @@ fun NoteCard(
                             alignment = Alignment.CenterVertically
                         ),
                         content = {
-
                             Text(
                                 text = note.title.ifEmpty(
                                     defaultValue = { stringResource(id = R.string.core_ui_note_untitled) }

@@ -383,8 +383,8 @@ fun NotesScreenContent(
                         verticalItemSpacing = 16.dp,
                         state = staggeredGridState,
                         content = {
-                            uiState.notes.forEach { (pinned, notes) ->
-                                if (pinned) {
+                            uiState.notes[true]?.let { notes ->
+                                if (notes.isNotEmpty()) {
                                     item(
                                         span = StaggeredGridItemSpan.FullLine,
                                         content = {
@@ -400,7 +400,29 @@ fun NotesScreenContent(
                                     )
                                 }
 
-                                if (!pinned && notes.isNotEmpty()) {
+                                items(
+                                    items = notes,
+                                    key = Note::id,
+                                    contentType = { "Note" },
+                                    itemContent = {
+                                        NoteCard(
+                                            note = it,
+                                            multiSelectionEnabled = multiSelectionEnabled,
+                                            enableMultiSelection = { onMultiSelectionChanged(true) },
+                                            selected = noteSelected(it),
+                                            onSelectedChanged = onNoteSelectedChanged,
+                                            onPinClick = onPinClick,
+                                            onNoteClick = onNoteClick,
+                                            modifier = Modifier
+                                                .padding(horizontal = 8.dp)
+                                                .animateItem()
+                                        )
+                                    }
+                                )
+                            }
+
+                            uiState.notes[false]?.let { notes ->
+                                if (notes.isNotEmpty() && uiState.notes[true]?.isNotEmpty() ?: false) {
                                     item(
                                         span = StaggeredGridItemSpan.FullLine,
                                         content = {
