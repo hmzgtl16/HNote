@@ -4,7 +4,7 @@ import com.example.hnote.core.data.util.toEntity
 import com.example.hnote.core.data.util.toItemEntities
 import com.example.hnote.core.data.util.toModel
 import com.example.hnote.core.database.dao.NoteDao
-import com.example.hnote.core.database.model.NoteWithItems
+import com.example.hnote.core.database.model.NoteWithItemsAndReminder
 import com.example.hnote.core.model.Item
 import com.example.hnote.core.model.Note
 import kotlinx.coroutines.flow.Flow
@@ -17,7 +17,7 @@ class NoteRepositoryImpl @Inject constructor(
 
     override val notes: Flow<List<Note>> =
         noteDao.getAllNotes()
-            .map { it.map(NoteWithItems::toModel) }
+            .map { it.map(NoteWithItemsAndReminder::toModel) }
 
     override suspend fun getNoteById(id: Long): Flow<Note?> =
         noteDao.getNoteById(id = id)
@@ -26,6 +26,7 @@ class NoteRepositoryImpl @Inject constructor(
     override suspend fun addNote(note: Note) {
         noteDao.upsertNoteWithItems(
             note = note.toEntity(),
+            reminder = note.reminder?.toEntity(),
             items = note.toItemEntities()
         )
     }
@@ -33,6 +34,7 @@ class NoteRepositoryImpl @Inject constructor(
     override suspend fun updateNote(note: Note) {
         noteDao.upsertNoteWithItems(
             note = note.toEntity(),
+            reminder = note.reminder?.toEntity(),
             items = note.toItemEntities()
         )
     }
@@ -41,6 +43,7 @@ class NoteRepositoryImpl @Inject constructor(
         notes.forEach {
             noteDao.upsertNoteWithItems(
                 note = it.toEntity(),
+                reminder = it.reminder?.toEntity(),
                 items = it.toItemEntities()
             )
         }
