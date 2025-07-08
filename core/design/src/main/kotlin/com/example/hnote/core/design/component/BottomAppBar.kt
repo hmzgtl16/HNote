@@ -16,7 +16,7 @@ import com.example.hnote.core.design.theme.AppTheme
 @Composable
 fun AppBottomAppBar(
     actions: @Composable RowScope.() -> Unit,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     floatingActionButton: (@Composable () -> Unit)? = null,
     containerColor: Color = BottomAppBarDefaults.containerColor,
     contentColor: Color = contentColorFor(containerColor),
