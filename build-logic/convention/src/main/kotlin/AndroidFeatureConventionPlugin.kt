@@ -33,10 +33,6 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                     "implementation",
                     libs.findLibrary("org.jetbrains.kotlinx.serialization.json").get()
                 )
-                add(
-                    "implementation",
-                    libs.findLibrary("com.github.commandiron.wheelPickerCompose").get()
-                )
             }
         }
     }
