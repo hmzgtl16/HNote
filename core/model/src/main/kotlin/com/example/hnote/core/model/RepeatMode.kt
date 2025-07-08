@@ -1,6 +1,6 @@
 package com.example.hnote.core.model
 
-enum class ReminderRepeatMode {
+enum class RepeatMode {
     NONE,
     DAILY,
     WEEKLY,

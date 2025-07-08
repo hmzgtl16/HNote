@@ -9,7 +9,7 @@ import com.example.hnote.core.model.Item
 import com.example.hnote.core.model.Note
 import com.example.hnote.core.model.NoteType
 import com.example.hnote.core.model.Reminder
-import com.example.hnote.core.model.ReminderRepeatMode
+import com.example.hnote.core.model.RepeatMode
 import com.example.hnote.core.model.SearchQuery
 import com.example.hnote.core.database.util.NoteType as NoteTypeEntity
 import com.example.hnote.core.database.util.ReminderRepeatMode as ReminderRepeatModeEntity
@@ -88,20 +88,20 @@ fun NoteTypeEntity.toModel(): NoteType = when (this) {
     NoteTypeEntity.CHECK_LIST -> NoteType.CHECK_LIST
 }
 
-fun ReminderRepeatMode.toEntity(): ReminderRepeatModeEntity = when (this) {
-    ReminderRepeatMode.NONE -> ReminderRepeatModeEntity.NONE
-    ReminderRepeatMode.DAILY -> ReminderRepeatModeEntity.DAILY
-    ReminderRepeatMode.WEEKLY -> ReminderRepeatModeEntity.WEEKLY
-    ReminderRepeatMode.MONTHLY -> ReminderRepeatModeEntity.MONTHLY
-    ReminderRepeatMode.YEARLY -> ReminderRepeatModeEntity.YEARLY
+fun RepeatMode.toEntity(): ReminderRepeatModeEntity = when (this) {
+    RepeatMode.NONE -> ReminderRepeatModeEntity.NONE
+    RepeatMode.DAILY -> ReminderRepeatModeEntity.DAILY
+    RepeatMode.WEEKLY -> ReminderRepeatModeEntity.WEEKLY
+    RepeatMode.MONTHLY -> ReminderRepeatModeEntity.MONTHLY
+    RepeatMode.YEARLY -> ReminderRepeatModeEntity.YEARLY
 }
 
-fun ReminderRepeatModeEntity.toModel(): ReminderRepeatMode = when (this) {
-    ReminderRepeatModeEntity.NONE -> ReminderRepeatMode.NONE
-    ReminderRepeatModeEntity.DAILY -> ReminderRepeatMode.DAILY
-    ReminderRepeatModeEntity.WEEKLY -> ReminderRepeatMode.WEEKLY
-    ReminderRepeatModeEntity.MONTHLY -> ReminderRepeatMode.MONTHLY
-    ReminderRepeatModeEntity.YEARLY -> ReminderRepeatMode.YEARLY
+fun ReminderRepeatModeEntity.toModel(): RepeatMode = when (this) {
+    ReminderRepeatModeEntity.NONE -> RepeatMode.NONE
+    ReminderRepeatModeEntity.DAILY -> RepeatMode.DAILY
+    ReminderRepeatModeEntity.WEEKLY -> RepeatMode.WEEKLY
+    ReminderRepeatModeEntity.MONTHLY -> RepeatMode.MONTHLY
+    ReminderRepeatModeEntity.YEARLY -> RepeatMode.YEARLY
 }
 
 fun SearchQuery.toEntity(): SearchQueryEntity = SearchQueryEntity(

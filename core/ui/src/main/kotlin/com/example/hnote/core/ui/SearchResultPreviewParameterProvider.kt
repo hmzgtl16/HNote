@@ -5,7 +5,7 @@ import com.example.hnote.core.model.Item
 import com.example.hnote.core.model.Note
 import com.example.hnote.core.model.NoteType
 import com.example.hnote.core.model.Reminder
-import com.example.hnote.core.model.ReminderRepeatMode
+import com.example.hnote.core.model.RepeatMode
 import com.example.hnote.core.model.SearchResult
 import kotlinx.datetime.Instant
 
@@ -49,7 +49,7 @@ class SearchResultPreviewParameterProvider : PreviewParameterProvider<SearchResu
                     pinned = true,
                     reminder = Reminder(
                         time = Instant.parse("2024-10-01T12:00:00Z"),
-                        repeatMode = ReminderRepeatMode.NONE,
+                        repeatMode = RepeatMode.NONE,
                         completed = false
                     )
                 ),
@@ -61,7 +61,7 @@ class SearchResultPreviewParameterProvider : PreviewParameterProvider<SearchResu
                     pinned = true,
                     reminder = Reminder(
                         time = Instant.parse("2024-10-01T12:00:00Z"),
-                        repeatMode = ReminderRepeatMode.DAILY,
+                        repeatMode = RepeatMode.DAILY,
                         completed = true
                     )
                 ),
@@ -135,7 +135,7 @@ class SearchResultPreviewParameterProvider : PreviewParameterProvider<SearchResu
                     pinned = false,
                     reminder = Reminder(
                         time = Instant.parse("2024-10-01T12:00:00Z"),
-                        repeatMode = ReminderRepeatMode.DAILY,
+                        repeatMode = RepeatMode.DAILY,
                         completed = false
                     )
                 ),
@@ -147,7 +147,7 @@ class SearchResultPreviewParameterProvider : PreviewParameterProvider<SearchResu
                     pinned = false,
                     reminder = Reminder(
                         time = Instant.parse("2024-10-01T12:00:00Z"),
-                        repeatMode = ReminderRepeatMode.WEEKLY,
+                        repeatMode = RepeatMode.WEEKLY,
                         completed = true
                     )
                 ),

@@ -1,15 +1,16 @@
 package com.example.hnote.core.ui
 
-import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.format
 import kotlinx.datetime.format.DayOfWeekNames
 import kotlinx.datetime.format.MonthNames
 import kotlinx.datetime.format.char
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toJavaLocalDateTime
+import kotlinx.datetime.toKotlinLocalDateTime
 import kotlinx.datetime.toLocalDateTime
 
 val formatter =
@@ -37,8 +38,8 @@ val formatter =
         )
     }
 
-fun Instant.format(): String =
-    toLocalDateTime(timeZone = TimeZone.currentSystemDefault())
-        .format(format = formatter)
+fun java.time.LocalDateTime.toKotlinInstant(): Instant =
+    toKotlinLocalDateTime().toInstant(timeZone = TimeZone.currentSystemDefault())
 
-fun Instant.isExpired(): Boolean = this <= Clock.System.now()
+fun Instant.toJavaLocalDateTime(): java.time.LocalDateTime =
+    toLocalDateTime(timeZone = TimeZone.currentSystemDefault()).toJavaLocalDateTime()
