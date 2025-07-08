@@ -10,7 +10,7 @@ import androidx.compose.material.icons.automirrored.rounded.Redo
 import androidx.compose.material.icons.automirrored.rounded.Undo
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Alarm
+import androidx.compose.material.icons.outlined.AddAlert
 import androidx.compose.material.icons.outlined.AlarmOn
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.CheckBox
@@ -41,7 +41,7 @@ object AppIcons {
     val AddList = Icons.Outlined.Add
     val AddNote = Icons.Outlined.Add
     val AddTask = Icons.Outlined.Add
-    val Alarm = Icons.Outlined.Alarm
+    val Reminder = Icons.Outlined.AddAlert
     val AlarmOnce = Icons.Outlined.AlarmOn
     val AlarmRepeat = Icons.Outlined.Repeat
     val Back = Icons.AutoMirrored.Outlined.ArrowBack
