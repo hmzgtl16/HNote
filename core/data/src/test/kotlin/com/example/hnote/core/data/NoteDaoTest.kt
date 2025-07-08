@@ -3,7 +3,7 @@ package com.example.hnote.core.data
 import com.example.hnote.core.database.dao.NoteDao
 import com.example.hnote.core.database.model.ItemEntity
 import com.example.hnote.core.database.model.NoteEntity
-import com.example.hnote.core.database.model.NoteWithItems
+import com.example.hnote.core.database.model.NoteWithItemsAndReminder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -60,22 +60,22 @@ class NoteDaoTest : NoteDao {
             }
         }
 
-    override fun getAllNotes(): Flow<List<NoteWithItems>> =
+    override fun getAllNotes(): Flow<List<NoteWithItemsAndReminder>> =
         noteEntitiesStateFlow
             .combine(itemEntitiesStateFlow) { notes, items ->
                 notes.map { note ->
-                    NoteWithItems(
+                    NoteWithItemsAndReminder(
                         note = note,
                         items = items.filter { it.noteId == note.id }
                     )
                 }
             }
 
-    override fun getNoteById(id: Long): Flow<NoteWithItems?> =
+    override fun getNoteById(id: Long): Flow<NoteWithItemsAndReminder?> =
         noteEntitiesStateFlow
             .combine(itemEntitiesStateFlow) { notes, items ->
                 notes.find { it.id == id }?.let { note ->
-                    NoteWithItems(
+                    NoteWithItemsAndReminder(
                         note = note,
                         items = items.filter { it.noteId == note.id }
                     )
