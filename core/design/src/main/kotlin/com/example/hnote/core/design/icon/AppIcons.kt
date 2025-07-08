@@ -63,7 +63,6 @@ object AppIcons {
     val Palette = Icons.Outlined.Palette
     val Pin = Icons.Rounded.PushPin
     val PinBorder = Icons.Outlined.PushPin
-    val Redo = Icons.AutoMirrored.Rounded.Redo
     val Search = Icons.Rounded.Search
     val Selected = Icons.Outlined.RadioButtonChecked
     val Settings = Icons.Rounded.Settings
@@ -72,6 +71,7 @@ object AppIcons {
     val Unchecked = Icons.Outlined.CheckBoxOutlineBlank
     val Unselected = Icons.Outlined.RadioButtonUnchecked
     val Undo = Icons.AutoMirrored.Rounded.Undo
+    val Redo = Icons.AutoMirrored.Rounded.Redo
     val UnfoldMore = Icons.Outlined.UnfoldMore
     val UndoneAll = Icons.Outlined.RemoveDone
 }
