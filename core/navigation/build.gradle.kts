@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.hnote.android.library)
+    alias(libs.plugins.hnote.android.library.compose)
     alias(libs.plugins.hnote.hilt)
 }
 
@@ -8,5 +9,7 @@ android {
 }
 
 dependencies {
+    api(libs.androidx.navigation.compose)
+
     implementation(libs.org.jetbrains.kotlinx.coroutines.core)
 }
