@@ -4,8 +4,9 @@ import androidx.navigation.NavOptions
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import javax.inject.Inject
 
-class NavigatorImpl : Navigator {
+class NavigatorImpl @Inject constructor() : Navigator {
     private val _events = MutableSharedFlow<NavigationEvent>()
     override val events: SharedFlow<NavigationEvent> = _events.asSharedFlow()
 
