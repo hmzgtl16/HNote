@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hnote.core.data.repository.SearchRepository
 import com.example.hnote.core.model.SearchQuery
+import com.example.hnote.core.navigation.Navigator
+import com.example.hnote.core.navigation.Route
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -18,6 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
+    private val navigator: Navigator,
     private val searchRepository: SearchRepository
 ) : ViewModel() {
 
@@ -62,6 +65,14 @@ class SearchViewModel @Inject constructor(
 
     fun clearAllRecentSearches() = viewModelScope.launch {
         searchRepository.deleteAll()
+    }
+
+    fun navigateToNote(noteId: Long) = viewModelScope.launch {
+        navigator.navigateTo(route = Route.Note(noteId = noteId))
+    }
+
+    fun navigateBack() = viewModelScope.launch {
+        navigator.navigateBack()
     }
 
     companion object {

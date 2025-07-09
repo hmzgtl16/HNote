@@ -54,17 +54,14 @@ import com.example.hnote.core.ui.SearchResultPreviewParameterProvider
 
 @Composable
 internal fun SearchRoute(
-    onBackClick: () -> Unit,
-    onNoteClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SearchViewModel = hiltViewModel(),
 ) {
-
     val recentSearchQueriesUiState by viewModel.recentSearchQueriesUiState.collectAsStateWithLifecycle()
     val searchResultUiState by viewModel.searchResultUiState.collectAsStateWithLifecycle()
     val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
 
-    BackHandler(onBack = onBackClick)
+    BackHandler(onBack = viewModel::navigateBack)
 
     SearchScreen(
         modifier = modifier,
@@ -75,8 +72,8 @@ internal fun SearchRoute(
         onSearchTriggered = viewModel::onSearchTriggered,
         onClearRecentSearch = viewModel::clearRecentSearch,
         onClearAllRecentSearches = viewModel::clearAllRecentSearches,
-        onBackClick = onBackClick,
-        onNoteClick = onNoteClick
+        onBackClick = viewModel::navigateBack,
+        onNoteClick = viewModel::navigateToNote
     )
 }
 
@@ -94,7 +91,6 @@ internal fun SearchScreen(
     onBackClick: () -> Unit,
     onNoteClick: (id: Long) -> Unit
 ) {
-
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.TopCenter,
