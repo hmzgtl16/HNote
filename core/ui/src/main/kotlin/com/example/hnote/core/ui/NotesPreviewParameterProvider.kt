@@ -48,8 +48,7 @@ class NotesPreviewParameterProvider : PreviewParameterProvider<Map<Boolean, List
                         pinned = true,
                         reminder = Reminder(
                             time = Instant.parse("2024-10-01T12:00:00Z"),
-                            repeatMode = RepeatMode.NONE,
-                            completed = false
+                            repeatMode = RepeatMode.NONE
                         )
                     ),
                     Note(
@@ -60,8 +59,7 @@ class NotesPreviewParameterProvider : PreviewParameterProvider<Map<Boolean, List
                         pinned = true,
                         reminder = Reminder(
                             time = Instant.parse("2024-10-01T12:00:00Z"),
-                            repeatMode = RepeatMode.DAILY,
-                            completed = true
+                            repeatMode = RepeatMode.DAILY
                         )
                     ),
                     Note(
@@ -136,8 +134,7 @@ class NotesPreviewParameterProvider : PreviewParameterProvider<Map<Boolean, List
                         pinned = false,
                         reminder = Reminder(
                             time = Instant.parse("2024-10-01T12:00:00Z"),
-                            repeatMode = RepeatMode.DAILY,
-                            completed = false
+                            repeatMode = RepeatMode.DAILY
                         )
                     ),
                     Note(
@@ -148,8 +145,7 @@ class NotesPreviewParameterProvider : PreviewParameterProvider<Map<Boolean, List
                         pinned = false,
                         reminder = Reminder(
                             time = Instant.parse("2024-10-01T12:00:00Z"),
-                            repeatMode = RepeatMode.WEEKLY,
-                            completed = true
+                            repeatMode = RepeatMode.WEEKLY
                         )
                     ),
                     Note(
