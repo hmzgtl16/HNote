@@ -1,5 +1,6 @@
 package com.example.hnote.feature.note
 
+import com.example.hnote.core.model.Item
 import com.example.hnote.core.model.Note
 import com.example.hnote.core.model.Reminder
 
@@ -9,6 +10,7 @@ data class NoteUiState(
     val content: String = "",
     val backgroundColor: Int? = null,
     val reminder: Reminder? = null,
+    val items: List<Item> = emptyList(),
     val isEdited: Boolean = false,
     val isReminderPickerVisible: Boolean = false,
     val isPaletteVisible: Boolean = false,
@@ -22,7 +24,8 @@ data class NoteUiState(
         title = title,
         content = content,
         backgroundColor = backgroundColor,
-        reminder = reminder
+        reminder = reminder,
+        items = items
     )
 }
 
@@ -30,5 +33,6 @@ data class EditableNoteState(
     val title: String,
     val content: String,
     val backgroundColor: Int?,
-    val reminder: Reminder?
+    val reminder: Reminder?,
+    val items: List<Item>
 )

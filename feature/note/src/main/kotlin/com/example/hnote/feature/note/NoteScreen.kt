@@ -40,9 +40,11 @@ import com.example.hnote.core.design.component.AppTextButton
 import com.example.hnote.core.design.component.ThemePreviews
 import com.example.hnote.core.design.icon.AppIcons
 import com.example.hnote.core.design.theme.AppTheme
+import com.example.hnote.core.model.Item
 import com.example.hnote.core.model.Reminder
 import com.example.hnote.core.model.RepeatMode
 import com.example.hnote.core.ui.DevicePreviews
+import com.example.hnote.core.ui.EditableItemCard
 import com.example.hnote.core.ui.PaletteModalBottomSheet
 import com.example.hnote.core.ui.ReminderCard
 import com.example.hnote.core.ui.ReminderDateTimePickerDialog
@@ -92,7 +94,7 @@ internal fun NoteScreen(
 ) {
     val focusManager = LocalFocusManager.current
     val paletteModalBottomSheetState = rememberModalBottomSheetState()
-    val formatedLastEdit = remember(key1 = uiState.note?.updated) {
+    val formattedLastEdit = remember(uiState.note?.updated) {
         uiState.note?.updated
             ?.toLocalDateTime(timeZone = TimeZone.currentSystemDefault())
             ?.format(format = formatter)
@@ -128,7 +130,7 @@ internal fun NoteScreen(
                     )
 
                     AppIconButton(
-                        onClick = { },
+                        onClick = { onEvent(NoteScreenEvent.AddItem) },
                         icon = {
                             Icon(
                                 imageVector = AppIcons.Checked,
@@ -245,6 +247,32 @@ internal fun NoteScreen(
                                         .padding(horizontal = 16.dp)
                                 )
                             }
+
+                            Column(
+                                content = {
+                                    uiState.items.forEachIndexed { index, item ->
+                                        EditableItemCard(
+                                            item = item,
+                                            onItemChanged = {
+                                                onEvent(
+                                                    NoteScreenEvent.UpdateItem(
+                                                        oldItem = item,
+                                                        newItem = it
+                                                    )
+                                                )
+                                            },
+                                            onDeleteItemClick = {
+                                                onEvent(
+                                                    NoteScreenEvent.RemoveItem(
+                                                        item
+                                                    )
+                                                )
+                                            },
+                                            modifier = Modifier
+                                        )
+                                    }
+                                }
+                            )
                         }
                     )
 
@@ -253,7 +281,7 @@ internal fun NoteScreen(
                             modifier = Modifier.fillMaxWidth(),
                             text = stringResource(
                                 id = R.string.feature_note_last_edit,
-                                formatedLastEdit!!
+                                formattedLastEdit!!
                             ),
                             textAlign = TextAlign.Center,
                             style = MaterialTheme.typography.labelSmall,
@@ -357,6 +385,13 @@ internal fun NoteScreenPreview() {
                     reminder = Reminder(
                         time = Clock.System.now().plus(4.hours),
                         repeatMode = RepeatMode.DAILY
+                    ),
+                    items = listOf(
+                        Item(id = 1L, content = "Item 1", checked = false),
+                        Item(id = 2L, content = "Item 2", checked = true),
+                        Item(id = 3L, content = "Item 3", checked = false),
+                        Item(id = 4L, content = "Item 4", checked = false),
+                        Item(id = 5L, content = "Item 5", checked = true)
                     )
                 ),
                 onEvent = {},

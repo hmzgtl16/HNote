@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.example.hnote.core.data.repository.NoteRepository
+import com.example.hnote.core.model.Item
 import com.example.hnote.core.model.Note
 import com.example.hnote.core.navigation.Navigator
 import com.example.hnote.core.navigation.Route
@@ -43,7 +44,8 @@ class NoteViewModel @Inject constructor(
                             title = note.title,
                             content = note.content,
                             backgroundColor = note.backgroundColor,
-                            reminder = note.reminder
+                            reminder = note.reminder,
+                            items = note.items
                         )
 
                         clearUndoRedoStacks()
@@ -55,6 +57,7 @@ class NoteViewModel @Inject constructor(
                                 content = initialEditableState.content,
                                 backgroundColor = initialEditableState.backgroundColor,
                                 reminder = initialEditableState.reminder,
+                                items = initialEditableState.items,
                                 isEdited = false
                             )
                         }
@@ -96,6 +99,24 @@ class NoteViewModel @Inject constructor(
                 updateEditableState(newEditableState = currentStateSnapshot.copy(reminder = event.reminder))
             }
 
+            is NoteScreenEvent.AddItem -> handleEditableStateChange {
+                val items = it.items.toMutableList()
+                items.add(element = Item())
+                it.copy(items = it.items + Item())
+            }
+
+            is NoteScreenEvent.RemoveItem -> handleEditableStateChange {
+                val items = it.items.toMutableList()
+                items.removeAt(index = event.index)
+                it.copy(items = items.toList())
+            }
+
+            is NoteScreenEvent.UpdateItem -> handleEditableStateChange {
+                val items = it.items.toMutableList()
+                items.set(index = event.index, element = event.item)
+                it.copy(items = items.toList())
+            }
+
             is NoteScreenEvent.ReminderPickerVisibilityChanged -> _uiState.update {
                 it.copy(isReminderPickerVisible = event.isVisible)
             }
@@ -134,7 +155,7 @@ class NoteViewModel @Inject constructor(
     }
 
     private fun addChangeToHistory(previousState: EditableNoteState) {
-        if (undoStack.size >= maxHistorySize) {
+        if (undoStack.size >= MAX_HISTORY_SIZE) {
             undoStack.removeFirst()
         }
         undoStack.addLast(previousState)
@@ -142,6 +163,12 @@ class NoteViewModel @Inject constructor(
         if (!uiState.value.isEdited) {
             _uiState.update { it.copy(isEdited = true) }
         }
+    }
+
+    private fun handleEditableStateChange(updateAction: (EditableNoteState) -> EditableNoteState) {
+        val currentStateSnapshot = uiState.value.getEditableSnapshot()
+        addChangeToHistory(previousState = currentStateSnapshot)
+        updateEditableState(newEditableState = updateAction(currentStateSnapshot))
     }
 
     private fun clearUndoRedoStacks() {
@@ -206,6 +233,10 @@ class NoteViewModel @Inject constructor(
 
     fun navigateBack() = viewModelScope.launch {
         navigator.navigateBack()
+    }
+
+    companion object {
+        private const val MAX_HISTORY_SIZE = 30
     }
 }
 
