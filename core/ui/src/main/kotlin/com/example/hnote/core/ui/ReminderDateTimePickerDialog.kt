@@ -28,29 +28,34 @@ import com.example.hnote.core.design.component.AppExposedDropdownMenuTextField
 import com.example.hnote.core.design.component.AppTextButton
 import com.example.hnote.core.design.component.ThemePreviews
 import com.example.hnote.core.design.theme.AppTheme
+import com.example.hnote.core.model.Reminder
 import com.example.hnote.core.model.RepeatMode
 import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import java.time.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ReminderDateTimePickerDialog(
-    reminder: Instant?,
-    repeatMode: RepeatMode,
-    onConfirmClick: (Instant, RepeatMode) -> Unit,
+fun ReminderDateTimePickerDialog(
+    reminder: Reminder?,
+    onConfirmClick: (Reminder?) -> Unit,
     onCancelClick: () -> Unit,
     onDeleteClick: () -> Unit,
 ) {
-    var newReminder by remember { mutableStateOf(value = reminder ?: Clock.System.now()) }
-    var newRepeatMode by remember { mutableStateOf(value = repeatMode) }
+    var newReminder by remember {
+        mutableStateOf(
+            value = reminder ?: Reminder(
+                time = Clock.System.now(),
+                repeatMode = RepeatMode.NONE
+            )
+        )
+    }
     var repeatModeMenuExpanded by remember { mutableStateOf(value = false) }
 
     AppAlertDialog(
         onDismissRequest = onCancelClick,
         confirmButton = {
             AppTextButton(
-                onClick = { onConfirmClick(newReminder, newRepeatMode) },
+                onClick = { onConfirmClick(newReminder) },
                 text = {
                     Text(
                         text = stringResource(id = R.string.feature_task_reminder_picker_confirm),
@@ -107,13 +112,15 @@ private fun ReminderDateTimePickerDialog(
                 content = {
 
                     AppDateTimePicker(
-                        startDateTime = reminder?.toJavaLocalDateTime()
+                        startDateTime = reminder?.time?.toJavaLocalDateTime()
                             ?: LocalDateTime.now().plusHours(1),
                         yearsRange = IntRange(
                             start = LocalDateTime.now().year,
                             endInclusive = 2100
                         ),
-                        onSnappedDateTime = { newReminder = it.toKotlinInstant() }
+                        onSnappedDateTime = {
+                            newReminder = newReminder.copy(time = it.toKotlinInstant())
+                        }
                     )
 
                     AppExposedDropdownMenuBox(
@@ -124,7 +131,7 @@ private fun ReminderDateTimePickerDialog(
                             AppExposedDropdownMenuTextField(
                                 modifier = Modifier.fillMaxWidth(),
                                 expanded = repeatModeMenuExpanded,
-                                value = stringResource(id = newRepeatMode.id()),
+                                value = stringResource(id = newReminder.repeatMode.id()),
                                 onValueChange = {},
                                 label = {
                                     Text(text = stringResource(id = R.string.feature_task_reminder_picker_repeat_mode))
@@ -145,7 +152,7 @@ private fun ReminderDateTimePickerDialog(
                                                 )
                                             },
                                             onClick = {
-                                                newRepeatMode = it
+                                                newReminder = newReminder.copy(repeatMode = it)
                                                 repeatModeMenuExpanded = false
                                             },
                                             leadingIcon = {}
@@ -168,8 +175,7 @@ fun ReminderDateTimePickerDialogPreview() {
         AppBackground {
             ReminderDateTimePickerDialog(
                 reminder = null,
-                repeatMode = RepeatMode.NONE,
-                onConfirmClick = { _, _ -> },
+                onConfirmClick = {},
                 onCancelClick = {},
                 onDeleteClick = {}
             )
