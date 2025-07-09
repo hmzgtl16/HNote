@@ -1,10 +1,12 @@
-package com.example.notes.feature.notes
+package com.example.hnote.feature.notes
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hnote.core.data.repository.NoteRepository
 import com.example.hnote.core.domain.usecase.GetNotesUseCase
 import com.example.hnote.core.model.Note
+import com.example.hnote.core.navigation.Navigator
+import com.example.hnote.core.navigation.Route
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -18,6 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NotesViewModel @Inject constructor(
+    private val navigator: Navigator,
     private val noteRepository: NoteRepository,
     getNotesUseCase: GetNotesUseCase
 ) : ViewModel() {
@@ -82,5 +85,9 @@ class NotesViewModel @Inject constructor(
         noteRepository.updateNotes(notes = selectedNotes.value.map { it.copy(pinned = isPinned) })
         _selectedNotes.value = emptyList()
         _multiSelectionEnabled.value = false
+    }
+
+    fun navigateToNote(noteId: Long) = viewModelScope.launch {
+        navigator.navigateTo(route = Route.Note(noteId = noteId))
     }
 }

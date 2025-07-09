@@ -1,4 +1,4 @@
-package com.example.notes.feature.notes
+package com.example.hnote.feature.notes
 
 import com.example.hnote.core.model.Note
 

@@ -1,4 +1,4 @@
-package com.example.notes.feature.notes
+package com.example.hnote.feature.notes
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -62,7 +62,6 @@ import com.example.hnote.core.ui.NotesPreviewParameterProvider
 
 @Composable
 internal fun NotesRoute(
-    onNoteClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: NotesViewModel = hiltViewModel(),
 ) {
@@ -83,7 +82,7 @@ internal fun NotesRoute(
         onNoteSelectedChanged = viewModel::onNoteSelectedChanged,
         deleteNotes = viewModel::deleteNotes,
         pinNotes = viewModel::pinNotes,
-        onNoteClick = onNoteClick,
+        onNoteClick = viewModel::navigateToNote,
         onPinClick = viewModel::pinNote,
         deletedNotes = deleteNotes,
         isDeleteSuccess = isDeleteSuccess,
