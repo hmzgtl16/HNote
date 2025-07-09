@@ -40,59 +40,43 @@ import com.example.hnote.core.design.component.AppTextButton
 import com.example.hnote.core.design.component.ThemePreviews
 import com.example.hnote.core.design.icon.AppIcons
 import com.example.hnote.core.design.theme.AppTheme
+import com.example.hnote.core.model.Reminder
+import com.example.hnote.core.model.RepeatMode
 import com.example.hnote.core.ui.DevicePreviews
 import com.example.hnote.core.ui.PaletteModalBottomSheet
+import com.example.hnote.core.ui.ReminderCard
+import com.example.hnote.core.ui.ReminderDateTimePickerDialog
 import com.example.hnote.core.ui.formatter
-import kotlinx.datetime.Instant
+import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.format
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Duration.Companion.hours
 
 @Composable
 internal fun NoteRoute(
-    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: NoteViewModel = hiltViewModel(),
 ) {
-    val note by viewModel.note.collectAsStateWithLifecycle()
-    val title by viewModel.title.collectAsStateWithLifecycle()
-    val description by viewModel.description.collectAsStateWithLifecycle()
-    val backgroundColor by viewModel.backgroundColor.collectAsStateWithLifecycle()
-    val pinned by viewModel.pinned.collectAsStateWithLifecycle()
-    val paletteVisibility by viewModel.paletteVisibility.collectAsStateWithLifecycle()
-    val deleteDialogVisibility by viewModel.deleteDialogVisibility.collectAsStateWithLifecycle()
-    val isDeleted by viewModel.isDeleted.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     BackHandler(
         onBack = {
-            viewModel.saveNote()
-            onBackClick()
+            viewModel.onEvent(event = NoteScreenEvent.SaveNote)
+            viewModel.navigateBack()
         }
     )
 
-    LaunchedEffect(key1 = isDeleted) {
-        if (note == null && isDeleted) onBackClick()
+    LaunchedEffect(key1 = uiState.isDeleted) {
+        if (uiState.isDeleted) viewModel.navigateBack()
     }
 
     NoteScreen(
-        title = title,
-        onTitleChange = viewModel::onTitleChange,
-        description = description,
-        onDescriptionChange = viewModel::onDescriptionChange,
-        backgroundColor = backgroundColor,
-        onBackgroundColorChange = viewModel::onBackgroundColorChange,
-        pinned = pinned,
-        onPinnedChange = viewModel::onPinnedChange,
-        lastEdit = note?.updated,
-        paletteVisibility = paletteVisibility,
-        onPaletteVisibilityChange = viewModel::onPaletteVisibilityChange,
-        deleteDialogVisibility = deleteDialogVisibility,
-        onDeleteDialogVisibilityChange = viewModel::onDeleteDialogVisibilityChange,
-        onCopyClick = viewModel::copyNote,
-        onDeleteClick = viewModel::deleteNote,
+        uiState = uiState,
+        onEvent = viewModel::onEvent,
         onBackClick = {
-            viewModel.saveNote()
-            onBackClick()
+            viewModel.onEvent(NoteScreenEvent.SaveNote)
+            viewModel.navigateBack()
         },
         modifier = modifier
     )
@@ -101,41 +85,29 @@ internal fun NoteRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun NoteScreen(
-    title: String,
-    onTitleChange: (String) -> Unit,
-    description: String,
-    onDescriptionChange: (String) -> Unit,
-    backgroundColor: Int?,
-    onBackgroundColorChange: (color: Int?) -> Unit,
-    pinned: Boolean,
-    onPinnedChange: (Boolean) -> Unit,
-    lastEdit: Instant?,
-    paletteVisibility: Boolean,
-    onPaletteVisibilityChange: (Boolean) -> Unit,
-    deleteDialogVisibility: Boolean,
-    onDeleteDialogVisibilityChange: (Boolean) -> Unit,
-    onCopyClick: () -> Unit,
-    onDeleteClick: () -> Unit,
+    uiState: NoteUiState,
+    onEvent: (NoteScreenEvent) -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
     val paletteModalBottomSheetState = rememberModalBottomSheetState()
-    val formatedLastEdit = remember(key1 = lastEdit) {
-        lastEdit
+    val formatedLastEdit = remember(key1 = uiState.note?.updated) {
+        uiState.note?.updated
             ?.toLocalDateTime(timeZone = TimeZone.currentSystemDefault())
             ?.format(format = formatter)
     }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        containerColor = if (backgroundColor != null) Color(color = backgroundColor)
-        else MaterialTheme.colorScheme.background,
+        containerColor = uiState.backgroundColor
+            ?.let(::Color) ?: MaterialTheme.colorScheme.background,
         bottomBar = {
             AppBottomAppBar(
                 actions = {
                     AppIconButton(
-                        onClick = {},
+                        onClick = { onEvent(NoteScreenEvent.Undo) },
+                        enabled = uiState.canUndo,
                         icon = {
                             Icon(
                                 imageVector = AppIcons.Undo,
@@ -145,7 +117,8 @@ internal fun NoteScreen(
                     )
 
                     AppIconButton(
-                        onClick = {},
+                        onClick = { onEvent(NoteScreenEvent.Redo) },
+                        enabled = uiState.canRedo,
                         icon = {
                             Icon(
                                 imageVector = AppIcons.Redo,
@@ -165,7 +138,7 @@ internal fun NoteScreen(
                     )
 
                     AppIconButton(
-                        onClick = { },
+                        onClick = { onEvent(NoteScreenEvent.ReminderPickerVisibilityChanged(true)) },
                         icon = {
                             Icon(
                                 imageVector = AppIcons.Reminder,
@@ -175,7 +148,7 @@ internal fun NoteScreen(
                     )
 
                     AppIconButton(
-                        onClick = { onPaletteVisibilityChange(true) },
+                        onClick = { onEvent(NoteScreenEvent.PaletteVisibilityChanged(true)) },
                         icon = {
                             Icon(
                                 imageVector = AppIcons.Palette,
@@ -185,7 +158,7 @@ internal fun NoteScreen(
                     )
 
                     AppIconButton(
-                        onClick = onCopyClick,
+                        onClick = { onEvent(NoteScreenEvent.CopyNote) },
                         icon = {
                             Icon(
                                 imageVector = AppIcons.Copy,
@@ -195,7 +168,7 @@ internal fun NoteScreen(
                     )
 
                     AppIconButton(
-                        onClick = { onDeleteDialogVisibilityChange(true) },
+                        onClick = { onEvent(NoteScreenEvent.DeleteDialogVisibilityChanged(true)) },
                         icon = {
                             Icon(
                                 imageVector = AppIcons.Delete,
@@ -204,23 +177,21 @@ internal fun NoteScreen(
                         }
                     )
                 },
-                containerColor = backgroundColor?.let { Color(color = backgroundColor) }
-                    ?: Color.Transparent
+                containerColor = uiState.backgroundColor?.let(::Color) ?: Color.Transparent
             )
         },
-        content = {
+        content = { padding ->
 
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues = it),
+                    .padding(paddingValues = padding),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(
                     space = 24.dp,
                     alignment = Alignment.Top
                 ),
                 content = {
-
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -231,11 +202,10 @@ internal fun NoteScreen(
                             alignment = Alignment.Top
                         ),
                         content = {
-
                             AppOutlinedTextField(
                                 modifier = Modifier.fillMaxWidth(),
-                                value = title,
-                                onValueChange = onTitleChange,
+                                value = uiState.title,
+                                onValueChange = { onEvent(NoteScreenEvent.TitleChanged(it)) },
                                 placeholder = {
                                     Text(text = stringResource(id = R.string.feature_note_title_placeholder))
                                 },
@@ -254,8 +224,8 @@ internal fun NoteScreen(
 
                             AppOutlinedTextField(
                                 modifier = Modifier.fillMaxWidth(),
-                                value = description,
-                                onValueChange = onDescriptionChange,
+                                value = uiState.content,
+                                onValueChange = { onEvent(NoteScreenEvent.ContentChanged(it)) },
                                 placeholder = {
                                     Text(text = stringResource(id = R.string.feature_note_description_placeholder))
                                 },
@@ -266,10 +236,19 @@ internal fun NoteScreen(
                                     imeAction = ImeAction.Done
                                 )
                             )
+
+                            uiState.reminder?.let {
+                                ReminderCard(
+                                    reminder = it,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp)
+                                )
+                            }
                         }
                     )
 
-                    if (lastEdit != null)
+                    uiState.note?.updated?.let {
                         Text(
                             modifier = Modifier.fillMaxWidth(),
                             text = stringResource(
@@ -279,33 +258,49 @@ internal fun NoteScreen(
                             textAlign = TextAlign.Center,
                             style = MaterialTheme.typography.labelSmall,
                         )
+                    }
                 }
             )
         }
     )
 
-    if (paletteVisibility) {
-        PaletteModalBottomSheet(
-            sheetState = paletteModalBottomSheetState,
-            onDismissRequest = { onPaletteVisibilityChange(false) },
-            backgroundColor = backgroundColor,
-            onBackgroundColorChange = {
-                onBackgroundColorChange(it)
-                onPaletteVisibilityChange(false)
+    if (uiState.isReminderPickerVisible) {
+        ReminderDateTimePickerDialog(
+            reminder = uiState.reminder,
+            onConfirmClick = {
+                onEvent(NoteScreenEvent.ReminderChanged(it))
+                onEvent(NoteScreenEvent.ReminderPickerVisibilityChanged(false))
+            },
+            onCancelClick = { onEvent(NoteScreenEvent.ReminderPickerVisibilityChanged(false)) },
+            onDeleteClick = {
+                onEvent(NoteScreenEvent.ReminderChanged(null))
+                onEvent(NoteScreenEvent.ReminderPickerVisibilityChanged(false))
             }
         )
     }
 
-    if (deleteDialogVisibility) {
+    if (uiState.isPaletteVisible) {
+        PaletteModalBottomSheet(
+            sheetState = paletteModalBottomSheetState,
+            onDismissRequest = { onEvent(NoteScreenEvent.PaletteVisibilityChanged(false)) },
+            backgroundColor = uiState.backgroundColor,
+            onBackgroundColorChange = {
+                onEvent(NoteScreenEvent.BackgroundColorChanged(it))
+                onEvent(NoteScreenEvent.PaletteVisibilityChanged(false))
+            }
+        )
+    }
+
+    if (uiState.isDeleteDialogVisible) {
         AppAlertDialog(
             onDismissRequest = {
-                onDeleteDialogVisibilityChange(false)
+                onEvent(NoteScreenEvent.DeleteDialogVisibilityChanged(false))
             },
             confirmButton = {
                 AppTextButton(
                     onClick = {
-                        onDeleteDialogVisibilityChange(false)
-                        onDeleteClick()
+                        onEvent(NoteScreenEvent.DeleteNote)
+                        onEvent(NoteScreenEvent.DeleteDialogVisibilityChanged(false))
                     },
                     text = {
                         Text(
@@ -318,9 +313,7 @@ internal fun NoteScreen(
             },
             dismissButton = {
                 AppTextButton(
-                    onClick = {
-                        onDeleteDialogVisibilityChange(false)
-                    },
+                    onClick = { onEvent(NoteScreenEvent.DeleteDialogVisibilityChanged(false)) },
                     text = {
                         Text(
                             text = stringResource(R.string.feature_note_delete_note_dismiss),
@@ -333,7 +326,7 @@ internal fun NoteScreen(
                 Text(
                     text = stringResource(
                         id = R.string.feature_note_delete_note_title,
-                        title.ifEmpty {
+                        uiState.title.ifEmpty {
                             stringResource(id = R.string.feature_note_title_unspecified)
                         }
                     ),
@@ -357,21 +350,16 @@ internal fun NoteScreenPreview() {
     AppTheme {
         AppBackground {
             NoteScreen(
-                title = "",
-                onTitleChange = {},
-                description = "",
-                onDescriptionChange = {},
-                backgroundColor = null,
-                onBackgroundColorChange = {},
-                pinned = false,
-                onPinnedChange = {},
-                lastEdit = null,
-                paletteVisibility = false,
-                onPaletteVisibilityChange = {},
-                deleteDialogVisibility = false,
-                onDeleteDialogVisibilityChange = {},
-                onCopyClick = {},
-                onDeleteClick = {},
+                uiState = NoteUiState(
+                    title = "Note Title",
+                    content = "Note description for...",
+                    backgroundColor = null,
+                    reminder = Reminder(
+                        time = Clock.System.now().plus(4.hours),
+                        repeatMode = RepeatMode.DAILY
+                    )
+                ),
+                onEvent = {},
                 onBackClick = {}
             )
         }
