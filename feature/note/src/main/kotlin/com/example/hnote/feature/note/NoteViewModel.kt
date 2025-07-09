@@ -6,117 +6,206 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.example.hnote.core.data.repository.NoteRepository
 import com.example.hnote.core.model.Note
-import com.example.hnote.feature.note.navigation.NoteRoute
+import com.example.hnote.core.navigation.Navigator
+import com.example.hnote.core.navigation.Route
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import javax.inject.Inject
 
 @HiltViewModel
 class NoteViewModel @Inject constructor(
+    private val navigator: Navigator,
     private val noteRepository: NoteRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    init {
-        val noteId = savedStateHandle.toRoute<NoteRoute>().noteId
+    private val _uiState = MutableStateFlow(NoteUiState())
+    val uiState: StateFlow<NoteUiState> = _uiState.asStateFlow()
 
-        viewModelScope.launch {
-            noteRepository.getNoteById(id = noteId).collect {
-                _note.value = it
-                _title.value = it?.title ?: ""
-                _description.value = it?.content ?: ""
-                _backgroundColor.value = it?.backgroundColor
-                _pinned.value = it?.pinned ?: false
-                _isEdited.value = false
+    private val undoStack = ArrayDeque<EditableNoteState>()
+    private val redoStack = ArrayDeque<EditableNoteState>()
+
+    private val maxHistorySize = 30
+
+    init {
+        savedStateHandle.toRoute<Route.Note>().noteId?.let { id ->
+            viewModelScope.launch {
+                noteRepository.getNoteById(id = id)
+                    .filterNotNull()
+                    .collect { note ->
+                        val initialEditableState = EditableNoteState(
+                            title = note.title,
+                            content = note.content,
+                            backgroundColor = note.backgroundColor,
+                            reminder = note.reminder
+                        )
+
+                        clearUndoRedoStacks()
+
+                        _uiState.update {
+                            it.copy(
+                                note = note,
+                                title = initialEditableState.title,
+                                content = initialEditableState.content,
+                                backgroundColor = initialEditableState.backgroundColor,
+                                reminder = initialEditableState.reminder,
+                                isEdited = false
+                            )
+                        }
+                    }
+            }
+        } ?: run {
+            clearUndoRedoStacks()
+
+            _uiState.update {
+                it.copy(
+                    canUndo = undoStack.isNotEmpty(),
+                    canRedo = redoStack.isNotEmpty()
+                )
             }
         }
     }
 
-    private val _note = MutableStateFlow<Note?>(value = null)
-    val note: StateFlow<Note?> get() = _note
+    fun onEvent(event: NoteScreenEvent) {
+        val currentStateSnapshot = uiState.value.getEditableSnapshot()
 
-    private val _title = MutableStateFlow(value = "")
-    val title: StateFlow<String> get() = _title
+        when (event) {
+            is NoteScreenEvent.TitleChanged -> {
+                addChangeToHistory(previousState = currentStateSnapshot)
+                updateEditableState(newEditableState = currentStateSnapshot.copy(title = event.title))
+            }
 
-    private val _description = MutableStateFlow(value = "")
-    val description: StateFlow<String> get() = _description
+            is NoteScreenEvent.ContentChanged -> {
+                addChangeToHistory(previousState = currentStateSnapshot)
+                updateEditableState(newEditableState = currentStateSnapshot.copy(content = event.content))
+            }
 
-    private val _backgroundColor = MutableStateFlow<Int?>(value = null)
-    val backgroundColor: StateFlow<Int?> get() = _backgroundColor
+            is NoteScreenEvent.BackgroundColorChanged -> {
+                addChangeToHistory(previousState = currentStateSnapshot)
+                updateEditableState(newEditableState = currentStateSnapshot.copy(backgroundColor = event.color))
+            }
 
-    private val _pinned = MutableStateFlow(value = false)
-    val pinned: StateFlow<Boolean> get() = _pinned
+            is NoteScreenEvent.ReminderChanged -> {
+                addChangeToHistory(previousState = currentStateSnapshot)
+                updateEditableState(newEditableState = currentStateSnapshot.copy(reminder = event.reminder))
+            }
 
-    private val _paletteVisibility = MutableStateFlow(value = false)
-    val paletteVisibility: StateFlow<Boolean> get() = _paletteVisibility
+            is NoteScreenEvent.ReminderPickerVisibilityChanged -> _uiState.update {
+                it.copy(isReminderPickerVisible = event.isVisible)
+            }
 
-    private val _deleteDialogVisibility = MutableStateFlow(value = false)
-    val deleteDialogVisibility: StateFlow<Boolean> get() = _deleteDialogVisibility
+            is NoteScreenEvent.PaletteVisibilityChanged -> _uiState.update {
+                it.copy(isPaletteVisible = event.isVisible)
+            }
 
-    private val _isEdited = MutableStateFlow(value = false)
-    private val isEdited: StateFlow<Boolean> get() = _isEdited
+            is NoteScreenEvent.DeleteDialogVisibilityChanged -> _uiState.update {
+                it.copy(isDeleteDialogVisible = event.isVisible)
+            }
 
-    private val _isDeleted = MutableStateFlow(value = false)
-    val isDeleted: StateFlow<Boolean> get() = _isDeleted
-
-    fun onTitleChange(value: String) {
-        _isEdited.value = true
-        _title.value = value
+            is NoteScreenEvent.Undo -> undo()
+            is NoteScreenEvent.Redo -> redo()
+            is NoteScreenEvent.SaveNote -> saveNote()
+            is NoteScreenEvent.CopyNote -> copyNote()
+            is NoteScreenEvent.DeleteNote -> deleteNote()
+        }
     }
 
-    fun onDescriptionChange(value: String) {
-        _isEdited.value = true
-        _description.value = value
-    }
-
-    fun onBackgroundColorChange(value: Int?) {
-        _isEdited.value = true
-        _backgroundColor.value = value
-    }
-
-    fun onPinnedChange(value: Boolean) {
-        _isEdited.value = true
-        _pinned.value = value
-    }
-
-    fun onPaletteVisibilityChange(value: Boolean) {
-        _paletteVisibility.value = value
-    }
-
-    fun onDeleteDialogVisibilityChange(value: Boolean) {
-        _deleteDialogVisibility.value = value
-    }
-
-    fun saveNote() = viewModelScope.launch {
-        if (!isEdited.value) return@launch
-        val note = note.value ?: Note()
-        noteRepository.updateNote(
-            note = note.copy(
-                title = title.value,
-                content = description.value,
-                updated = Clock.System.now(),
-                pinned = pinned.value,
-                backgroundColor = backgroundColor.value,
+    private fun updateEditableState(
+        newEditableState: EditableNoteState,
+        markAsEdited: Boolean = true
+    ) {
+        _uiState.update {
+            it.copy(
+                title = newEditableState.title,
+                content = newEditableState.content,
+                backgroundColor = newEditableState.backgroundColor,
+                reminder = newEditableState.reminder,
+                isEdited = if (markAsEdited) true else it.isEdited,
+                canUndo = undoStack.isNotEmpty(),
+                canRedo = redoStack.isNotEmpty()
             )
-        )
-        _isEdited.value = false
+        }
     }
 
-    fun copyNote() = viewModelScope.launch {
-        val note = note.value?.copy(
+    private fun addChangeToHistory(previousState: EditableNoteState) {
+        if (undoStack.size >= maxHistorySize) {
+            undoStack.removeFirst()
+        }
+        undoStack.addLast(previousState)
+        redoStack.clear()
+        if (!uiState.value.isEdited) {
+            _uiState.update { it.copy(isEdited = true) }
+        }
+    }
+
+    private fun clearUndoRedoStacks() {
+        undoStack.clear()
+        redoStack.clear()
+        _uiState.update {
+            it.copy(
+                canUndo = undoStack.isNotEmpty(),
+                canRedo = redoStack.isNotEmpty()
+            )
+        }
+    }
+
+    private fun undo() {
+        if (undoStack.isNotEmpty()) {
+            val stateToRestore = undoStack.removeLast()
+            val currentStateForRedo = uiState.value.getEditableSnapshot()
+            redoStack.addLast(currentStateForRedo)
+            updateEditableState(stateToRestore)
+        }
+    }
+
+    private fun redo() {
+        if (redoStack.isNotEmpty()) {
+            val stateToRestore = redoStack.removeLast()
+            val currentStateForUndo = uiState.value.getEditableSnapshot()
+            undoStack.addLast(currentStateForUndo)
+            updateEditableState(stateToRestore)
+        }
+    }
+
+    private fun saveNote() = viewModelScope.launch {
+        val currentState = uiState.value
+        if (!currentState.isEdited) return@launch
+
+        val noteToSave = currentState.note?.copy(
+            title = currentState.title,
+            content = currentState.content,
+            reminder = currentState.reminder,
+            backgroundColor = currentState.backgroundColor,
+            updated = Clock.System.now()
+        ) ?: Note()
+        noteRepository.updateNote(note = noteToSave)
+    }
+
+    private fun copyNote() = viewModelScope.launch {
+        val currentState = uiState.value
+
+        val noteToCopy = currentState.note?.copy(
             id = 0,
             created = Clock.System.now(),
             updated = Clock.System.now()
         ) ?: return@launch
-        noteRepository.updateNote(note = note)
+        noteRepository.updateNote(note = noteToCopy)
     }
 
-    fun deleteNote() = viewModelScope.launch {
-        val note = note.value ?: return@launch
-        noteRepository.deleteNote(note = note)
+    private fun deleteNote() = viewModelScope.launch {
+        val currentState = uiState.value
+        val noteToDelete = currentState.note ?: return@launch
+        noteRepository.deleteNote(note = noteToDelete)
+    }
+
+    fun navigateBack() = viewModelScope.launch {
+        navigator.navigateBack()
     }
 }
 
