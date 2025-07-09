@@ -43,7 +43,6 @@ import com.example.hnote.core.ui.DevicePreviews
 
 @Composable
 fun SettingsRoute(
-    onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
@@ -54,7 +53,7 @@ fun SettingsRoute(
         uiState = uiState,
         onChangeTheme = viewModel::updateTheme,
         onChangeDynamicTheme = viewModel::updateDynamicColor,
-        onDismiss = onDismiss,
+        onDismiss = viewModel::navigateBack,
         modifier = modifier
     )
 }

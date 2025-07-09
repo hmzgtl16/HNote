@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hnote.core.data.repository.UserDataRepository
 import com.example.hnote.core.model.Theme
+import com.example.hnote.core.navigation.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -14,6 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
+    private val navigator: Navigator,
     private val userDataRepository: UserDataRepository,
 ) : ViewModel() {
 
@@ -37,6 +39,10 @@ class SettingsViewModel @Inject constructor(
 
     fun updateDynamicColor(useDynamicColor: Boolean) = viewModelScope.launch {
         userDataRepository.setDynamicColorPreference(useDynamicColor)
+    }
+
+    fun navigateBack() = viewModelScope.launch {
+        navigator.navigateBack()
     }
 }
 
