@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.hnote.android.library)
     alias(libs.plugins.hnote.android.library.compose)
     alias(libs.plugins.hnote.hilt)
+    alias(libs.plugins.org.jetbrains.kotlin.serialization)
 }
 
 android {

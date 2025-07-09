@@ -46,7 +46,6 @@ import com.example.hnote.core.design.component.AppTopAppBar
 import com.example.hnote.core.design.icon.AppIcons
 import com.example.hnote.core.navigation.NavigationEvent
 import com.example.hnote.navigation.AppNavHost
-import kotlinx.coroutines.withContext
 
 @Composable
 fun App(
@@ -81,24 +80,26 @@ fun App(
     val lifecycleOwner = LocalLifecycleOwner.current
 
     LaunchedEffect(key1 = lifecycleOwner.lifecycle) {
-        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            withContext(appState.dispatcher) {
-                appState.navigator.events.collect {
-                    when (it) {
-                        is NavigationEvent.NavigateTo -> {
-                            appState.navController.navigate(
-                                route = it.route,
-                                navOptions = it.navOptions
-                            )
-                        }
+        lifecycleOwner
+            .repeatOnLifecycle(
+                state = Lifecycle.State.STARTED,
+                block = {
+                    appState.navigator.events.collect {
+                        when (it) {
+                            is NavigationEvent.NavigateTo -> {
+                                appState.navController.navigate(
+                                    route = it.route,
+                                    navOptions = it.navOptions
+                                )
+                            }
 
-                        is NavigationEvent.NavigateBack -> {
-                            appState.navController.navigateUp()
+                            is NavigationEvent.NavigateBack -> {
+                                appState.navController.navigateUp()
+                            }
                         }
                     }
                 }
-            }
-        }
+            )
     }
 
     val shouldShowTopAppBar = appState.isMainDestination
