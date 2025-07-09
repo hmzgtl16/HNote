@@ -55,6 +55,7 @@ dependencies {
 
     implementation(projects.core.data)
     implementation(projects.core.design)
+    implementation(projects.core.navigation)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core)
