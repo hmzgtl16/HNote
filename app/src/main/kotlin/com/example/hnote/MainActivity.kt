@@ -15,15 +15,27 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.hnote.core.common.ApplicationDispatcher
+import com.example.hnote.core.common.Dispatcher
 import com.example.hnote.core.design.theme.AppTheme
+import com.example.hnote.core.navigation.Navigator
 import com.example.hnote.ui.App
 import com.example.hnote.ui.rememberAppState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    @ApplicationDispatcher(dispatcher = Dispatcher.DEFAULT)
+    lateinit var dispatcher: CoroutineDispatcher
+
+    @Inject
+    lateinit var navigator: Navigator
 
     private val viewModel by viewModels<MainActivityViewModel>()
 
@@ -55,7 +67,10 @@ class MainActivity : ComponentActivity() {
         splashScreen.setKeepOnScreenCondition { viewModel.uiState.value.shouldKeepSplashScreen() }
 
         setContent {
-            val appState = rememberAppState()
+            val appState = rememberAppState(
+                dispatcher = dispatcher,
+                navigator = navigator
+            )
 
             AppTheme(
                 darkTheme = uiState.shouldUseDarkTheme(isSystemDarkTheme = isSystemInDarkTheme()),

@@ -9,13 +9,16 @@ import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.hnote.feature.search.navigation.navigateToSearch
-import com.example.hnote.feature.settings.navigation.navigateToSettings
-import com.example.notes.feature.notes.navigation.NotesRoute
+import com.example.hnote.core.navigation.Navigator
+import com.example.hnote.core.navigation.Route
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Stable
 class AppState(
+    val dispatcher: CoroutineDispatcher,
+    val navigator: Navigator,
     val navController: NavHostController,
     val coroutineScope: CoroutineScope
 ) {
@@ -25,18 +28,33 @@ class AppState(
             .currentBackStackEntryAsState().value?.destination
 
     val isMainDestination: Boolean
-        @Composable get() = currentDestination?.hasRoute(route = NotesRoute::class) ?: false
+        @Composable get() = currentDestination?.hasRoute(route = Route.Notes::class) ?: false
 
-    fun navigateToSearch() = navController.navigateToSearch()
-    fun navigateToSettings() = navController.navigateToSettings()
+    fun navigateToSearch() = coroutineScope.launch {
+        navigator.navigateTo(Route.Search)
+    }
+
+    fun navigateToSettings() = coroutineScope.launch {
+        navigator.navigateTo(Route.Settings)
+    }
 }
 
 @Composable
 fun rememberAppState(
+    dispatcher: CoroutineDispatcher,
+    navigator: Navigator,
     navController: NavHostController = rememberNavController(),
     coroutineScope: CoroutineScope = rememberCoroutineScope()
 ): AppState = remember(
-    key1 = navController,
-    key2 = coroutineScope,
-    calculation = { AppState(navController = navController, coroutineScope = coroutineScope) }
-)
+    dispatcher,
+    navigator,
+    navController,
+    coroutineScope
+) {
+    AppState(
+        dispatcher = dispatcher,
+        navigator = navigator,
+        navController = navController,
+        coroutineScope = coroutineScope
+    )
+}

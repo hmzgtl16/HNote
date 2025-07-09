@@ -29,18 +29,24 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.hnote.R
 import com.example.hnote.core.design.component.AppBackground
 import com.example.hnote.core.design.component.AppGradientBackground
 import com.example.hnote.core.design.component.AppIconButton
 import com.example.hnote.core.design.component.AppTopAppBar
 import com.example.hnote.core.design.icon.AppIcons
+import com.example.hnote.core.navigation.NavigationEvent
 import com.example.hnote.navigation.AppNavHost
+import kotlinx.coroutines.withContext
 
 @Composable
 fun App(
@@ -72,6 +78,29 @@ fun App(
     windowAdaptiveInfo: WindowAdaptiveInfo,
     modifier: Modifier = Modifier,
 ) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    LaunchedEffect(key1 = lifecycleOwner.lifecycle) {
+        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            withContext(appState.dispatcher) {
+                appState.navigator.events.collect {
+                    when (it) {
+                        is NavigationEvent.NavigateTo -> {
+                            appState.navController.navigate(
+                                route = it.route,
+                                navOptions = it.navOptions
+                            )
+                        }
+
+                        is NavigationEvent.NavigateBack -> {
+                            appState.navController.navigateUp()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     val shouldShowTopAppBar = appState.isMainDestination
 
     Scaffold(
