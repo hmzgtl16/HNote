@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.notes.feature.notes"
+    namespace = "com.example.hnote.feature.notes"
 }
 
 dependencies {
