@@ -32,7 +32,7 @@ fun Note.toReminderEntity(): ReminderEntity? = reminder?.let {
     ReminderEntity(
         time = it.time,
         repeatMode = it.repeatMode.toEntity(),
-        completed = it.completed,
+        completed = false,
         noteId = id
     )
 }
@@ -40,7 +40,7 @@ fun Note.toReminderEntity(): ReminderEntity? = reminder?.let {
 fun Reminder.toEntity(noteId: Long = 0L): ReminderEntity = ReminderEntity(
     time = time,
     repeatMode = repeatMode.toEntity(),
-    completed = completed,
+    completed = false,
     noteId = noteId
 )
 
@@ -53,8 +53,7 @@ fun Item.toEntity(noteId: Long = 0L): ItemEntity = ItemEntity(
 
 fun ReminderEntity.toModel(): Reminder = Reminder(
     time = time,
-    repeatMode = repeatMode.toModel(),
-    completed = completed
+    repeatMode = repeatMode.toModel()
 )
 
 fun ItemEntity.toModel(): Item = Item(

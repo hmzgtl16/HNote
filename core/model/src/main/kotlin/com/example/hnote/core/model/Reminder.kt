@@ -4,6 +4,5 @@ import kotlinx.datetime.Instant
 
 data class Reminder(
     val time: Instant,
-    val repeatMode: RepeatMode = RepeatMode.NONE,
-    val completed: Boolean = false
+    val repeatMode: RepeatMode = RepeatMode.NONE
 )
