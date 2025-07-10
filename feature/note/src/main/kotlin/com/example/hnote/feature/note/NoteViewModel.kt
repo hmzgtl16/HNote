@@ -1,6 +1,5 @@
 package com.example.hnote.feature.note
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -94,7 +93,6 @@ class NoteViewModel @Inject constructor(
             }
 
             is NoteScreenEvent.ReminderChanged -> {
-                Log.d("NoteViewModel", "Reminder changed: $event")
                 addChangeToHistory(previousState = currentStateSnapshot)
                 updateEditableState(newEditableState = currentStateSnapshot.copy(reminder = event.reminder))
             }
@@ -196,9 +194,7 @@ class NoteViewModel @Inject constructor(
     }
 
     private fun saveNote() = viewModelScope.launch {
-        Log.d("NoteViewModel", "Saving note...")
         val currentState = uiState.value
-        Log.d("NoteViewModel", "Note: $currentState")
         if (!currentState.isEdited) return@launch
 
         val noteToSave = currentState.note?.copy(
@@ -210,6 +206,7 @@ class NoteViewModel @Inject constructor(
             updated = Clock.System.now()
         ) ?: Note()
         noteRepository.updateNote(note = noteToSave)
+        navigator.navigateBack()
     }
 
     private fun copyNote() = viewModelScope.launch {
@@ -231,10 +228,6 @@ class NoteViewModel @Inject constructor(
         val currentState = uiState.value
         val noteToDelete = currentState.note ?: return@launch
         noteRepository.deleteNote(note = noteToDelete)
-        navigateBack()
-    }
-
-    fun navigateBack() = viewModelScope.launch {
         navigator.navigateBack()
     }
 

@@ -1,6 +1,5 @@
 package com.example.hnote.feature.note
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -64,9 +63,7 @@ internal fun NoteRoute(
 
     BackHandler(
         onBack = {
-            Log.d("NoteRoute", "Back pressed")
             viewModel.onEvent(event = NoteScreenEvent.SaveNote)
-            viewModel.navigateBack()
         }
     )
 
