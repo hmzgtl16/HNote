@@ -42,6 +42,9 @@ interface NoteDao {
     @Delete
     suspend fun deleteNotes(notes: List<NoteEntity>)
 
+    @Query("DELETE FROM reminders WHERE noteId = :noteId")
+    suspend fun deleteReminderByNoteId(noteId: Long)
+
     @Delete
     suspend fun deleteItem(item: ItemEntity)
 
