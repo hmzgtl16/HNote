@@ -229,6 +229,7 @@ class NoteViewModel @Inject constructor(
         val currentState = uiState.value
         val noteToDelete = currentState.note ?: return@launch
         noteRepository.deleteNote(note = noteToDelete)
+        navigateBack()
     }
 
     fun navigateBack() = viewModelScope.launch {

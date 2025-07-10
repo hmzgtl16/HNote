@@ -15,7 +15,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -68,10 +67,6 @@ internal fun NoteRoute(
             viewModel.navigateBack()
         }
     )
-
-    LaunchedEffect(key1 = uiState.isDeleted) {
-        if (uiState.isDeleted) viewModel.navigateBack()
-    }
 
     NoteScreen(
         uiState = uiState,
@@ -256,16 +251,14 @@ internal fun NoteScreen(
                                             onItemChanged = {
                                                 onEvent(
                                                     NoteScreenEvent.UpdateItem(
-                                                        oldItem = item,
-                                                        newItem = it
+                                                        index = index,
+                                                        item = item
                                                     )
                                                 )
                                             },
                                             onDeleteItemClick = {
                                                 onEvent(
-                                                    NoteScreenEvent.RemoveItem(
-                                                        item
-                                                    )
+                                                    NoteScreenEvent.RemoveItem(index = index)
                                                 )
                                             },
                                             modifier = Modifier
