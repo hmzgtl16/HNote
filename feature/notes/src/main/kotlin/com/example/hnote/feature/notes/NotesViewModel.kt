@@ -41,30 +41,40 @@ class NotesViewModel @Inject constructor(
         }
     }
 
-    fun onMultiSelectionChanged(isMultiSelectionEnabled: Boolean) {
-        _uiState.update { it.copy(isMultiSelectionEnabled = isMultiSelectionEnabled) }
-    }
+    fun onEvent(event: NotesScreenEvent) {
+        when (event) {
+            is NotesScreenEvent.MultiSelectionChanged -> _uiState.update {
+                it.copy(isMultiSelectionEnabled = event.enabled)
+            }
 
-    fun onNoteSelectedChanged(note: Note) {
-        _uiState.update {
-            val updatedSelectedNotes = it.selectedNotes
-                .toMutableList()
-                .apply {
-                    if (contains(note)) remove(note) else add(note)
-                }
-            it.copy(selectedNotes = updatedSelectedNotes)
+            is NotesScreenEvent.NoteSelectedChanged -> _uiState.update {
+                val updatedSelectedNotes = it.selectedNotes
+                    .toMutableList()
+                    .apply {
+                        if (contains(event.note))
+                            remove(event.note)
+                        else
+                            add(event.note)
+                    }
+                it.copy(selectedNotes = updatedSelectedNotes)
+
+            }
+
+            is NotesScreenEvent.SelectAllNotesChecked -> _uiState.update {
+                val allNotes = (it.notesState as? NotesState.Success)
+                    ?.notes?.values?.flatten() ?: emptyList()
+                it.copy(selectedNotes = if (event.checked) allNotes else emptyList())
+            }
+
+            is NotesScreenEvent.DeleteNotes -> deleteNotes()
+            is NotesScreenEvent.RestoreNotes -> restoreNotes()
+            is NotesScreenEvent.PinNote -> pinNote(note = event.note)
+            is NotesScreenEvent.PinNotes -> pinNotes(isPinned = event.isPinned)
+            is NotesScreenEvent.NavigateToNote -> navigateToNote(noteId = event.noteId)
         }
     }
 
-    fun onSelectAllNotesChecked(checked: Boolean) {
-        _uiState.update {
-            val allNotes = (it.notesState as? NotesState.Success)
-                ?.notes?.values?.flatten() ?: emptyList()
-            it.copy(selectedNotes = if (checked) allNotes else emptyList())
-        }
-    }
-
-    fun deleteNotes() = viewModelScope.launch {
+    private fun deleteNotes() = viewModelScope.launch {
         val notesToDelete = _uiState.value.selectedNotes
         if (notesToDelete.isEmpty()) return@launch
 
@@ -79,7 +89,7 @@ class NotesViewModel @Inject constructor(
         }
     }
 
-    fun restoreNotes() = viewModelScope.launch {
+    private fun restoreNotes() = viewModelScope.launch {
         val notesToRestore = _uiState.value.deletedNotes
         if (notesToRestore.isEmpty()) return@launch
 
@@ -89,12 +99,12 @@ class NotesViewModel @Inject constructor(
         }
     }
 
-    fun pinNote(note: Note) = viewModelScope.launch {
+    private fun pinNote(note: Note) = viewModelScope.launch {
         val noteToPin = note.copy(pinned = !note.pinned)
         noteRepository.updateNote(note = noteToPin)
     }
 
-    fun pinNotes(isPinned: Boolean) = viewModelScope.launch {
+    private fun pinNotes(isPinned: Boolean) = viewModelScope.launch {
         val notesToPin = _uiState.value.selectedNotes.map { it.copy(pinned = isPinned) }
         if (notesToPin.isEmpty()) return@launch
 
@@ -107,7 +117,7 @@ class NotesViewModel @Inject constructor(
         }
     }
 
-    fun navigateToNote(noteId: Long) = viewModelScope.launch {
+    private fun navigateToNote(noteId: Long) = viewModelScope.launch {
         navigator.navigateTo(route = Route.Note(noteId = noteId))
     }
 }
