@@ -36,6 +36,14 @@ class NoteRepositoryImpl @Inject constructor(
             reminder = note.reminder?.toEntity(),
             items = note.items.map(Item::toEntity)
         )
+
+        if (note.reminder == null)
+            deleteNoteReminder(noteId = note.id)
+
+        deleteItemsExcludingIds(
+            noteId = note.id,
+            ids = note.items.map(Item::id)
+        )
     }
 
     override suspend fun updateNotes(notes: List<Note>) {

@@ -19,7 +19,7 @@ private const val itemInsertTrigger =
     """
         CREATE TRIGGER IF NOT EXISTS insert_item_fts AFTER INSERT ON items
         BEGIN 
-            INSERT INTO items_fts(item_fts_id, item_fts_content, item_fts_noteId)
+            INSERT INTO items_fts(item_fts_id, item_fts_content, item_fts_note_id)
             VALUES (new.id, new.content, new.noteId);
         END;
     """

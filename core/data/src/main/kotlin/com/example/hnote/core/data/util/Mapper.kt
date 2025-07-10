@@ -7,11 +7,9 @@ import com.example.hnote.core.database.model.ReminderEntity
 import com.example.hnote.core.database.model.SearchQueryEntity
 import com.example.hnote.core.model.Item
 import com.example.hnote.core.model.Note
-import com.example.hnote.core.model.NoteType
 import com.example.hnote.core.model.Reminder
 import com.example.hnote.core.model.RepeatMode
 import com.example.hnote.core.model.SearchQuery
-import com.example.hnote.core.database.util.NoteType as NoteTypeEntity
 import com.example.hnote.core.database.util.ReminderRepeatMode as ReminderRepeatModeEntity
 
 fun Note.toEntity(): NoteEntity = NoteEntity(
@@ -21,15 +19,13 @@ fun Note.toEntity(): NoteEntity = NoteEntity(
     pinned = pinned,
     backgroundColor = backgroundColor,
     createdAt = created,
-    updatedAt = updated,
-    type = type.toEntity()
+    updatedAt = updated
 )
 
 fun Reminder.toEntity(noteId: Long = 0L): ReminderEntity = ReminderEntity(
     id = id,
     time = time,
     repeatMode = repeatMode.toEntity(),
-    completed = false,
     noteId = noteId
 )
 
@@ -41,6 +37,7 @@ fun Item.toEntity(noteId: Long = 0L): ItemEntity = ItemEntity(
 )
 
 fun ReminderEntity.toModel(): Reminder = Reminder(
+    id = id,
     time = time,
     repeatMode = repeatMode.toModel()
 )
@@ -59,22 +56,9 @@ fun NoteWithItemsAndReminder.toModel(): Note = Note(
     backgroundColor = note.backgroundColor,
     created = note.createdAt,
     updated = note.updatedAt,
-    type = note.type.toModel(),
     reminder = reminder?.toModel(),
     items = items.map(ItemEntity::toModel)
 )
-
-fun NoteType.toEntity(): NoteTypeEntity = when (this) {
-    NoteType.SIMPLE -> NoteTypeEntity.SIMPLE
-    NoteType.REMINDER -> NoteTypeEntity.REMINDER
-    NoteType.CHECK_LIST -> NoteTypeEntity.CHECK_LIST
-}
-
-fun NoteTypeEntity.toModel(): NoteType = when (this) {
-    NoteTypeEntity.SIMPLE -> NoteType.SIMPLE
-    NoteTypeEntity.REMINDER -> NoteType.REMINDER
-    NoteTypeEntity.CHECK_LIST -> NoteType.CHECK_LIST
-}
 
 fun RepeatMode.toEntity(): ReminderRepeatModeEntity = when (this) {
     RepeatMode.NONE -> ReminderRepeatModeEntity.NONE

@@ -1,5 +1,6 @@
 package com.example.hnote.core.database.dao
 
+import android.util.Log
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
@@ -16,7 +17,7 @@ interface NoteDao {
     @Upsert
     suspend fun upsertNote(note: NoteEntity): Long
     @Upsert
-    suspend fun upsertReminder(reminder: ReminderEntity): Long
+    suspend fun upsertReminder(reminder: ReminderEntity)
     @Upsert
     suspend fun upsertItems(items: List<ItemEntity>)
     @Transaction
@@ -25,8 +26,13 @@ interface NoteDao {
         reminder: ReminderEntity?,
         items: List<ItemEntity>
     ) {
-        val noteId = upsertNote(note).takeUnless { it == -1L } ?: note.id
-        reminder?.let { upsertReminder(it.copy(noteId = noteId)) }
+        val noteId = upsertNote(note = note).takeUnless { it == -1L } ?: note.id
+        reminder
+            ?.copy(noteId = noteId)
+            ?.let {
+                Log.d("NoteDao", "Upserting reminder: $it")
+                upsertReminder(reminder = it)
+            }
         items
             .map { it.copy(noteId = noteId) }
             .also { upsertItems(items = it) }

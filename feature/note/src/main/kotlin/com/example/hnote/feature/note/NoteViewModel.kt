@@ -1,5 +1,6 @@
 package com.example.hnote.feature.note
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -93,26 +94,30 @@ class NoteViewModel @Inject constructor(
             }
 
             is NoteScreenEvent.ReminderChanged -> {
+                Log.d("NoteViewModel", "Reminder changed: $event")
                 addChangeToHistory(previousState = currentStateSnapshot)
                 updateEditableState(newEditableState = currentStateSnapshot.copy(reminder = event.reminder))
             }
 
-            is NoteScreenEvent.AddItem -> handleEditableStateChange {
-                val items = it.items.toMutableList()
+            is NoteScreenEvent.AddItem -> {
+                addChangeToHistory(previousState = currentStateSnapshot)
+                val items = currentStateSnapshot.items.toMutableList()
                 items.add(element = Item())
-                it.copy(items = it.items + Item())
+                updateEditableState(newEditableState = currentStateSnapshot.copy(items = items))
             }
 
-            is NoteScreenEvent.RemoveItem -> handleEditableStateChange {
-                val items = it.items.toMutableList()
+            is NoteScreenEvent.RemoveItem -> {
+                addChangeToHistory(previousState = currentStateSnapshot)
+                val items = currentStateSnapshot.items.toMutableList()
                 items.removeAt(index = event.index)
-                it.copy(items = items.toList())
+                updateEditableState(newEditableState = currentStateSnapshot.copy(items = items))
             }
 
-            is NoteScreenEvent.UpdateItem -> handleEditableStateChange {
-                val items = it.items.toMutableList()
+            is NoteScreenEvent.UpdateItem -> {
+                addChangeToHistory(previousState = currentStateSnapshot)
+                val items = currentStateSnapshot.items.toMutableList()
                 items.set(index = event.index, element = event.item)
-                it.copy(items = items.toList())
+                updateEditableState(newEditableState = currentStateSnapshot.copy(items = items))
             }
 
             is NoteScreenEvent.ReminderPickerVisibilityChanged -> _uiState.update {
@@ -145,6 +150,7 @@ class NoteViewModel @Inject constructor(
                 content = newEditableState.content,
                 backgroundColor = newEditableState.backgroundColor,
                 reminder = newEditableState.reminder,
+                items = newEditableState.items,
                 isEdited = if (markAsEdited) true else it.isEdited,
                 canUndo = undoStack.isNotEmpty(),
                 canRedo = redoStack.isNotEmpty()
@@ -158,15 +164,6 @@ class NoteViewModel @Inject constructor(
         }
         undoStack.addLast(previousState)
         redoStack.clear()
-        if (!uiState.value.isEdited) {
-            _uiState.update { it.copy(isEdited = true) }
-        }
-    }
-
-    private fun handleEditableStateChange(updateAction: (EditableNoteState) -> EditableNoteState) {
-        val currentStateSnapshot = uiState.value.getEditableSnapshot()
-        addChangeToHistory(previousState = currentStateSnapshot)
-        updateEditableState(newEditableState = updateAction(currentStateSnapshot))
     }
 
     private fun clearUndoRedoStacks() {
@@ -199,7 +196,9 @@ class NoteViewModel @Inject constructor(
     }
 
     private fun saveNote() = viewModelScope.launch {
+        Log.d("NoteViewModel", "Saving note...")
         val currentState = uiState.value
+        Log.d("NoteViewModel", "Note: $currentState")
         if (!currentState.isEdited) return@launch
 
         val noteToSave = currentState.note?.copy(
@@ -211,10 +210,6 @@ class NoteViewModel @Inject constructor(
             updated = Clock.System.now()
         ) ?: Note()
         noteRepository.updateNote(note = noteToSave)
-        noteRepository.deleteItemsExcludingIds(
-            noteId = noteToSave.id,
-            ids = noteToSave.items.map(Item::id)
-        )
     }
 
     private fun copyNote() = viewModelScope.launch {
@@ -223,13 +218,11 @@ class NoteViewModel @Inject constructor(
 
         val noteToCopy = originalNote.copy(
             id = 0,
+            reminder = originalNote.reminder?.copy(id = 0L),
+            items = originalNote.items.map { it.copy(id = 0L) },
             created = Clock.System.now(),
             updated = Clock.System.now()
         )
-
-        currentState.reminder?.let {
-            noteRepository.deleteNoteReminder(noteId = originalNote.id)
-        }
 
         noteRepository.updateNote(note = noteToCopy)
     }

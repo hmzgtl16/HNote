@@ -23,6 +23,5 @@ data class ReminderEntity(
     val id: Long = 0L,
     val time: Instant,
     val repeatMode: ReminderRepeatMode,
-    val completed: Boolean,
     @ColumnInfo(index = true) val noteId: Long
 )
