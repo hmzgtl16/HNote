@@ -25,9 +25,6 @@ fun Note.toEntity(): NoteEntity = NoteEntity(
     type = type.toEntity()
 )
 
-fun Note.toItemEntities(): List<ItemEntity> = items
-    .map { it.toEntity(noteId = id) }
-
 fun Note.toReminderEntity(): ReminderEntity? = reminder?.let {
     ReminderEntity(
         time = it.time,
