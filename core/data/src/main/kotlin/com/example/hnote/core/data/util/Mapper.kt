@@ -25,16 +25,8 @@ fun Note.toEntity(): NoteEntity = NoteEntity(
     type = type.toEntity()
 )
 
-fun Note.toReminderEntity(): ReminderEntity? = reminder?.let {
-    ReminderEntity(
-        time = it.time,
-        repeatMode = it.repeatMode.toEntity(),
-        completed = false,
-        noteId = id
-    )
-}
-
 fun Reminder.toEntity(noteId: Long = 0L): ReminderEntity = ReminderEntity(
+    id = id,
     time = time,
     repeatMode = repeatMode.toEntity(),
     completed = false,
