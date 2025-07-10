@@ -16,4 +16,6 @@ interface NoteRepository {
     suspend fun deleteNotes(notes: List<Note>)
     suspend fun deleteItem(item: Item)
     suspend fun deleteItems(items: List<Item>)
+    suspend fun deleteNoteReminder(noteId: Long)
+    suspend fun deleteItemsExcludingIds(noteId: Long, ids: List<Long>)
 }

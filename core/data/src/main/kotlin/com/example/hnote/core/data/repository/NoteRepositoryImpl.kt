@@ -1,7 +1,6 @@
 package com.example.hnote.core.data.repository
 
 import com.example.hnote.core.data.util.toEntity
-import com.example.hnote.core.data.util.toItemEntities
 import com.example.hnote.core.data.util.toModel
 import com.example.hnote.core.database.dao.NoteDao
 import com.example.hnote.core.database.model.NoteWithItemsAndReminder
@@ -27,7 +26,7 @@ class NoteRepositoryImpl @Inject constructor(
         noteDao.upsertNoteWithItems(
             note = note.toEntity(),
             reminder = note.reminder?.toEntity(),
-            items = note.toItemEntities()
+            items = note.items.map(Item::toEntity)
         )
     }
 
@@ -35,7 +34,7 @@ class NoteRepositoryImpl @Inject constructor(
         noteDao.upsertNoteWithItems(
             note = note.toEntity(),
             reminder = note.reminder?.toEntity(),
-            items = note.toItemEntities()
+            items = note.items.map(Item::toEntity)
         )
     }
 
@@ -44,7 +43,7 @@ class NoteRepositoryImpl @Inject constructor(
             noteDao.upsertNoteWithItems(
                 note = it.toEntity(),
                 reminder = it.reminder?.toEntity(),
-                items = it.toItemEntities()
+                items = it.items.map(Item::toEntity)
             )
         }
     }
@@ -63,5 +62,13 @@ class NoteRepositoryImpl @Inject constructor(
 
     override suspend fun deleteItems(items: List<Item>) {
         noteDao.deleteItems(items = items.map(Item::toEntity))
+    }
+
+    override suspend fun deleteNoteReminder(noteId: Long) {
+        noteDao.deleteReminderByNoteId(noteId = noteId)
+    }
+
+    override suspend fun deleteItemsExcludingIds(noteId: Long, ids: List<Long>) {
+        noteDao.deleteItemsExcludingIds(noteId = noteId, ids = ids.toSet())
     }
 }
