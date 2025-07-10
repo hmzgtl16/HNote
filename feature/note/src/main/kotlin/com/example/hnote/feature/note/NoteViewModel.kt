@@ -32,8 +32,6 @@ class NoteViewModel @Inject constructor(
     private val undoStack = ArrayDeque<EditableNoteState>()
     private val redoStack = ArrayDeque<EditableNoteState>()
 
-    private val maxHistorySize = 30
-
     init {
         savedStateHandle.toRoute<Route.Note>().noteId?.let { id ->
             viewModelScope.launch {
@@ -208,20 +206,31 @@ class NoteViewModel @Inject constructor(
             title = currentState.title,
             content = currentState.content,
             reminder = currentState.reminder,
+            items = currentState.items,
             backgroundColor = currentState.backgroundColor,
             updated = Clock.System.now()
         ) ?: Note()
         noteRepository.updateNote(note = noteToSave)
+        noteRepository.deleteItemsExcludingIds(
+            noteId = noteToSave.id,
+            ids = noteToSave.items.map(Item::id)
+        )
     }
 
     private fun copyNote() = viewModelScope.launch {
         val currentState = uiState.value
+        val originalNote = currentState.note ?: return@launch
 
-        val noteToCopy = currentState.note?.copy(
+        val noteToCopy = originalNote.copy(
             id = 0,
             created = Clock.System.now(),
             updated = Clock.System.now()
-        ) ?: return@launch
+        )
+
+        currentState.reminder?.let {
+            noteRepository.deleteNoteReminder(noteId = originalNote.id)
+        }
+
         noteRepository.updateNote(note = noteToCopy)
     }
 
