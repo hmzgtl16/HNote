@@ -15,7 +15,6 @@ data class NoteUiState(
     val isReminderPickerVisible: Boolean = false,
     val isPaletteVisible: Boolean = false,
     val isDeleteDialogVisible: Boolean = false,
-    val isDeleted: Boolean = false,
     val canUndo: Boolean = false,
     val canRedo: Boolean = false,
 ) {

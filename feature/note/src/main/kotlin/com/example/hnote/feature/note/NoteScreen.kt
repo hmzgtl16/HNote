@@ -73,10 +73,6 @@ internal fun NoteRoute(
     NoteScreen(
         uiState = uiState,
         onEvent = viewModel::onEvent,
-        onBackClick = {
-            viewModel.onEvent(NoteScreenEvent.SaveNote)
-            viewModel.navigateBack()
-        },
         modifier = modifier
     )
 }
@@ -86,7 +82,6 @@ internal fun NoteRoute(
 internal fun NoteScreen(
     uiState: NoteUiState,
     onEvent: (NoteScreenEvent) -> Unit,
-    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
@@ -389,8 +384,7 @@ internal fun NoteScreenPreview() {
                         Item(id = 5L, content = "Item 5", checked = true)
                     )
                 ),
-                onEvent = {},
-                onBackClick = {}
+                onEvent = {}
             )
         }
     }
