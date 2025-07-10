@@ -3,7 +3,6 @@ package com.example.hnote.feature.notes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hnote.core.data.repository.NoteRepository
-import com.example.hnote.core.domain.usecase.GetNotesUseCase
 import com.example.hnote.core.model.Note
 import com.example.hnote.core.navigation.Navigator
 import com.example.hnote.core.navigation.Route
@@ -21,11 +20,15 @@ import javax.inject.Inject
 @HiltViewModel
 class NotesViewModel @Inject constructor(
     private val navigator: Navigator,
-    private val noteRepository: NoteRepository,
-    getNotesUseCase: GetNotesUseCase
+    private val noteRepository: NoteRepository
 ) : ViewModel() {
 
-    val uiState: StateFlow<NotesUiState> = getNotesUseCase.invoke()
+    val uiState: StateFlow<NotesUiState> = noteRepository.notes
+        .map {
+            it
+                .groupBy(Note::pinned)
+                .toSortedMap(compareByDescending(Boolean::not))
+        }
         .map<Map<Boolean, List<Note>>, NotesUiState>(NotesUiState::Success)
         .onStart { emit(NotesUiState.Loading) }
         .stateIn(
