@@ -38,9 +38,9 @@ fun NoteCard(
     multiSelectionEnabled: Boolean,
     enableMultiSelection: () -> Unit,
     selected: Boolean,
-    onSelectedChanged: (Note) -> Unit,
-    onNoteClick: (Long) -> Unit,
-    onPinClick: (Note) -> Unit,
+    onSelectedChanged: () -> Unit,
+    onNoteClick: () -> Unit,
+    onPinClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
 
@@ -53,13 +53,13 @@ fun NoteCard(
             .wrapContentHeight(align = Alignment.Top)
             .combinedClickable(
                 onClick = {
-                    if (multiSelectionEnabled) onSelectedChanged(note)
-                    else onNoteClick(note.id)
+                    if (multiSelectionEnabled) onSelectedChanged()
+                    else onNoteClick()
                 },
                 onLongClick = {
                     if (multiSelectionEnabled) return@combinedClickable
                     enableMultiSelection()
-                    onSelectedChanged(note)
+                    onSelectedChanged()
                 },
                 role = Role.RadioButton
             )
@@ -98,7 +98,7 @@ fun NoteCard(
 
                                 AppIconToggleButton(
                                     checked = note.pinned,
-                                    onCheckedChange = { onPinClick(note) },
+                                    onCheckedChange = { onPinClick() },
                                     icon = {
                                         Icon(
                                             imageVector = AppIcons.PinBorder,

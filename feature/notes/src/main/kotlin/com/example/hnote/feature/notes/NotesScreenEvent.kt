@@ -8,7 +8,8 @@ interface NotesScreenEvent {
     data class SelectAllNotesChecked(val checked: Boolean) : NotesScreenEvent
     data object DeleteNotes : NotesScreenEvent
     data object RestoreNotes : NotesScreenEvent
+    data object UndoSnackbarDismissed : NotesScreenEvent
     data class PinNote(val note: Note) : NotesScreenEvent
-    data class PinNotes(val isPinned: Boolean) : NotesScreenEvent
-    data class NavigateToNote(val noteId: Long) : NotesScreenEvent
+    data object PinNotes : NotesScreenEvent
+    data class NavigateToNote(val noteId: Long? = null) : NotesScreenEvent
 }

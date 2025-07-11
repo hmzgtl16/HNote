@@ -7,6 +7,8 @@ import com.example.hnote.core.model.Note
 import com.example.hnote.core.navigation.Navigator
 import com.example.hnote.core.navigation.Route
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,6 +26,8 @@ class NotesViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(value = NotesUiState())
     val uiState: StateFlow<NotesUiState> get() = _uiState.asStateFlow()
+
+    private var undoDeleteJob: Job? = null
 
     init {
         viewModelScope.launch {
@@ -48,16 +52,11 @@ class NotesViewModel @Inject constructor(
             }
 
             is NotesScreenEvent.NoteSelectedChanged -> _uiState.update {
-                val updatedSelectedNotes = it.selectedNotes
-                    .toMutableList()
-                    .apply {
-                        if (contains(event.note))
-                            remove(event.note)
-                        else
-                            add(event.note)
-                    }
-                it.copy(selectedNotes = updatedSelectedNotes)
+                val updatedSelectedNotes =
+                    if (it.selectedNotes.contains(event.note)) it.selectedNotes - event.note
+                    else it.selectedNotes + event.note
 
+                it.copy(selectedNotes = updatedSelectedNotes)
             }
 
             is NotesScreenEvent.SelectAllNotesChecked -> _uiState.update {
@@ -68,8 +67,13 @@ class NotesViewModel @Inject constructor(
 
             is NotesScreenEvent.DeleteNotes -> deleteNotes()
             is NotesScreenEvent.RestoreNotes -> restoreNotes()
+
+            is NotesScreenEvent.UndoSnackbarDismissed -> {
+                _uiState.update { it.copy(showUndoDeleteSnackbar = false) }
+            }
+
             is NotesScreenEvent.PinNote -> pinNote(note = event.note)
-            is NotesScreenEvent.PinNotes -> pinNotes(isPinned = event.isPinned)
+            is NotesScreenEvent.PinNotes -> pinNotes()
             is NotesScreenEvent.NavigateToNote -> navigateToNote(noteId = event.noteId)
         }
     }
@@ -82,20 +86,34 @@ class NotesViewModel @Inject constructor(
 
         _uiState.update {
             it.copy(
-                deletedNotes = notesToDelete,
                 selectedNotes = emptyList(),
-                isMultiSelectionEnabled = false
+                isMultiSelectionEnabled = false,
+                recentlyDeletedNotes = notesToDelete,
+                showUndoDeleteSnackbar = true
             )
+        }
+
+        undoDeleteJob?.cancel()
+        undoDeleteJob = viewModelScope.launch {
+            delay(5000L)
+            _uiState.update {
+                if (it.recentlyDeletedNotes == notesToDelete) {
+                    it.copy(recentlyDeletedNotes = emptyList(), showUndoDeleteSnackbar = false)
+                } else {
+                    it
+                }
+            }
         }
     }
 
     private fun restoreNotes() = viewModelScope.launch {
-        val notesToRestore = _uiState.value.deletedNotes
+        undoDeleteJob?.cancel()
+        val notesToRestore = _uiState.value.recentlyDeletedNotes
         if (notesToRestore.isEmpty()) return@launch
 
         noteRepository.updateNotes(notes = notesToRestore)
         _uiState.update {
-            it.copy(deletedNotes = emptyList())
+            it.copy(recentlyDeletedNotes = emptyList(), showUndoDeleteSnackbar = false)
         }
     }
 
@@ -104,10 +122,12 @@ class NotesViewModel @Inject constructor(
         noteRepository.updateNote(note = noteToPin)
     }
 
-    private fun pinNotes(isPinned: Boolean) = viewModelScope.launch {
-        val notesToPin = _uiState.value.selectedNotes.map { it.copy(pinned = isPinned) }
-        if (notesToPin.isEmpty()) return@launch
+    private fun pinNotes() = viewModelScope.launch {
+        val selectedNotes = _uiState.value.selectedNotes
+        if (selectedNotes.isEmpty()) return@launch
 
+        val shouldPin = selectedNotes.any { !it.pinned }
+        val notesToPin = selectedNotes.map { it.copy(pinned = shouldPin) }
         noteRepository.updateNotes(notes = notesToPin)
         _uiState.update {
             it.copy(
@@ -117,7 +137,7 @@ class NotesViewModel @Inject constructor(
         }
     }
 
-    private fun navigateToNote(noteId: Long) = viewModelScope.launch {
+    private fun navigateToNote(noteId: Long?) = viewModelScope.launch {
         navigator.navigateTo(route = Route.Note(noteId = noteId))
     }
 }

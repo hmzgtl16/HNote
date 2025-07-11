@@ -3,10 +3,13 @@ package com.example.hnote.feature.notes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
@@ -30,9 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -67,26 +68,10 @@ internal fun NotesRoute(
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val selectedNotes by viewModel.selectedNotes.collectAsStateWithLifecycle()
-    val deleteNotes by viewModel.deletedNotes.collectAsStateWithLifecycle()
-    val isDeleteSuccess by viewModel.isDeleteSuccess.collectAsStateWithLifecycle()
-    val multiSelectionEnabled by viewModel.multiSelectionEnabled.collectAsStateWithLifecycle()
 
     NotesScreen(
         uiState = uiState,
-        selectedNotes = selectedNotes,
-        multiSelectionEnabled = multiSelectionEnabled,
-        onMultiSelectionChanged = viewModel::onMultiSelectionChanged,
-        onSelectAllNotesChecked = viewModel::onSelectAllNotesChecked,
-        noteSelected = selectedNotes::contains,
-        onNoteSelectedChanged = viewModel::onNoteSelectedChanged,
-        deleteNotes = viewModel::deleteNotes,
-        pinNotes = viewModel::pinNotes,
-        onNoteClick = viewModel::navigateToNote,
-        onPinClick = viewModel::pinNote,
-        deletedNotes = deleteNotes,
-        isDeleteSuccess = isDeleteSuccess,
-        restoreNotes = viewModel::restoreNotes,
+        onEvent = viewModel::onEvent,
         modifier = modifier
     )
 }
@@ -94,19 +79,7 @@ internal fun NotesRoute(
 @Composable
 internal fun NotesScreen(
     uiState: NotesUiState,
-    selectedNotes: List<Note>,
-    multiSelectionEnabled: Boolean,
-    onMultiSelectionChanged: (Boolean) -> Unit,
-    onSelectAllNotesChecked: (Boolean) -> Unit,
-    noteSelected: (Note) -> Boolean,
-    onNoteSelectedChanged: (Note) -> Unit,
-    deleteNotes: () -> Unit,
-    pinNotes: (Boolean) -> Unit,
-    onNoteClick: (Long) -> Unit,
-    onPinClick: (Note) -> Unit,
-    deletedNotes: List<Note>,
-    isDeleteSuccess: Boolean,
-    restoreNotes: () -> Unit,
+    onEvent: (NotesScreenEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -114,33 +87,21 @@ internal fun NotesScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         content = {
 
-            when (uiState) {
-                NotesUiState.Loading -> {
+            when (uiState.notesState) {
+                NotesState.Loading -> {
                     NotesScreenLoading()
                 }
 
-                is NotesUiState.Success -> {
-                    if (uiState.notes.isNotEmpty()) {
+                is NotesState.Success -> {
+                    if (uiState.notesState.notes.isNotEmpty()) {
                         NotesScreenContent(
                             uiState = uiState,
-                            selectedNotes = selectedNotes,
-                            onAllNotesSelectedChanged = onSelectAllNotesChecked,
-                            multiSelectionEnabled = multiSelectionEnabled,
-                            onMultiSelectionChanged = onMultiSelectionChanged,
-                            noteSelected = noteSelected,
-                            onNoteSelectedChanged = onNoteSelectedChanged,
-                            deleteNotes = deleteNotes,
-                            pinNotes = pinNotes,
-                            onNoteClick = onNoteClick,
-                            onPinClick = onPinClick,
-                            deletedNotes = deletedNotes,
-                            isDeleteSuccess = isDeleteSuccess,
-                            restoreNotes = restoreNotes,
+                            onEvent = onEvent,
                             modifier = modifier
                         )
                     } else {
                         NotesScreenEmpty(
-                            onNoteClick = onNoteClick,
+                            onEvent = onEvent,
                             modifier = modifier
                         )
                     }
@@ -160,7 +121,7 @@ fun NotesScreenLoading(modifier: Modifier = Modifier) {
 
 @Composable
 fun NotesScreenEmpty(
-    onNoteClick: (Long) -> Unit,
+    onEvent: (NotesScreenEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -191,7 +152,7 @@ fun NotesScreenEmpty(
             )
 
             AppButton(
-                onClick = { onNoteClick(-1) },
+                onClick = { onEvent(NotesScreenEvent.NavigateToNote()) },
                 text = {
                     Text(text = stringResource(id = R.string.feature_notes_add_note))
                 },
@@ -210,73 +171,69 @@ fun NotesScreenEmpty(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotesScreenContent(
-    uiState: NotesUiState.Success,
-    selectedNotes: List<Note>,
-    onAllNotesSelectedChanged: (Boolean) -> Unit,
-    multiSelectionEnabled: Boolean,
-    onMultiSelectionChanged: (Boolean) -> Unit,
-    noteSelected: (Note) -> Boolean,
-    onNoteSelectedChanged: (Note) -> Unit,
-    deleteNotes: () -> Unit,
-    pinNotes: (Boolean) -> Unit,
-    onNoteClick: (Long) -> Unit,
-    onPinClick: (Note) -> Unit,
-    deletedNotes: List<Note>,
-    isDeleteSuccess: Boolean,
-    restoreNotes: () -> Unit,
+    uiState: NotesUiState,
+    onEvent: (NotesScreenEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
 
-    val context = LocalContext.current
-
     val staggeredGridState = rememberLazyStaggeredGridState()
-
-    val snackbarHostState = remember { SnackbarHostState() }
 
     val expandedFab by remember {
         derivedStateOf { staggeredGridState.firstVisibleItemIndex == 0 }
     }
 
-    var deleteNotesResult by remember { mutableStateOf(value = false) }
+    val allNotesSelected = remember(
+        key1 = uiState.notesState,
+        key2 = uiState.selectedNotes,
+        calculation = { uiState.allNotesSelectedState }
+    )
 
-    LaunchedEffect(key1 = deleteNotesResult) {
-        if (deleteNotesResult) restoreNotes()
-    }
+    val context = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(key1 = isDeleteSuccess) {
-        if (isDeleteSuccess) {
-            deleteNotesResult = snackbarHostState.showSnackbar(
-                message = context.resources.getQuantityString(
-                    R.plurals.feature_notes_removed_notes,
-                    deletedNotes.size,
-                    deletedNotes.size
-                ),
-                actionLabel = context.resources.getString(R.string.feature_notes_undo),
-                duration = SnackbarDuration.Short
-            ) == SnackbarResult.ActionPerformed
+    LaunchedEffect(
+        key1 = uiState.showUndoDeleteSnackbar,
+        key2 = uiState.recentlyDeletedNotes,
+        block = {
+            if (uiState.showUndoDeleteSnackbar && uiState.recentlyDeletedNotes.isNotEmpty()) {
+                val count = uiState.recentlyDeletedNotes.size
+                val message = context.resources
+                    .getQuantityString(R.plurals.feature_notes_deleted_notes, count, count)
+                val actionLabel = context.getString(R.string.feature_notes_undo)
+
+                val result = snackbarHostState.showSnackbar(
+                    message = message,
+                    actionLabel = actionLabel,
+                    duration = SnackbarDuration.Short
+                )
+                when (result) {
+                    SnackbarResult.ActionPerformed -> {
+                        onEvent(NotesScreenEvent.RestoreNotes)
+                    }
+
+                    SnackbarResult.Dismissed -> {
+                        onEvent(NotesScreenEvent.UndoSnackbarDismissed)
+                    }
+                }
+            }
         }
-    }
+    )
 
-    val allNotesSelected = when {
-        selectedNotes.isEmpty() -> ToggleableState.Off
-        selectedNotes.containsAll(elements = uiState.notes.values.flatten()) -> ToggleableState.On
-        else -> ToggleableState.Indeterminate
-    }
 
     Scaffold(
         modifier = modifier,
         topBar = {
-            if (multiSelectionEnabled) {
+            if (uiState.isMultiSelectionEnabled) {
                 AppTopAppBar(
                     title = {
                         Text(
-                            text = if (selectedNotes.isEmpty())
+                            text = if (uiState.selectedNotes.isEmpty())
                                 stringResource(id = R.string.feature_notes_no_selected_notes)
                             else {
                                 pluralStringResource(
                                     id = R.plurals.feature_notes_selected_notes,
-                                    count = selectedNotes.size,
-                                    selectedNotes.size
+                                    count = uiState.selectedNotes.size,
+                                    uiState.selectedNotes.size
                                 )
                             },
                             maxLines = 1,
@@ -286,8 +243,8 @@ fun NotesScreenContent(
                     navigationIcon = {
                         AppIconButton(
                             onClick = {
-                                onMultiSelectionChanged(false)
-                                onAllNotesSelectedChanged(false)
+                                onEvent(NotesScreenEvent.MultiSelectionChanged(false))
+                                onEvent(NotesScreenEvent.SelectAllNotesChecked(false))
                             },
                             icon = {
                                 Icon(
@@ -299,10 +256,10 @@ fun NotesScreenContent(
                     },
                     actions = {
 
-                        val mostPinned = selectedNotes.all(predicate = Note::pinned)
+                        val mostPinned = uiState.selectedNotes.all(predicate = Note::pinned)
 
                         AppIconButton(
-                            onClick = { pinNotes(!mostPinned) },
+                            onClick = { onEvent(NotesScreenEvent.PinNotes) },
                             icon = {
                                 Icon(
                                     imageVector = if (mostPinned) AppIcons.PinBorder else AppIcons.Pin,
@@ -312,7 +269,7 @@ fun NotesScreenContent(
                         )
 
                         AppIconButton(
-                            onClick = deleteNotes,
+                            onClick = { onEvent(NotesScreenEvent.DeleteNotes) },
                             icon = {
                                 Icon(
                                     imageVector = AppIcons.Delete,
@@ -326,10 +283,15 @@ fun NotesScreenContent(
                 )
             }
         },
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                modifier = Modifier.windowInsetsPadding(WindowInsets.safeDrawing)
+            )
+        },
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                onClick = { onNoteClick(-1) },
+                onClick = { onEvent(NotesScreenEvent.NavigateToNote()) },
                 expanded = expandedFab,
                 icon = {
                     Icon(
@@ -353,18 +315,12 @@ fun NotesScreenContent(
                     .padding(paddingValues = paddingValues),
                 content = {
 
-                    if (multiSelectionEnabled) {
+                    if (uiState.isMultiSelectionEnabled) {
                         AppTriStateCheckbox(
                             state = allNotesSelected,
                             onClick = {
-                                if (allNotesSelected == ToggleableState.On)
-                                    onAllNotesSelectedChanged(false)
-
-                                if (allNotesSelected == ToggleableState.Off)
-                                    onAllNotesSelectedChanged(true)
-
-                                if (allNotesSelected == ToggleableState.Indeterminate)
-                                    onAllNotesSelectedChanged(true)
+                                val targetState = allNotesSelected != ToggleableState.On
+                                onEvent(NotesScreenEvent.SelectAllNotesChecked(targetState))
                             },
                             text = {
                                 Text(
@@ -382,7 +338,7 @@ fun NotesScreenContent(
                         verticalItemSpacing = 16.dp,
                         state = staggeredGridState,
                         content = {
-                            uiState.notes[true]?.let { notes ->
+                            (uiState.notesState as NotesState.Success).notes[true]?.let { notes ->
                                 if (notes.isNotEmpty()) {
                                     item(
                                         span = StaggeredGridItemSpan.FullLine,
@@ -406,12 +362,30 @@ fun NotesScreenContent(
                                     itemContent = {
                                         NoteCard(
                                             note = it,
-                                            multiSelectionEnabled = multiSelectionEnabled,
-                                            enableMultiSelection = { onMultiSelectionChanged(true) },
-                                            selected = noteSelected(it),
-                                            onSelectedChanged = onNoteSelectedChanged,
-                                            onPinClick = onPinClick,
-                                            onNoteClick = onNoteClick,
+                                            multiSelectionEnabled = uiState.isMultiSelectionEnabled,
+                                            enableMultiSelection = {
+                                                onEvent(
+                                                    NotesScreenEvent.MultiSelectionChanged(
+                                                        true
+                                                    )
+                                                )
+                                            },
+                                            selected = uiState.selectedNotes.contains(it),
+                                            onSelectedChanged = {
+                                                onEvent(
+                                                    NotesScreenEvent.NoteSelectedChanged(
+                                                        it
+                                                    )
+                                                )
+                                            },
+                                            onPinClick = { onEvent(NotesScreenEvent.PinNote(it)) },
+                                            onNoteClick = {
+                                                onEvent(
+                                                    NotesScreenEvent.NavigateToNote(
+                                                        it.id
+                                                    )
+                                                )
+                                            },
                                             modifier = Modifier
                                                 .padding(horizontal = 8.dp)
                                                 .animateItem()
@@ -420,8 +394,8 @@ fun NotesScreenContent(
                                 )
                             }
 
-                            uiState.notes[false]?.let { notes ->
-                                if (notes.isNotEmpty() && uiState.notes[true]?.isNotEmpty() ?: false) {
+                            uiState.notesState.notes[false]?.let { notes ->
+                                if (notes.isNotEmpty() && uiState.notesState.notes[true]?.isNotEmpty() ?: false) {
                                     item(
                                         span = StaggeredGridItemSpan.FullLine,
                                         content = {
@@ -444,12 +418,30 @@ fun NotesScreenContent(
                                     itemContent = {
                                         NoteCard(
                                             note = it,
-                                            multiSelectionEnabled = multiSelectionEnabled,
-                                            enableMultiSelection = { onMultiSelectionChanged(true) },
-                                            selected = noteSelected(it),
-                                            onSelectedChanged = onNoteSelectedChanged,
-                                            onPinClick = onPinClick,
-                                            onNoteClick = onNoteClick,
+                                            multiSelectionEnabled = uiState.isMultiSelectionEnabled,
+                                            enableMultiSelection = {
+                                                onEvent(
+                                                    NotesScreenEvent.MultiSelectionChanged(
+                                                        true
+                                                    )
+                                                )
+                                            },
+                                            selected = uiState.selectedNotes.contains(it),
+                                            onSelectedChanged = {
+                                                onEvent(
+                                                    NotesScreenEvent.NoteSelectedChanged(
+                                                        it
+                                                    )
+                                                )
+                                            },
+                                            onPinClick = { onEvent(NotesScreenEvent.PinNote(it)) },
+                                            onNoteClick = {
+                                                onEvent(
+                                                    NotesScreenEvent.NavigateToNote(
+                                                        it.id
+                                                    )
+                                                )
+                                            },
                                             modifier = Modifier
                                                 .padding(horizontal = 8.dp)
                                                 .animateItem()
@@ -471,20 +463,8 @@ fun NotesScreenLoadingPreview() {
     AppTheme {
         AppBackground {
             NotesScreen(
-                uiState = NotesUiState.Loading,
-                selectedNotes = emptyList(),
-                onSelectAllNotesChecked = {},
-                multiSelectionEnabled = false,
-                onMultiSelectionChanged = {},
-                noteSelected = { false },
-                onNoteSelectedChanged = {},
-                deleteNotes = {},
-                pinNotes = {},
-                onNoteClick = {},
-                onPinClick = {},
-                deletedNotes = emptyList(),
-                isDeleteSuccess = false,
-                restoreNotes = {}
+                uiState = NotesUiState(),
+                onEvent = {}
             )
         }
     }
@@ -496,20 +476,8 @@ fun NotesScreenEmptyPreview() {
     AppTheme {
         AppBackground {
             NotesScreen(
-                uiState = NotesUiState.Success(notes = emptyMap()),
-                selectedNotes = emptyList(),
-                onSelectAllNotesChecked = {},
-                multiSelectionEnabled = false,
-                onMultiSelectionChanged = {},
-                noteSelected = { false },
-                onNoteSelectedChanged = {},
-                deleteNotes = {},
-                pinNotes = {},
-                onNoteClick = {},
-                onPinClick = {},
-                deletedNotes = emptyList(),
-                isDeleteSuccess = false,
-                restoreNotes = {}
+                uiState = NotesUiState(notesState = NotesState.Success(notes = emptyMap())),
+                onEvent = {}
             )
         }
     }
@@ -524,20 +492,8 @@ fun NotesScreenContentPreview(
     AppTheme {
         AppBackground {
             NotesScreen(
-                uiState = NotesUiState.Success(notes = notes),
-                selectedNotes = emptyList(),
-                onSelectAllNotesChecked = {},
-                multiSelectionEnabled = false,
-                onMultiSelectionChanged = {},
-                noteSelected = { false },
-                onNoteSelectedChanged = {},
-                deleteNotes = {},
-                pinNotes = {},
-                onNoteClick = {},
-                onPinClick = {},
-                deletedNotes = emptyList(),
-                isDeleteSuccess = false,
-                restoreNotes = {}
+                uiState = NotesUiState(notesState = NotesState.Success(notes = notes)),
+                onEvent = {}
             )
         }
     }
@@ -552,20 +508,12 @@ fun NotesScreenContentMultiSelectionEnabledPreview(
     AppTheme {
         AppBackground {
             NotesScreen(
-                uiState = NotesUiState.Success(notes = notes),
-                selectedNotes = notes.values.flatten().filter(Note::pinned),
-                onSelectAllNotesChecked = {},
-                multiSelectionEnabled = true,
-                onMultiSelectionChanged = {},
-                noteSelected = { notes.values.flatten().filter(Note::pinned).contains(it) },
-                onNoteSelectedChanged = {},
-                deleteNotes = {},
-                pinNotes = {},
-                onNoteClick = {},
-                onPinClick = {},
-                deletedNotes = emptyList(),
-                isDeleteSuccess = false,
-                restoreNotes = {}
+                uiState = NotesUiState(
+                    notesState = NotesState.Success(notes = notes),
+                    isMultiSelectionEnabled = true,
+                    selectedNotes = notes.values.flatten().filter(Note::pinned)
+                ),
+                onEvent = {}
             )
         }
     }
