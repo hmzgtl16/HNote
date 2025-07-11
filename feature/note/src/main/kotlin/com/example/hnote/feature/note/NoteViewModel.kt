@@ -195,7 +195,10 @@ class NoteViewModel @Inject constructor(
 
     private fun saveNote() = viewModelScope.launch {
         val currentState = uiState.value
-        if (!currentState.isEdited) return@launch
+        if (!currentState.isEdited) {
+            navigator.navigateBack()
+            return@launch
+        }
 
         val noteToSave = currentState.note?.copy(
             title = currentState.title,
@@ -222,6 +225,7 @@ class NoteViewModel @Inject constructor(
         )
 
         noteRepository.updateNote(note = noteToCopy)
+        navigator.navigateBack()
     }
 
     private fun deleteNote() = viewModelScope.launch {
