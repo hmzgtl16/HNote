@@ -33,6 +33,14 @@ class SettingsViewModel @Inject constructor(
             initialValue = SettingsUiState.Loading,
         )
 
+    fun onEvent(event: SettingsDialogEvent) {
+        when (event) {
+            is SettingsDialogEvent.Dismiss -> navigateBack()
+            is SettingsDialogEvent.DynamicColorEnabled -> updateDynamicColor(event.enabled)
+            is SettingsDialogEvent.ThemeChanged -> updateTheme(event.theme)
+        }
+    }
+
     fun updateTheme(theme: Theme) = viewModelScope.launch {
         userDataRepository.setTheme(theme = theme)
     }
@@ -41,7 +49,7 @@ class SettingsViewModel @Inject constructor(
         userDataRepository.setDynamicColorPreference(useDynamicColor)
     }
 
-    fun navigateBack() = viewModelScope.launch {
+    private fun navigateBack() = viewModelScope.launch {
         navigator.navigateBack()
     }
 }
