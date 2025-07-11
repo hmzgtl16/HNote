@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="core_notification_channel_name">Notes reminders</string>
+    <string name="core_notification_channel_description">The latest reminders on HNote</string>
+    <string name="core_notification_notification_title">Task reminder</string>
+    <string name="core_notification_notification_description">Tab to view</string>
+</resources>
