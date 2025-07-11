@@ -1,5 +1,6 @@
 package com.example.hnote.core.data.repository
 
+import com.example.hnote.core.alarm.AlarmScheduler
 import com.example.hnote.core.data.util.toEntity
 import com.example.hnote.core.data.util.toModel
 import com.example.hnote.core.database.dao.NoteDao
@@ -11,7 +12,8 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class NoteRepositoryImpl @Inject constructor(
-    private val noteDao: NoteDao
+    private val noteDao: NoteDao,
+    private val alarmScheduler: AlarmScheduler
 ) : NoteRepository {
 
     override val notes: Flow<List<Note>> =
@@ -37,8 +39,15 @@ class NoteRepositoryImpl @Inject constructor(
             items = note.items.map(Item::toEntity)
         )
 
-        if (note.reminder == null)
+        note.reminder?.let {
             deleteNoteReminder(noteId = note.id)
+            alarmScheduler.cancel(id = it.id)
+            alarmScheduler.schedule(
+                id = it.id,
+                scheduleTime = it.time,
+                repeatMode = it.repeatMode
+            )
+        }
 
         deleteItemsExcludingIds(
             noteId = note.id,
