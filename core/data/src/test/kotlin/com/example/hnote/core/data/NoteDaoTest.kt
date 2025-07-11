@@ -4,6 +4,7 @@ import com.example.hnote.core.database.dao.NoteDao
 import com.example.hnote.core.database.model.ItemEntity
 import com.example.hnote.core.database.model.NoteEntity
 import com.example.hnote.core.database.model.NoteWithItemsAndReminder
+import com.example.hnote.core.database.model.ReminderEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -23,6 +24,10 @@ class NoteDaoTest : NoteDao {
                 .distinctBy { entity -> entity.id }
         }
         return note.id.takeIf { it != 0L } ?: noteEntitiesStateFlow.value.size.toLong()
+    }
+
+    override suspend fun upsertReminder(reminder: ReminderEntity) {
+        TODO("Not yet implemented")
     }
 
     override suspend fun upsertItems(items: List<ItemEntity>) =
@@ -48,6 +53,10 @@ class NoteDaoTest : NoteDao {
             it.filterNot { entity -> entity.id in notes.map(NoteEntity::id) }
         }
 
+    override suspend fun deleteReminderByNoteId(noteId: Long) {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun deleteItem(item: ItemEntity) =
         itemEntitiesStateFlow.update { it ->
             it.filterNot { entity -> entity.id == item.id }
@@ -59,6 +68,13 @@ class NoteDaoTest : NoteDao {
                 entity.id in items.map(ItemEntity::id)
             }
         }
+
+    override suspend fun deleteItemsExcludingIds(
+        noteId: Long,
+        ids: Set<Long>
+    ) {
+        TODO("Not yet implemented")
+    }
 
     override fun getAllNotes(): Flow<List<NoteWithItemsAndReminder>> =
         noteEntitiesStateFlow
@@ -81,4 +97,8 @@ class NoteDaoTest : NoteDao {
                     )
                 }
             }
+
+    override fun getNotesByIds(ids: Set<Long>): Flow<List<NoteWithItemsAndReminder>> {
+        TODO("Not yet implemented")
+    }
 }

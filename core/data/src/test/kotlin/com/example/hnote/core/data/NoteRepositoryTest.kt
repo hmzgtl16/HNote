@@ -5,7 +5,6 @@ import com.example.hnote.core.data.repository.NoteRepositoryImpl
 import com.example.hnote.core.database.dao.NoteDao
 import com.example.hnote.core.model.Item
 import com.example.hnote.core.model.Note
-import com.example.hnote.core.model.NoteType
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -23,10 +22,15 @@ class NoteRepositoryTest {
 
     private lateinit var noteDao: NoteDao
 
+    private lateinit var alarmScheduler: AlarmSchedulerTest
+
     @BeforeTest
     fun setup() {
         noteDao = NoteDaoTest()
-        repository = NoteRepositoryImpl(noteDao = noteDao)
+        repository = NoteRepositoryImpl(
+            noteDao = noteDao,
+            alarmScheduler = alarmScheduler
+        )
     }
 
     @Test
@@ -34,10 +38,9 @@ class NoteRepositoryTest {
         val note = Note(
             id = 1,
             title = "Test Note",
-            content = "This is a test note.",
-            type = NoteType.SIMPLE
+            content = "This is a test note."
         )
-        repository.addNote(note = note)
+        repository.upsertNote(note = note)
         val notes = repository.notes.first()
 
         assertContains(iterable = notes, element = note)
@@ -49,14 +52,13 @@ class NoteRepositoryTest {
             id = 1,
             title = "Test Note with Items",
             content = "This is a test note with items.",
-            type = NoteType.CHECK_LIST,
             items = listOf(
                 Item(id = 1L, content = "Item 1"),
                 Item(id = 2L, content = "Item 2"),
                 Item(id = 3L, content = "Item 3")
             )
         )
-        repository.addNote(note = note)
+        repository.upsertNote(note = note)
 
         val notes = repository.notes.first()
 
@@ -65,17 +67,16 @@ class NoteRepositoryTest {
     }
 
     @Test
-    fun testUpdateNote() = testScope.runTest {
+    fun testUpsertNote() = testScope.runTest {
         val note = Note(
             id = 1,
             title = "Test Note",
-            content = "This is a test note.",
-            type = NoteType.SIMPLE
+            content = "This is a test note."
         )
-        repository.addNote(note = note)
+        repository.upsertNote(note = note)
 
         val updatedNote = note.copy(title = "Updated Test Note")
-        repository.updateNote(note = updatedNote)
+        repository.upsertNote(note = updatedNote)
 
         val notes = repository.notes.first()
 
@@ -83,25 +84,24 @@ class NoteRepositoryTest {
     }
 
     @Test
-    fun testUpdateNoteWithItems() = testScope.runTest {
+    fun testUpsertNoteWithItems() = testScope.runTest {
         val note = Note(
             id = 1,
             title = "Test Note with Items",
             content = "This is a test note with items.",
-            type = NoteType.CHECK_LIST,
             items = listOf(
                 Item(id = 1L, content = "Item 1"),
                 Item(id = 2L, content = "Item 2"),
                 Item(id = 3L, content = "Item 3")
             )
         )
-        repository.addNote(note = note)
+        repository.upsertNote(note = note)
 
         val updatedNote = note.copy(
             title = "Updated Test Note with Items",
             items = note.items.map { it.copy(content = "${it.content} (updated)") }
         )
-        repository.updateNote(note = updatedNote)
+        repository.upsertNote(note = updatedNote)
 
         val notes = repository.notes.first()
 
@@ -109,21 +109,21 @@ class NoteRepositoryTest {
     }
 
     @Test
-    fun testUpdateNotes() = testScope.runTest {
+    fun testUpsertNotes() = testScope.runTest {
         val note1 = Note(
             id = 1,
             title = "Test Note 1",
             content = "This is a test note 1.",
-            type = NoteType.SIMPLE
-        )
+
+            )
         val note2 = Note(
             id = 2,
             title = "Test Note 2",
             content = "This is a test note 2.",
-            type = NoteType.SIMPLE
-        )
-        repository.addNote(note = note1)
-        repository.addNote(note = note2)
+
+            )
+        repository.upsertNote(note = note1)
+        repository.upsertNote(note = note2)
 
         val updatedNote1 = note1.copy(title = "Updated Test Note 1")
         val updatedNote2 = note2.copy(title = "Updated Test Note 2")
@@ -136,12 +136,12 @@ class NoteRepositoryTest {
     }
 
     @Test
-    fun testUpdateNotesWithItems() = testScope.runTest {
+    fun testUpsertNotesWithItems() = testScope.runTest {
         val note1 = Note(
             id = 1,
             title = "Test Note 1 with Items",
             content = "This is a test note 1 with items.",
-            type = NoteType.CHECK_LIST,
+
             items = listOf(
                 Item(id = 1L, content = "Item 1"),
                 Item(id = 2L, content = "Item 2")
@@ -151,14 +151,14 @@ class NoteRepositoryTest {
             id = 2,
             title = "Test Note 2 with Items",
             content = "This is a test note 2 with items.",
-            type = NoteType.CHECK_LIST,
+
             items = listOf(
                 Item(id = 3L, content = "Item 3"),
                 Item(id = 4L, content = "Item 4")
             )
         )
-        repository.addNote(note = note1)
-        repository.addNote(note = note2)
+        repository.upsertNote(note = note1)
+        repository.upsertNote(note = note2)
 
         val updatedNote1 = note1.copy(
             title = "Updated Test Note 1 with Items",
@@ -182,9 +182,9 @@ class NoteRepositoryTest {
             id = 1,
             title = "Test Note",
             content = "This is a test note.",
-            type = NoteType.SIMPLE
-        )
-        repository.addNote(note = note)
+
+            )
+        repository.upsertNote(note = note)
         repository.deleteNote(note = note)
 
         val notes = repository.notes.first()
@@ -198,23 +198,23 @@ class NoteRepositoryTest {
             id = 1,
             title = "Test Note 1",
             content = "This is a test note 1.",
-            type = NoteType.SIMPLE
-        )
+
+            )
         val note2 = Note(
             id = 2,
             title = "Test Note 2",
             content = "This is a test note 2.",
-            type = NoteType.SIMPLE
-        )
+
+            )
         val note3 = Note(
             id = 3,
             title = "Test Note 3",
             content = "This is a test note 3.",
-            type = NoteType.SIMPLE
-        )
-        repository.addNote(note = note1)
-        repository.addNote(note = note2)
-        repository.addNote(note = note3)
+
+            )
+        repository.upsertNote(note = note1)
+        repository.upsertNote(note = note2)
+        repository.upsertNote(note = note3)
 
         repository.deleteNotes(notes = listOf(note1, note2))
 
@@ -230,13 +230,13 @@ class NoteRepositoryTest {
             id = 1,
             title = "Test Note with Items",
             content = "This is a test note with items.",
-            type = NoteType.CHECK_LIST,
+
             items = listOf(
                 Item(id = 1L, content = "Item 1"),
                 Item(id = 2L, content = "Item 2")
             )
         )
-        repository.addNote(note = note)
+        repository.upsertNote(note = note)
 
         val itemToDelete = note.items.first()
         repository.deleteItem(item = itemToDelete)
@@ -252,14 +252,13 @@ class NoteRepositoryTest {
             id = 1,
             title = "Test Note with Items",
             content = "This is a test note with items.",
-            type = NoteType.CHECK_LIST,
             items = listOf(
                 Item(id = 1L, content = "Item 1"),
                 Item(id = 2L, content = "Item 2"),
                 Item(id = 3L, content = "Item 3")
             )
         )
-        repository.addNote(note = note)
+        repository.upsertNote(note = note)
 
         val itemsToDelete = note.items.take(2)
         repository.deleteItems(items = itemsToDelete)
