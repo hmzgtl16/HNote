@@ -8,9 +8,11 @@ import com.example.hnote.core.model.RepeatMode
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.datetime.Instant
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.time.Duration.Companion.days
 import kotlin.time.DurationUnit
 
+@Singleton
 class AlarmSchedulerImpl @Inject constructor(
     @ApplicationContext private val context: Context
 ) : AlarmScheduler {
