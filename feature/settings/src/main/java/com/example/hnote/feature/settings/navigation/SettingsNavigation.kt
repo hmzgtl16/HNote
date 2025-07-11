@@ -1,6 +1,5 @@
 package com.example.hnote.feature.settings.navigation
 
-import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.dialog
 import com.example.hnote.core.navigation.Route
@@ -8,10 +7,7 @@ import com.example.hnote.feature.settings.SettingsRoute
 
 fun NavGraphBuilder.settingsDialog() {
 
-    dialog<Route.Settings>(
-        dialogProperties = DialogProperties(usePlatformDefaultWidth = false),
-        content = {
-            SettingsRoute()
-        }
-    )
+    dialog<Route.Settings> {
+        SettingsRoute()
+    }
 }
