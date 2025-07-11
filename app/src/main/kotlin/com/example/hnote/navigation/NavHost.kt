@@ -14,7 +14,6 @@ import com.example.hnote.ui.AppState
 @Composable
 fun AppNavHost(
     appState: AppState,
-    onShowSnackbar: suspend (String, String?) -> Boolean,
     windowAdaptiveInfo: WindowAdaptiveInfo,
     modifier: Modifier = Modifier
 ) {
@@ -24,8 +23,8 @@ fun AppNavHost(
         startDestination = Route.Notes,
         modifier = modifier,
         builder = {
-            notesScreen(onShowSnackbar = onShowSnackbar)
-            noteScreen(onShowSnackbar = onShowSnackbar)
+            notesScreen()
+            noteScreen()
             searchScreen()
             settingsDialog()
         }

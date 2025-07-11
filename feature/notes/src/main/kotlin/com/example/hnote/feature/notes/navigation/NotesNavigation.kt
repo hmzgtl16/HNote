@@ -5,9 +5,7 @@ import androidx.navigation.compose.composable
 import com.example.hnote.core.navigation.Route
 import com.example.hnote.feature.notes.NotesRoute
 
-fun NavGraphBuilder.notesScreen(
-    onShowSnackbar: suspend (String, String?) -> Boolean
-) {
+fun NavGraphBuilder.notesScreen() {
     composable<Route.Notes> {
         NotesRoute()
     }
