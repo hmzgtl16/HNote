@@ -2,7 +2,7 @@ package com.example.hnote.feature.notes
 
 import com.example.hnote.core.model.Note
 
-interface NotesScreenEvent {
+sealed interface NotesScreenEvent {
     data class MultiSelectionChanged(val enabled: Boolean) : NotesScreenEvent
     data class NoteSelectedChanged(val note: Note) : NotesScreenEvent
     data class SelectAllNotesChecked(val checked: Boolean) : NotesScreenEvent
