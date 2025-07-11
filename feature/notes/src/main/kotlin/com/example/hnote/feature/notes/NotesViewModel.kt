@@ -119,7 +119,7 @@ class NotesViewModel @Inject constructor(
 
     private fun pinNote(note: Note) = viewModelScope.launch {
         val noteToPin = note.copy(pinned = !note.pinned)
-        noteRepository.updateNote(note = noteToPin)
+        noteRepository.upsertNote(note = noteToPin)
     }
 
     private fun pinNotes() = viewModelScope.launch {

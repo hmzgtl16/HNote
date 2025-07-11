@@ -208,7 +208,7 @@ class NoteViewModel @Inject constructor(
             backgroundColor = currentState.backgroundColor,
             updated = Clock.System.now()
         ) ?: Note()
-        noteRepository.updateNote(note = noteToSave)
+        noteRepository.upsertNote(note = noteToSave)
         navigator.navigateBack()
     }
 
@@ -224,7 +224,7 @@ class NoteViewModel @Inject constructor(
             updated = Clock.System.now()
         )
 
-        noteRepository.updateNote(note = noteToCopy)
+        noteRepository.upsertNote(note = noteToCopy)
         navigator.navigateBack()
     }
 

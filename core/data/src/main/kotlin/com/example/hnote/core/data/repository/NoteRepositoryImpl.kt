@@ -24,15 +24,7 @@ class NoteRepositoryImpl @Inject constructor(
         noteDao.getNoteById(id = id)
             .map { it?.toModel() }
 
-    override suspend fun addNote(note: Note) {
-        noteDao.upsertNoteWithItems(
-            note = note.toEntity(),
-            reminder = note.reminder?.toEntity(),
-            items = note.items.map(Item::toEntity)
-        )
-    }
-
-    override suspend fun updateNote(note: Note) {
+    override suspend fun upsertNote(note: Note) {
         noteDao.upsertNoteWithItems(
             note = note.toEntity(),
             reminder = note.reminder?.toEntity(),
