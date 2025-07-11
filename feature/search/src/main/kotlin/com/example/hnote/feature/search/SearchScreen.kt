@@ -59,43 +59,32 @@ internal fun SearchRoute(
 ) {
     val recentSearchQueriesUiState by viewModel.recentSearchQueriesUiState.collectAsStateWithLifecycle()
     val searchResultUiState by viewModel.searchResultUiState.collectAsStateWithLifecycle()
-    val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
+    val searchQuery by viewModel.currentSearchQueryUiState.collectAsStateWithLifecycle()
 
-    BackHandler(onBack = viewModel::navigateBack)
+    BackHandler(onBack = { viewModel.onEvent(SearchScreenEvent.NavigateBack) })
 
     SearchScreen(
-        modifier = modifier,
         recentSearchQueriesUiState = recentSearchQueriesUiState,
         searchResultUiState = searchResultUiState,
         searchQuery = searchQuery,
-        onSearchQueryChanged = viewModel::onSearchQueryChanged,
-        onSearchTriggered = viewModel::onSearchTriggered,
-        onClearRecentSearch = viewModel::clearRecentSearch,
-        onClearAllRecentSearches = viewModel::clearAllRecentSearches,
-        onBackClick = viewModel::navigateBack,
-        onNoteClick = viewModel::navigateToNote
+        onEvent = viewModel::onEvent,
+        modifier = modifier
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SearchScreen(
-    modifier: Modifier = Modifier,
     recentSearchQueriesUiState: SearchQueryUiState,
     searchResultUiState: SearchResultUiState,
     searchQuery: String,
-    onSearchQueryChanged: (String) -> Unit = {},
-    onSearchTriggered: (String) -> Unit = {},
-    onClearRecentSearch: (SearchQuery) -> Unit,
-    onClearAllRecentSearches: () -> Unit = {},
-    onBackClick: () -> Unit,
-    onNoteClick: (id: Long) -> Unit
+    onEvent: (SearchScreenEvent) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.TopCenter,
         content = {
-
             AppSearchBar(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -103,17 +92,16 @@ internal fun SearchScreen(
                 inputField = {
                     SearchBarDefaults.InputField(
                         query = searchQuery,
-                        onQueryChange = onSearchQueryChanged,
-                        onSearch = onSearchTriggered,
+                        onQueryChange = { onEvent(SearchScreenEvent.SearchQueryChanged(it)) },
+                        onSearch = { onEvent(SearchScreenEvent.SearchTriggered(it)) },
                         expanded = true,
                         onExpandedChange = { },
                         placeholder = {
                             Text(text = stringResource(id = android.R.string.search_go))
                         },
                         leadingIcon = {
-
                             AppIconButton(
-                                onClick = onBackClick,
+                                onClick = { onEvent(SearchScreenEvent.NavigateBack) },
                                 icon = {
                                     Icon(
                                         imageVector = AppIcons.Back,
@@ -125,7 +113,7 @@ internal fun SearchScreen(
                         trailingIcon = {
                             if (searchQuery.isNotEmpty()) {
                                 AppIconButton(
-                                    onClick = { onSearchQueryChanged("") },
+                                    onClick = { onEvent(SearchScreenEvent.SearchQueryChanged("")) },
                                     icon = {
                                         Icon(
                                             imageVector = AppIcons.Close,
@@ -142,29 +130,32 @@ internal fun SearchScreen(
                 onExpandedChange = { },
                 colors = SearchBarDefaults.colors(containerColor = Color.Transparent),
                 content = {
-
                     Column(
                         modifier = modifier.fillMaxSize(),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Top,
                         content = {
-
                             when (searchResultUiState) {
-                                SearchResultUiState.LoadFailed, SearchResultUiState.Loading -> Unit
-                                SearchResultUiState.EmptyQuery -> {
+                                is SearchResultUiState.LoadFailed, SearchResultUiState.Loading -> Unit
+                                is SearchResultUiState.EmptyQuery -> {
                                     if (recentSearchQueriesUiState is SearchQueryUiState.Success) {
                                         RecentSearches(
                                             queries = recentSearchQueriesUiState.queries,
                                             onRecentSearchClicked = {
-                                                onSearchQueryChanged(it.query)
-                                                onSearchTriggered(it.query)
+                                                onEvent(SearchScreenEvent.SearchQueryChanged(it.query))
+                                                onEvent(SearchScreenEvent.SearchTriggered(it.query))
                                             },
-                                            onClearRecentSearch = onClearRecentSearch,
-                                            onClearAllRecentSearches = onClearAllRecentSearches
+                                            onClearRecentSearch = {
+                                                onEvent(
+                                                    SearchScreenEvent.ClearRecentSearch(
+                                                        it
+                                                    )
+                                                )
+                                            },
+                                            onClearAllRecentSearches = { onEvent(SearchScreenEvent.ClearAllRecentSearches) }
                                         )
                                     }
                                 }
-
                                 is SearchResultUiState.Success -> {
                                     if (searchResultUiState.isEmpty()) {
                                         SearchResultEmpty(
@@ -177,17 +168,33 @@ internal fun SearchScreen(
                                             RecentSearches(
                                                 queries = recentSearchQueriesUiState.queries,
                                                 onRecentSearchClicked = {
-                                                    onSearchQueryChanged(it.query)
-                                                    onSearchTriggered(it.query)
+                                                    onEvent(SearchScreenEvent.SearchQueryChanged(it.query))
+                                                    onEvent(SearchScreenEvent.SearchTriggered(it.query))
                                                 },
-                                                onClearRecentSearch = onClearRecentSearch,
-                                                onClearAllRecentSearches = onClearAllRecentSearches
+                                                onClearRecentSearch = {
+                                                    onEvent(
+                                                        SearchScreenEvent.ClearRecentSearch(
+                                                            it
+                                                        )
+                                                    )
+                                                },
+                                                onClearAllRecentSearches = {
+                                                    onEvent(
+                                                        SearchScreenEvent.ClearAllRecentSearches
+                                                    )
+                                                }
                                             )
                                         }
                                     } else {
                                         SearchResultContent(
                                             notes = searchResultUiState.searchResult.notes,
-                                            onNoteClick = onNoteClick,
+                                            onNoteClick = {
+                                                onEvent(
+                                                    SearchScreenEvent.NavigateToNote(
+                                                        noteId = it
+                                                    )
+                                                )
+                                            },
                                             modifier = Modifier.fillMaxSize()
                                         )
                                     }
@@ -207,23 +214,20 @@ fun RecentSearches(
     onRecentSearchClicked: (SearchQuery) -> Unit,
     onClearRecentSearch: (SearchQuery) -> Unit,
     onClearAllRecentSearches: () -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
-
     LazyColumn(
         modifier = modifier.fillMaxWidth(),
         contentPadding = PaddingValues(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(space = 8.dp, alignment = Alignment.Top),
         content = {
-
             item {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                     content = {
-
                         Text(
                             text = buildAnnotatedString {
                                 withStyle(
@@ -236,7 +240,6 @@ fun RecentSearches(
                         )
 
                         if (queries.isNotEmpty()) {
-
                             AppTextButton(
                                 onClick = onClearAllRecentSearches,
                                 text = {
@@ -256,7 +259,6 @@ fun RecentSearches(
                 key = { it.hashCode() },
                 contentType = { it },
                 itemContent = {
-
                     SearchQueryCard(
                         searchQuery = it,
                         onClick = onRecentSearchClicked,
@@ -272,9 +274,8 @@ fun RecentSearches(
 @Composable
 fun SearchResultEmpty(
     searchQuery: String,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
-
     Box(
         modifier = modifier,
         contentAlignment = Alignment.TopCenter,
@@ -296,7 +297,7 @@ fun SearchResultEmpty(
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(vertical = 24.dp),
             )
-        },
+        }
     )
 }
 
@@ -304,7 +305,7 @@ fun SearchResultEmpty(
 fun SearchResultContent(
     notes: List<Note>,
     onNoteClick: (id: Long) -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     val staggeredGridState = rememberLazyStaggeredGridState()
 
@@ -316,7 +317,6 @@ fun SearchResultContent(
         horizontalArrangement = Arrangement.spacedBy(space = 16.dp),
         modifier = modifier,
         content = {
-
             if (notes.isNotEmpty()) {
                 item(
                     span = StaggeredGridItemSpan.FullLine,
@@ -342,7 +342,6 @@ fun SearchResultContent(
                 key = { it.hashCode() },
                 contentType = { it },
                 itemContent = {
-
                     NoteCard(
                         note = it,
                         onNoteClick = onNoteClick,
@@ -365,12 +364,7 @@ private fun SearchScreenLoadingPreview() {
                 recentSearchQueriesUiState = SearchQueryUiState.Loading,
                 searchResultUiState = SearchResultUiState.Loading,
                 searchQuery = "",
-                onSearchQueryChanged = {},
-                onSearchTriggered = {},
-                onClearRecentSearch = {},
-                onClearAllRecentSearches = {},
-                onBackClick = {},
-                onNoteClick = {}
+                onEvent = {}
             )
         }
     }
@@ -385,12 +379,7 @@ private fun SearchScreenEmptyPreview() {
                 recentSearchQueriesUiState = SearchQueryUiState.Loading,
                 searchResultUiState = SearchResultUiState.Success(searchResult = SearchResult()),
                 searchQuery = "Hello World!",
-                onSearchQueryChanged = {},
-                onSearchTriggered = {},
-                onClearRecentSearch = {},
-                onClearAllRecentSearches = {},
-                onBackClick = {},
-                onNoteClick = {}
+                onEvent = {}
             )
         }
     }
@@ -405,21 +394,16 @@ private fun SearchScreenEmptyPreview(
     AppTheme {
         AppBackground {
             SearchScreen(
-                recentSearchQueriesUiState = SearchQueryUiState.Loading,
+                recentSearchQueriesUiState = SearchQueryUiState.Success(queries = emptyList()),
                 searchResultUiState = SearchResultUiState.Success(
                     searchResult = searchResult.copy(
                         notes = searchResult.notes.filter {
-                            it.title.contains("the") || it.content.contains("the")
+                            it.title.contains("ry0") || it.content.contains("ry0")
                         }
                     )
                 ),
-                searchQuery = "the",
-                onSearchQueryChanged = {},
-                onSearchTriggered = {},
-                onClearRecentSearch = {},
-                onClearAllRecentSearches = {},
-                onBackClick = {},
-                onNoteClick = {}
+                searchQuery = "ry0",
+                onEvent = {}
             )
         }
     }
@@ -437,12 +421,7 @@ private fun SearchScreenPreview(
                 recentSearchQueriesUiState = SearchQueryUiState.Success(queries = searchQueries),
                 searchResultUiState = SearchResultUiState.Loading,
                 searchQuery = "",
-                onSearchQueryChanged = {},
-                onSearchTriggered = {},
-                onClearRecentSearch = {},
-                onClearAllRecentSearches = {},
-                onBackClick = {},
-                onNoteClick = {}
+                onEvent = {}
             )
         }
     }
