@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
@@ -51,9 +50,7 @@ fun SettingsRoute(
 
     SettingsDialog(
         uiState = uiState,
-        onChangeTheme = viewModel::updateTheme,
-        onChangeDynamicTheme = viewModel::updateDynamicColor,
-        onDismiss = viewModel::navigateBack,
+        onEvent = viewModel::onEvent,
         modifier = modifier
     )
 }
@@ -61,15 +58,11 @@ fun SettingsRoute(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun SettingsDialog(
-    uiState: SettingsUiState,
-    onChangeTheme: (Theme) -> Unit,
-    onChangeDynamicTheme: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
-    supportDynamicTheme: Boolean = supportsDynamicTheming(),
-    onDismiss: () -> Unit,
+    uiState: SettingsUiState,
+    onEvent: (SettingsDialogEvent) -> Unit,
+    supportDynamicTheme: Boolean = supportsDynamicTheming()
 ) {
-
-
     val windowInfo = LocalWindowInfo.current
 
     Box(
@@ -77,10 +70,6 @@ fun SettingsDialog(
             .background(
                 color = LocalBackgroundTheme.current.color,
                 shape = RoundedCornerShape(size = 30.dp)
-            )
-            .sizeIn(
-                maxHeight = windowInfo.containerSize.height.dp - 80.dp,
-                maxWidth = windowInfo.containerSize.width.dp - 80.dp
             ),
         contentAlignment = Alignment.Center,
         content = {
@@ -115,9 +104,15 @@ fun SettingsDialog(
                         is SettingsUiState.Success -> {
                             SettingsDialogContent(
                                 theme = uiState.theme,
-                                onChangeTheme = onChangeTheme,
+                                onChangeTheme = { onEvent(SettingsDialogEvent.ThemeChanged(it)) },
                                 useDynamicTheme = uiState.useDynamicColor,
-                                onChangeDynamicTheme = onChangeDynamicTheme,
+                                onChangeDynamicTheme = {
+                                    onEvent(
+                                        SettingsDialogEvent.DynamicColorEnabled(
+                                            it
+                                        )
+                                    )
+                                },
                                 supportDynamicTheme = supportDynamicTheme
                             )
                         }
@@ -126,7 +121,7 @@ fun SettingsDialog(
                     HorizontalDivider()
 
                     AppTextButton(
-                        onClick = onDismiss,
+                        onClick = { onEvent(SettingsDialogEvent.Dismiss) },
                         text = {
                             Text(
                                 text = stringResource(id = R.string.feature_settings_dismiss_dialog_button_text),
@@ -324,9 +319,7 @@ private fun SettingsDialogLoadingPreview() {
     AppTheme {
         SettingsDialog(
             uiState = SettingsUiState.Loading,
-            onChangeTheme = {},
-            onChangeDynamicTheme = {},
-            onDismiss = {}
+            onEvent = {}
         )
     }
 }
@@ -340,10 +333,7 @@ private fun SettingsDialogSuccessPreview() {
                 theme = Theme.FOLLOW_SYSTEM,
                 useDynamicColor = true
             ),
-            onChangeTheme = {},
-            onChangeDynamicTheme = {},
-            supportDynamicTheme = true,
-            onDismiss = {}
+            onEvent = {}
         )
     }
 }
