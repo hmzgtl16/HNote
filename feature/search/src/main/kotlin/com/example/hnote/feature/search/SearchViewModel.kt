@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,7 +29,8 @@ class SearchViewModel @Inject constructor(
     val searchQuery: StateFlow<String> get() = _searchQuery
 
     val searchResultUiState: StateFlow<SearchResultUiState> =
-        searchQuery.flatMapLatest {
+        searchQuery
+            .flatMapLatest {
             if (it.length < SEARCH_QUERY_MIN_LENGTH) {
                 flowOf(value = SearchResultUiState.EmptyQuery)
             } else {
@@ -52,7 +54,7 @@ class SearchViewModel @Inject constructor(
             )
 
     fun onSearchQueryChanged(query: String) {
-        _searchQuery.value = query
+        _searchQuery.update { query.trim() }
     }
 
     fun onSearchTriggered(query: String) = viewModelScope.launch {
