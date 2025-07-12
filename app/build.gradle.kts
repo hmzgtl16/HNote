@@ -53,6 +53,7 @@ dependencies {
     implementation(projects.feature.search)
     implementation(projects.feature.settings)
 
+    implementation(projects.core.alarm)
     implementation(projects.core.data)
     implementation(projects.core.design)
     implementation(projects.core.navigation)
