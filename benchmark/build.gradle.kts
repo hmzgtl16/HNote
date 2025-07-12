@@ -4,12 +4,15 @@ plugins {
 
 android {
     namespace = "com.example.hnote.benchmark"
-    compileSdk = 36
 
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "APP_BUILD_TYPE_SUFFIX", "\"\"")
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {
@@ -18,10 +21,6 @@ android {
             signingConfig = getByName("debug").signingConfig
             matchingFallbacks += listOf("release")
         }
-    }
-
-    buildFeatures {
-        buildConfig = true
     }
 
     targetProjectPath = ":app"
