@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.benchmark"
+    namespace = "com.example.hnote.benchmark"
     compileSdk = 36
 
     defaultConfig {
@@ -15,9 +15,6 @@ android {
     }
 
     buildTypes {
-        // This benchmark buildType is used for benchmarking, and should function like your
-        // release build (for example, with minification on). It"s signed with a debug key
-        // for easy local/CI testing.
         create("benchmark") {
             isDebuggable = true
             signingConfig = getByName("debug").signingConfig
@@ -42,8 +39,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.junit)
-
     implementation(libs.androidx.benchmark.macro.junit4)
     implementation(libs.androidx.test.core)
     implementation(libs.androidx.test.espresso.core)
