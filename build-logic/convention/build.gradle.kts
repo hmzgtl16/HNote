@@ -59,10 +59,6 @@ gradlePlugin {
             id = libs.plugins.hnote.android.test.get().pluginId
             implementationClass = "AndroidTestConventionPlugin"
         }
-        register("androidFlavors") {
-            id = libs.plugins.hnote.android.application.flavors.get().pluginId
-            implementationClass = "AndroidApplicationFlavorsConventionPlugin"
-        }
         register("jvmLibrary") {
             id = libs.plugins.hnote.jvm.library.get().pluginId
             implementationClass = "JvmLibraryConventionPlugin"

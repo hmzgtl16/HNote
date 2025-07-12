@@ -1,5 +1,3 @@
-import com.example.hnote.configureFlavors
-
 plugins {
     alias(libs.plugins.hnote.android.test)
 }
@@ -24,14 +22,6 @@ android {
 
     buildFeatures {
         buildConfig = true
-    }
-
-    configureFlavors(this) { flavor ->
-        buildConfigField(
-            "String",
-            "APP_FLAVOR_SUFFIX",
-            "\"${flavor.applicationIdSuffix ?: ""}\""
-        )
     }
 
     targetProjectPath = ":app"
