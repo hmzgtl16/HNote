@@ -9,9 +9,9 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class AlarmReceiver : BroadcastReceiver() {
-
     @Inject
     lateinit var notifier: Notifier
+
     override fun onReceive(context: Context, intent: Intent) {
         val id = intent.getLongExtra(AlarmScheduler.ALARM_EXTRA_ID, 0L)
         notifier.postReminderNotification(id = id)
