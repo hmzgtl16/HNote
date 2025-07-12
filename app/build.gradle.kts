@@ -23,6 +23,11 @@ android {
         debug {
             applicationIdSuffix = BuildType.DEBUG.applicationIdSuffix
         }
+        create("benchmark") {
+            initWith(buildTypes.getByName("release"))
+            matchingFallbacks += listOf("release")
+            isDebuggable = false
+        }
         release {
             isMinifyEnabled = true
             applicationIdSuffix = BuildType.RELEASE.applicationIdSuffix
@@ -30,7 +35,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.named("debug").get()
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 

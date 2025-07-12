@@ -33,6 +33,7 @@ rootProject.name = "HNote"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 include(":app")
+include(":benchmark")
 include(":core:alarm")
 include(":core:common")
 include(":core:data")
