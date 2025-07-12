@@ -4,6 +4,8 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.example.hnote.core.model.RepeatMode
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.datetime.Instant
@@ -19,10 +21,10 @@ class AlarmSchedulerImpl @Inject constructor(
 
     private val alarmManager = context.getSystemService(AlarmManager::class.java)
 
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun schedule(id: Long, scheduleTime: Instant, repeatMode: RepeatMode) {
         val intent = Intent(context, AlarmReceiver::class.java).apply {
             putExtra(AlarmScheduler.ALARM_EXTRA_ID, id)
-            putExtra(AlarmScheduler.ALARM_EXTRA_ID, repeatMode.ordinal)
         }
 
         val pendingIntent = PendingIntent.getBroadcast(
