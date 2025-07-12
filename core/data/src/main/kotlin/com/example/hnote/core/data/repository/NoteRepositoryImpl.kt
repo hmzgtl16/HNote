@@ -31,8 +31,11 @@ class NoteRepositoryImpl @Inject constructor(
             items = note.items.map(Item::toEntity)
         )
 
-        note.reminder?.let {
+        if (note.reminder == null) {
             deleteNoteReminder(noteId = note.id)
+        }
+
+        note.reminder?.let {
             alarmScheduler.cancel(id = it.id)
             alarmScheduler.schedule(
                 id = it.id,
