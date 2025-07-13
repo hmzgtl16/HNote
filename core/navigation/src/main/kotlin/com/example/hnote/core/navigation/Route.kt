@@ -16,3 +16,5 @@ sealed interface Route {
     @Serializable
     data object Settings : Route
 }
+
+const val DEEP_LINK_SCHEME_AND_HOST = "http://www.example.com/hnote"
