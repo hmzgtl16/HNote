@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.hnote.android.test)
+    alias(libs.plugins.androidx.baselineprofile)
 }
 
 android {
@@ -7,12 +8,7 @@ android {
 
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        buildConfigField("String", "APP_BUILD_TYPE_SUFFIX", "\"\"")
-    }
-
-    buildFeatures {
-        buildConfig = true
+        testInstrumentationRunnerArguments["androidx.benchmark.suppressErrors"] = "EMULATOR"
     }
 
     buildTypes {
@@ -23,8 +19,23 @@ android {
         }
     }
 
+    testOptions.managedDevices.localDevices {
+        create("pixel6Api33") {
+            device = "Pixel 9"
+            apiLevel = 36
+            systemImageSource = "google"
+        }
+    }
+
     targetProjectPath = ":app"
     experimentalProperties["android.experimental.self-instrumenting"] = true
+}
+
+baselineProfile {
+    managedDevices.clear()
+    managedDevices += "pixel9Api36"
+
+    useConnectedDevices = false
 }
 
 dependencies {
