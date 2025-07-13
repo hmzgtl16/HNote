@@ -23,15 +23,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="http" />
                 <data android:host="www.example.com" />
-                <data android:path="/hnote" />
+                <data android:pathPattern="/hnote" />
+            </intent-filter>
+            <!--<intent-filter android:autoVerify="true">
+                <data android:scheme="http"
+                    android:host="www.example.com"
+                    android:pathPrefix="/hnote" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <action android:name="android.intent.action.VIEW" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
     </application>
 </manifest>
