@@ -12,7 +12,7 @@
         android:theme="@style/Theme.HNote.Splash">
         <profileable
             android:shell="true"
-            tools:targetApi="29" />
+            tools:targetApi="36" />
 
         <activity
             android:name=".MainActivity"
