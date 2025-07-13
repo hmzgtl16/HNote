@@ -16,6 +16,21 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
+        <entry key="-2002002197">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="Pixel_9" value="120" />
+                  <entry key="Pixel_Tablet" value="120" />
+                  <entry key="Tests" value="360" />
+                  <entry key="Xiaomi M2007J20CG" value="120" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="-1906384979">
           <value>
             <AndroidTestResultsTableState>

@@ -20,7 +20,6 @@ class ExampleStartupBenchmark {
         packageName = PACKAGE_NAME,
         metrics = BaselineProfileMetrics.allMetrics,
         compilationMode = compilationMode,
-        // More iterations result in higher statistical significance.
         iterations = 20,
         startupMode = StartupMode.COLD,
         setupBlock = {
