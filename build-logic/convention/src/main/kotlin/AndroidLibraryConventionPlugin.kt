@@ -1,4 +1,5 @@
 import com.android.build.gradle.LibraryExtension
+import com.example.hnote.configureGradleManagedDevices
 import com.example.hnote.configureKotlinAndroid
 import com.example.hnote.libs
 import org.gradle.api.Plugin
@@ -19,6 +20,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 defaultConfig.targetSdk = 36
                 defaultConfig.testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                 testOptions.animationsDisabled = true
+                configureGradleManagedDevices(this)
                 resourcePrefix =
                     path.split("""\W""".toRegex())
                         .drop(1)

@@ -1,4 +1,5 @@
 import com.android.build.gradle.TestExtension
+import com.example.hnote.configureGradleManagedDevices
 import com.example.hnote.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -15,6 +16,7 @@ class AndroidTestConventionPlugin : Plugin<Project> {
             extensions.configure<TestExtension> {
                 configureKotlinAndroid(this)
                 defaultConfig.targetSdk = 36
+                configureGradleManagedDevices(this)
             }
         }
     }

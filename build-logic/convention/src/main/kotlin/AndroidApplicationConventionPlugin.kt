@@ -1,4 +1,5 @@
 import com.android.build.api.dsl.ApplicationExtension
+import com.example.hnote.configureGradleManagedDevices
 import com.example.hnote.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -16,6 +17,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 configureKotlinAndroid(this)
                 defaultConfig.targetSdk = 36
                 testOptions.animationsDisabled = true
+                configureGradleManagedDevices(this)
             }
         }
     }

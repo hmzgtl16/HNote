@@ -25,6 +25,13 @@ dependencies {
     compileOnly(libs.org.jetbrains.kotlin.gradle.plugin)
 }
 
+tasks {
+    validatePlugins {
+        enableStricterValidation = true
+        failOnWarning = true
+    }
+}
+
 gradlePlugin {
     plugins {
         register("androidApplication") {
