@@ -11,13 +11,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.hnote.core.navigation.Navigator
 import com.example.hnote.core.navigation.Route
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Stable
 class AppState(
-    val dispatcher: CoroutineDispatcher,
     val navigator: Navigator,
     val navController: NavHostController,
     val coroutineScope: CoroutineScope
@@ -41,18 +39,15 @@ class AppState(
 
 @Composable
 fun rememberAppState(
-    dispatcher: CoroutineDispatcher,
     navigator: Navigator,
     navController: NavHostController = rememberNavController(),
     coroutineScope: CoroutineScope = rememberCoroutineScope()
 ): AppState = remember(
-    dispatcher,
     navigator,
     navController,
     coroutineScope
 ) {
     AppState(
-        dispatcher = dispatcher,
         navigator = navigator,
         navController = navController,
         coroutineScope = coroutineScope
