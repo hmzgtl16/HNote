@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.hnote.android.application)
     alias(libs.plugins.hnote.android.application.compose)
     alias(libs.plugins.hnote.hilt)
+    alias(libs.plugins.androidx.baselineprofile)
     alias(libs.plugins.org.jetbrains.kotlin.serialization)
 }
 
@@ -30,6 +31,7 @@ android {
                 "proguard-rules.pro"
             )
             signingConfig = signingConfigs.getByName("debug")
+            baselineProfile.automaticGenerationDuringBuild = true
         }
     }
 
@@ -63,4 +65,11 @@ dependencies {
     implementation(libs.androidx.compose.material3.adaptive)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.org.jetbrains.kotlinx.serialization.json)
+
+    baselineProfile(projects.benchmark)
+}
+
+baselineProfile {
+    automaticGenerationDuringBuild = false
+    dexLayoutOptimization = true
 }

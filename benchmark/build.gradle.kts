@@ -20,7 +20,7 @@ android {
     }
 
     testOptions.managedDevices.localDevices {
-        create("pixel6Api33") {
+        create("pixel9Api36") {
             device = "Pixel 9"
             apiLevel = 36
             systemImageSource = "google"
@@ -46,10 +46,4 @@ dependencies {
     implementation(libs.androidx.test.rules)
     implementation(libs.androidx.test.runner)
     implementation(libs.androidx.test.uiautomator)
-}
-
-androidComponents {
-    beforeVariants(selector().all()) {
-        it.enable = it.buildType == "benchmark"
-    }
 }

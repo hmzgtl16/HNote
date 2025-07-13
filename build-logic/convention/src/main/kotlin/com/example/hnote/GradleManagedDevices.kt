@@ -1,6 +1,7 @@
 package com.example.hnote
 
 import com.android.build.api.dsl.CommonExtension
+import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.invoke
 
 internal fun configureGradleManagedDevices(
@@ -20,15 +21,21 @@ internal fun configureGradleManagedDevices(
     commonExtension.testOptions {
         managedDevices {
             localDevices {
-                create(pixel9.taskName) {
+                maybeCreate(pixel9.taskName).apply {
                     device = pixel9.device
                     apiLevel = pixel9.apiLevel
                     systemImageSource = pixel9.systemImageSource
                 }
-                create(pixelTablet.taskName) {
+                maybeCreate(pixelTablet.taskName).apply {
                     device = pixelTablet.device
                     apiLevel = pixelTablet.apiLevel
                     systemImageSource = pixelTablet.systemImageSource
+                }
+            }
+            groups {
+                maybeCreate("phoneAndTablet").apply {
+                    targetDevices.add(localDevices[pixel9.taskName])
+                    targetDevices.add(localDevices[pixelTablet.taskName])
                 }
             }
         }
