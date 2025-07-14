@@ -8,7 +8,7 @@ import com.example.hnote.core.database.model.ItemEntity
 import com.example.hnote.core.database.model.NoteEntity
 import com.example.hnote.core.database.model.ReminderEntity
 import com.example.hnote.core.database.util.NoteType
-import com.example.hnote.core.database.util.ReminderRepeatMode
+import com.example.hnote.core.database.util.RepeatMode
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
@@ -311,7 +311,7 @@ private fun testNoteEntity(
 private fun testReminderEntity(
     id: Long = 0L,
     time: Instant,
-    reminderMode: ReminderRepeatMode = ReminderRepeatMode.NONE,
+    reminderMode: RepeatMode = RepeatMode.NONE,
     isCompleted: Boolean = false,
     noteId: Long = 0L
 ): ReminderEntity = ReminderEntity(

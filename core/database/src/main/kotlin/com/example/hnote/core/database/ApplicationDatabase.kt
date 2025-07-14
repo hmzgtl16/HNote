@@ -13,8 +13,7 @@ import com.example.hnote.core.database.model.NoteFtsEntity
 import com.example.hnote.core.database.model.ReminderEntity
 import com.example.hnote.core.database.model.SearchQueryEntity
 import com.example.hnote.core.database.util.InstantConverter
-import com.example.hnote.core.database.util.NoteTypeConverter
-import com.example.hnote.core.database.util.ReminderRepeatModeConverter
+import com.example.hnote.core.database.util.RepeatModeConverter
 
 @Database(
     entities = [
@@ -30,8 +29,7 @@ import com.example.hnote.core.database.util.ReminderRepeatModeConverter
 )
 @TypeConverters(
         InstantConverter::class,
-        NoteTypeConverter::class,
-        ReminderRepeatModeConverter::class
+    RepeatModeConverter::class
 )
 internal abstract class ApplicationDatabase : RoomDatabase() {
     abstract fun noteDao(): NoteDao

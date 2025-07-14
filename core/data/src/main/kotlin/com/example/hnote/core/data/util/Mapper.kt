@@ -10,7 +10,7 @@ import com.example.hnote.core.model.Note
 import com.example.hnote.core.model.Reminder
 import com.example.hnote.core.model.RepeatMode
 import com.example.hnote.core.model.SearchQuery
-import com.example.hnote.core.database.util.ReminderRepeatMode as ReminderRepeatModeEntity
+import com.example.hnote.core.database.util.RepeatMode as ReminderRepeatModeEntity
 
 fun Note.toEntity(): NoteEntity = NoteEntity(
     id = id,
