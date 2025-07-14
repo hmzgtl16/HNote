@@ -100,7 +100,7 @@ appropriate DataStore instance (or a wrapper class like `PreferencesDataSource`)
 ### Example (Conceptual - in another module):
 
 ```
-// In a UserDataRepository in data module
+// In a UserDataRepository in :core:data module
 
 
 class UserDataRepositoryImpl @Inject constructor(

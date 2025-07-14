@@ -110,7 +110,7 @@ necessary DAOs or a repository that wraps these DAOs.
 ### Example (Conceptual - in another module):
 
 ```
-// In a SearchRepository in data module
+// In a SearchRepository in :core:data module
 
 import ...
 
