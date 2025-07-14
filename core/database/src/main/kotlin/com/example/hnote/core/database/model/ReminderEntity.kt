@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.example.hnote.core.database.util.ReminderRepeatMode
+import com.example.hnote.core.database.util.RepeatMode
 import kotlinx.datetime.Instant
 
 @Entity(
@@ -22,6 +22,6 @@ data class ReminderEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,
     val time: Instant,
-    val repeatMode: ReminderRepeatMode,
+    val repeatMode: RepeatMode,
     @ColumnInfo(index = true) val noteId: Long
 )
