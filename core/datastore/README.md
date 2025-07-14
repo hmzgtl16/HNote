@@ -1,6 +1,7 @@
-# `datastore` Module
+# `:core:datastore` Module
 
-The `datastore` module is a core component responsible for managing application data persistence,
+The `:core:datastore` module is a core component responsible for managing application data
+persistence,
 specifically focusing on user preferences and UI theme configurations. It leverages Jetpack
 DataStore, a modern and robust solution for data storage in Android applications.
 
@@ -22,7 +23,7 @@ interact with persisted data in a consistent and safe manner.
 
 ## Module Structure
 
-The `datastore` module's structure is as follows:
+The `:core:datastore` module's structure is as follows:
 
 ```
 datastore/
