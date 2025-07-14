@@ -10,9 +10,11 @@ import org.gradle.kotlin.dsl.dependencies
 class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            apply(plugin = "hnote.android.library")
-            apply(plugin = "hnote.hilt")
-            apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
+            apply(plugin = libs.findPlugin("hnote.android.library").get().get().pluginId)
+            apply(plugin = libs.findPlugin("hnote.hilt").get().get().pluginId)
+            apply(
+                plugin = libs.findPlugin("org.jetbrains.kotlin.serialization").get().get().pluginId
+            )
 
             extensions.configure<LibraryExtension> {
                 testOptions.animationsDisabled = true

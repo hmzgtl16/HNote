@@ -8,7 +8,7 @@ import org.gradle.kotlin.dsl.dependencies
 class JvmLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            apply(plugin = "org.jetbrains.kotlin.jvm")
+            apply(plugin = libs.findPlugin("org.jetbrains.kotlin.jvm").get().get().pluginId)
 
             configureKotlinJvm()
             dependencies {
