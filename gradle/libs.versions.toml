@@ -103,6 +103,7 @@ org-jetbrains-kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "k
 androidx-room = { id = "androidx.room", version.ref = "androidx-room" }
 androidx-baselineprofile = { id = "androidx.baselineprofile", version.ref = "androidx-benchmark-macro" }
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
+com-android-base = { id = "com.android.base", version.ref = "android-gradle-plugin" }
 com-android-library = { id = "com.android.library", version.ref = "android-gradle-plugin" }
 com-android-test = { id = "com.android.test", version.ref = "android-gradle-plugin" }
 com-google-dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "com-google-dagger" }
