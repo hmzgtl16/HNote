@@ -1,12 +1,12 @@
 plugins {
-    alias(libs.plugins.hnote.android.library)
-    alias(libs.plugins.hnote.android.library.compose)
-    alias(libs.plugins.hnote.hilt)
+    alias(libs.plugins.hnotes.android.library)
+    alias(libs.plugins.hnotes.android.library.compose)
+    alias(libs.plugins.hnotes.hilt)
     alias(libs.plugins.org.jetbrains.kotlin.serialization)
 }
 
 android {
-    namespace = "com.example.hnote.core.navigation"
+    namespace = "com.example.hnotes.core.navigation"
 }
 
 dependencies {

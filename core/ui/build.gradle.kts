@@ -1,10 +1,10 @@
 plugins {
-    alias(libs.plugins.hnote.android.library)
-    alias(libs.plugins.hnote.android.library.compose)
+    alias(libs.plugins.hnotes.android.library)
+    alias(libs.plugins.hnotes.android.library.compose)
 }
 
 android {
-    namespace = "com.example.hnote.core.ui"
+    namespace = "com.example.hnotes.core.ui"
 }
 
 dependencies {

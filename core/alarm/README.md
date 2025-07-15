@@ -33,7 +33,7 @@ alarm/
 ├── ...
 ├── src
 │   ├── main
-│   │   ├── kotlin/com/example/hnote/core/alarm
+│   │   ├── kotlin/com/example/hnotes/core/alarm
 │   │   │   ├── di
 │   │   │   │   └── AlarmModule.kt           # Provides Alarm dependencies for DI
 │   │   │   ├── AlarmReceiver.kt             # BroadcastReceiver for handling alarm triggers

@@ -33,7 +33,7 @@ common/
 ├── ...
 ├── src
 │   ├── main
-│   │   └── kotlin/com/example/hnote/core/common
+│   │   └── kotlin/com/example/hnotes/core/common
 │   │       ├── di
 │   │       │   ├── ApplicationScopeModule.kt  # Provides CoroutineScope dependencies
 │   │       │   └── DispatchersModule.kt       # Provides CoroutineDispatchers
@@ -78,9 +78,9 @@ ApplicationScope for long-running tasks will inject these components from the :c
 ```
 // In DataStoreModule in :core:datastore module
 
-import com.example.hnote.core.common.ApplicationDispatcher
-import com.example.hnote.core.common.ApplicationScope
-import com.example.hnote.core.common.Dispatcher
+import com.example.hnotes.core.common.ApplicationDispatcher
+import com.example.hnotes.core.common.ApplicationScope
+import com.example.hnotes.core.common.Dispatcher
 import ...
 
 @Module

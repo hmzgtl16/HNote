@@ -30,7 +30,7 @@ database/
 ├── ...
 ├── src
 │   ├── main
-│   │   ├── kotlin/com/example/hnote/core/database
+│   │   ├── kotlin/com/example/hnotes/core/database
 │   │   │   ├── dao
 │   │   │   │   ├── NoteDao.kt                 # Data Access Object for NoteEntity
 │   │   │   │   ├── NoteFtsDao.kt              # Data Access Object for NoteFtsEntity (Full-Text Search)
@@ -57,7 +57,7 @@ database/
 │   │   │   └── ApplicationDatabase.kt         # Room database class
 │   │   └── ...
 │   └── test
-│       └── java/com/example/hnote/core/database
+│       └── java/com/example/hnotes/core/database
 │           └── ...
 ├── build.gradle.kts
 └── ...

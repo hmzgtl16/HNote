@@ -1,6 +1,6 @@
 plugins {
-    alias(libs.plugins.hnote.jvm.library)
-    alias(libs.plugins.hnote.hilt)
+    alias(libs.plugins.hnotes.jvm.library)
+    alias(libs.plugins.hnotes.hilt)
 }
 
 dependencies {

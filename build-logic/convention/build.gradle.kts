@@ -4,7 +4,7 @@ plugins {
     `kotlin-dsl`
 }
 
-group = "com.example.hnote.buildlogic"
+group = "com.example.hnotes.buildlogic"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_21
@@ -35,39 +35,39 @@ tasks {
 gradlePlugin {
     plugins {
         register("androidApplication") {
-            id = libs.plugins.hnote.android.application.asProvider().get().pluginId
+            id = libs.plugins.hnotes.android.application.asProvider().get().pluginId
             implementationClass = "AndroidApplicationConventionPlugin"
         }
         register("androidApplicationCompose") {
-            id = libs.plugins.hnote.android.application.compose.get().pluginId
+            id = libs.plugins.hnotes.android.application.compose.get().pluginId
             implementationClass = "AndroidApplicationComposeConventionPlugin"
         }
         register("androidLibrary") {
-            id = libs.plugins.hnote.android.library.asProvider().get().pluginId
+            id = libs.plugins.hnotes.android.library.asProvider().get().pluginId
             implementationClass = "AndroidLibraryConventionPlugin"
         }
         register("androidLibraryCompose") {
-            id = libs.plugins.hnote.android.library.compose.get().pluginId
+            id = libs.plugins.hnotes.android.library.compose.get().pluginId
             implementationClass = "AndroidLibraryComposeConventionPlugin"
         }
         register("androidFeature") {
-            id = libs.plugins.hnote.android.feature.get().pluginId
+            id = libs.plugins.hnotes.android.feature.get().pluginId
             implementationClass = "AndroidFeatureConventionPlugin"
         }
         register("hilt") {
-            id = libs.plugins.hnote.hilt.get().pluginId
+            id = libs.plugins.hnotes.hilt.get().pluginId
             implementationClass = "HiltConventionPlugin"
         }
         register("androidRoom") {
-            id = libs.plugins.hnote.android.room.get().pluginId
+            id = libs.plugins.hnotes.android.room.get().pluginId
             implementationClass = "AndroidRoomConventionPlugin"
         }
         register("androidTest") {
-            id = libs.plugins.hnote.android.test.get().pluginId
+            id = libs.plugins.hnotes.android.test.get().pluginId
             implementationClass = "AndroidTestConventionPlugin"
         }
         register("jvmLibrary") {
-            id = libs.plugins.hnote.jvm.library.get().pluginId
+            id = libs.plugins.hnotes.jvm.library.get().pluginId
             implementationClass = "JvmLibraryConventionPlugin"
         }
     }

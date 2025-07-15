@@ -32,7 +32,7 @@ data. Its primary responsibilities include:
 model/
 ├── build/
 ├── src
-│   ├── main/kotlin/com/example/hnote/core/model
+│   ├── main/kotlin/com/example/hnotes/core/model
 │   │   ├── Item.kt                 # Data class for individual items
 │   │   ├── Note.kt                 # Data class for notes
 │   │   ├── NoteType.kt             # Enum/sealed class for different note types

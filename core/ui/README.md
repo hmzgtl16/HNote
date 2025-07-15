@@ -35,7 +35,7 @@ ui/
 ├── src
 │   ├── ...
 │   └── main
-│       ├── kotlin/com/example/hnote/core/ui
+│       ├── kotlin/com/example/hnotes/core/ui
 │       │   ├── ItemCard.kt                            # UI component for displaying an item
 │       │   ├── NoteCard.kt                            # UI component for displaying a note
 │       │   ├── ReminderCard.kt                        # UI component for displaying a reminder

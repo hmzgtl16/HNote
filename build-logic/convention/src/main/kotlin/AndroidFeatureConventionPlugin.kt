@@ -1,6 +1,6 @@
 import com.android.build.gradle.LibraryExtension
-import com.example.hnote.configureGradleManagedDevices
-import com.example.hnote.libs
+import com.example.hnotes.configureGradleManagedDevices
+import com.example.hnotes.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
@@ -10,8 +10,8 @@ import org.gradle.kotlin.dsl.dependencies
 class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            apply(plugin = libs.findPlugin("hnote.android.library").get().get().pluginId)
-            apply(plugin = libs.findPlugin("hnote.hilt").get().get().pluginId)
+            apply(plugin = libs.findPlugin("hnotes.android.library").get().get().pluginId)
+            apply(plugin = libs.findPlugin("hnotes.hilt").get().get().pluginId)
             apply(
                 plugin = libs.findPlugin("org.jetbrains.kotlin.serialization").get().get().pluginId
             )

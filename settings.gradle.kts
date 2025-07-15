@@ -28,7 +28,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "HNote"
+rootProject.name = "HNotes"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 

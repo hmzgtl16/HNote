@@ -38,7 +38,7 @@ navigation/
 ├── build/
 ├── src
 │   ├── main
-│   │   ├── kotlin/com/example/hnote/core/navigation
+│   │   ├── kotlin/com/example/hnotes/core/navigation
 │   │   │   ├── di
 │   │   │   │   └── NavigationModule.kt  # Provides Navigation dependencies for DI
 │   │   │   ├── NavigationEvent.kt       # Defines various navigation events

@@ -1,11 +1,11 @@
 plugins {
-    alias(libs.plugins.hnote.android.library)
-    alias(libs.plugins.hnote.hilt)
+    alias(libs.plugins.hnotes.android.library)
+    alias(libs.plugins.hnotes.hilt)
     alias(libs.plugins.org.jetbrains.kotlin.serialization)
 }
 
 android {
-    namespace = "com.example.hnote.core.data"
+    namespace = "com.example.hnotes.core.data"
 
     testOptions {
         unitTests {

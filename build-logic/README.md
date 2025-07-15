@@ -56,7 +56,7 @@ build-logic/
 │   ├── src/
 │   │   └── main/
 │   │       └── kotlin/
-│   │           └── com.example.hnote/
+│   │           └── com.example.hnotes/
 │   │           ├   ├── AndroidCompose.kt
 │   │           ├   ├── GradleManagedDevices.kt
 │   │           ├   ├── KotlinAndroid.kt
@@ -74,7 +74,7 @@ build-logic/
 └── settings.gradle.kts
 ```
 
-The core logic resides within `build-logic/convention/src/main/kotlin/com.example.hnote/`.
+The core logic resides within `build-logic/convention/src/main/kotlin/com.example.hnotes/`.
 Each .kt file within this directory typically defines a specific convention plugin.
 
 ## How Convention Plugins Work
@@ -104,11 +104,11 @@ using their defined id.
 gradlePlugin {
     plugins {
         register("androidApplication") {
-            id = libs.plugins.hnote.android.application.asProvider().get().pluginId
+            id = libs.plugins.hnotes.android.application.asProvider().get().pluginId
             implementationClass = "AndroidApplicationConventionPlugin"
         }
         register("androidLibrary") {
-            id = libs.plugins.hnote.android.library.asProvider().get().pluginId
+            id = libs.plugins.hnotes.android.library.asProvider().get().pluginId
             implementationClass = "AndroidLibraryConventionPlugin"
         }
         ...
@@ -149,7 +149,7 @@ would simply apply the convention plugin in its `build.gradle.kts`file:
 // app/build.gradle.kts
 
 plugins {
-    alias(libs.plugins.hnote.android.application)
+    alias(libs.plugins.hnotes.android.application)
     ...
 }
 

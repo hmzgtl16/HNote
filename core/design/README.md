@@ -38,7 +38,7 @@ design/
 ├── src
 │   ├── ...
 │   └── main
-│       ├── kotlin/com/example/hnote/core/design
+│       ├── kotlin/com/example/hnotes/core/design
 │       │   ├── component                  # Reusable UI components (e.g., buttons, text fields)
 │       │   │   ├── AlertDialog.kt
 │       │   │   ├── Background.kt

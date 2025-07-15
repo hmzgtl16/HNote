@@ -1,18 +1,18 @@
-import com.example.hnote.BuildType
+import com.example.hnotes.BuildType
 
 plugins {
-    alias(libs.plugins.hnote.android.application)
-    alias(libs.plugins.hnote.android.application.compose)
-    alias(libs.plugins.hnote.hilt)
+    alias(libs.plugins.hnotes.android.application)
+    alias(libs.plugins.hnotes.android.application.compose)
+    alias(libs.plugins.hnotes.hilt)
     alias(libs.plugins.androidx.baselineprofile)
     alias(libs.plugins.org.jetbrains.kotlin.serialization)
 }
 
 android {
-    namespace = "com.example.hnote"
+    namespace = "com.example.hnotes"
 
     defaultConfig {
-        applicationId = "com.example.hnote"
+        applicationId = "com.example.hnotes"
         versionCode = 1
         versionName = "1.0.0"
 

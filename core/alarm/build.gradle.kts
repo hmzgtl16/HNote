@@ -1,10 +1,10 @@
 plugins {
-    alias(libs.plugins.hnote.android.library)
-    alias(libs.plugins.hnote.hilt)
+    alias(libs.plugins.hnotes.android.library)
+    alias(libs.plugins.hnotes.hilt)
 }
 
 android {
-    namespace = "com.example.hnote.core.alarm"
+    namespace = "com.example.hnotes.core.alarm"
 }
 
 dependencies {

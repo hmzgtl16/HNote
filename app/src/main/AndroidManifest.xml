@@ -30,7 +30,7 @@
 
                 <data android:scheme="http" />
                 <data android:host="www.example.com" />
-                <data android:pathPattern="/hnote" />
+                <data android:pathPattern="/hnotes" />
             </intent-filter>
         </activity>
     </application>

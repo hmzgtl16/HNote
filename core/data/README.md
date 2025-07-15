@@ -28,7 +28,7 @@ business logic from the specific data sources. Its primary responsibilities incl
 data/
 ├── ...
 ├── src/
-│   ├── main/kotlin/com/example/hnote/core/data/
+│   ├── main/kotlin/com/example/hnotes/core/data/
 │   │   ├── di/
 │   │   ├── repository/
 │   │   │   ├── NoteRepository.kt         
@@ -111,8 +111,8 @@ They should not directly interact with the underlying data sources (database, Da
 ```
 // In NoteViewModel in a :feature:note module
 
-import com.example.hnote.core.data.repository.NoteRepository
-import com.example.hnote.core.model.Note
+import com.example.hnotes.core.data.repository.NoteRepository
+import com.example.hnotes.core.model.Note
 
 @HiltViewModel
 class NoteViewModel @Inject constructor(

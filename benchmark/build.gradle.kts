@@ -1,10 +1,10 @@
 plugins {
-    alias(libs.plugins.hnote.android.test)
+    alias(libs.plugins.hnotes.android.test)
     alias(libs.plugins.androidx.baselineprofile)
 }
 
 android {
-    namespace = "com.example.hnote.benchmark"
+    namespace = "com.example.hnotes.benchmark"
 
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

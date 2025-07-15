@@ -1,7 +1,7 @@
 import com.android.build.gradle.LibraryExtension
-import com.example.hnote.configureGradleManagedDevices
-import com.example.hnote.configureKotlinAndroid
-import com.example.hnote.libs
+import com.example.hnotes.configureGradleManagedDevices
+import com.example.hnotes.configureKotlinAndroid
+import com.example.hnotes.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply

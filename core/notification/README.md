@@ -35,7 +35,7 @@ notification/
 │   ├── androidTest
 │   │   └── ...
 │   ├── main
-│   │   ├── kotlin/com/example/hnote/core/notification
+│   │   ├── kotlin/com/example/hnotes/core/notification
 │   │   │   ├── di
 │   │   │   │   └── NotificationModule.kt  # Provides Notification dependencies for DI
 │   │   │   ├── Notifier.kt                # Interface for notification operations

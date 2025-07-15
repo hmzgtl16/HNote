@@ -115,12 +115,12 @@ org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "org
 org-jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "org-jetbrains-kotlin" }
 
 # Plugins defined by this project
-hnote-android-application = { id = "hnote.android.application" }
-hnote-android-application-compose = { id = "hnote.android.application.compose" }
-hnote-android-feature = { id = "hnote.android.feature" }
-hnote-android-library = { id = "hnote.android.library" }
-hnote-android-library-compose = { id = "hnote.android.library.compose" }
-hnote-android-room = { id = "hnote.android.room" }
-hnote-android-test = { id = "hnote.android.test" }
-hnote-hilt = { id = "hnote.hilt" }
-hnote-jvm-library = { id = "hnote.jvm.library" }
+hnotes-android-application = { id = "hnotes.android.application" }
+hnotes-android-application-compose = { id = "hnotes.android.application.compose" }
+hnotes-android-feature = { id = "hnotes.android.feature" }
+hnotes-android-library = { id = "hnotes.android.library" }
+hnotes-android-library-compose = { id = "hnotes.android.library.compose" }
+hnotes-android-room = { id = "hnotes.android.room" }
+hnotes-android-test = { id = "hnotes.android.test" }
+hnotes-hilt = { id = "hnotes.hilt" }
+hnotes-jvm-library = { id = "hnotes.jvm.library" }

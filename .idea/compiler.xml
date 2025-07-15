@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="11" />
+    <bytecodeTargetLevel target="11">
+      <module name="HNote.app" target="21" />
+      <module name="HNote.benchmark" target="21" />
+      <module name="HNote.core.alarm" target="21" />
+      <module name="HNote.core.data" target="21" />
+      <module name="HNote.core.database" target="21" />
+      <module name="HNote.core.datastore" target="21" />
+      <module name="HNote.core.design" target="21" />
+      <module name="HNote.core.navigation" target="21" />
+      <module name="HNote.core.notification" target="21" />
+      <module name="HNote.core.ui" target="21" />
+      <module name="HNote.feature.note" target="21" />
+      <module name="HNote.feature.notes" target="21" />
+      <module name="HNote.feature.search" target="21" />
+      <module name="HNote.feature.settings" target="21" />
+    </bytecodeTargetLevel>
   </component>
 </project>

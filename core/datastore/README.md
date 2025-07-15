@@ -30,13 +30,13 @@ datastore/
 ├── ...
 ├── src
 │   ├── main
-│   │   ├── kotlin/com/example/hnote/core/datastore
+│   │   ├── kotlin/com/example/hnotes/core/datastore
 │   │   │   ├── di
 │   │   │   │   └── DataStoreModule.kt         # Provides DataStore dependencies for DI
 │   │   │   ├── PreferencesDataSource.kt       # Main class for accessing preferences
 │   │   │   ├── UserPreferencesSerializer.kt   # Handles serialization/deserialization of preferences
 │   │   │   └── Utils.kt                       # Utility functions for DataStore
-│   │   ├── proto/com/example/hnote/data
+│   │   ├── proto/com/example/hnotes/data
 │   │   │   ├── ui_theme_config.proto          # Protocol Buffer schema for UI theme configuration
 │   │   │   └── user_preferences.proto         # Protocol Buffer schema for user preferences
 │   │   └── ...
@@ -59,10 +59,10 @@ datastore/
   objects are serialized into and deserialized from a byte stream. This ensures type-safe and
   efficient storage of complex data structures.
 - `Utils.kt`: Contains common utility functions or extensions related to DataStore operations.
-- `proto/com/example/hnote/data/ui_theme_config.proto`: Defines the schema for UI theme-related
+- `proto/com/example/hnotes/data/ui_theme_config.proto`: Defines the schema for UI theme-related
   configurations using Protocol Buffers. This allows for structured and versionable storage of theme
   settings.
-- `proto/com/example/hnote/data/user_preferences.proto`: Defines the schema for general user
+- `proto/com/example/hnotes/data/user_preferences.proto`: Defines the schema for general user
   preferences using Protocol Buffers. This enables storing complex user settings as a single,
   type-safe object.
 
