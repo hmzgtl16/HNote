@@ -5,7 +5,7 @@
 
     <application>
         <receiver
-            android:name=".AlarmReceiver"
+            android:name="com.example.hnote.core.alarm.AlarmReceiver"
             android:exported="true" />
     </application>
 </manifest>

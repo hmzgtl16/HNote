@@ -83,14 +83,12 @@ class AlarmSchedulerImpl @Inject constructor(
 
     override fun cancel(id: Long) {
         val intent = Intent(context, AlarmReceiver::class.java)
-
         val pendingIntent = PendingIntent.getBroadcast(
             context,
             id.toInt(),
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE,
         )
-
         alarmManager.cancel(pendingIntent)
     }
 }
