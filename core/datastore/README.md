@@ -77,20 +77,6 @@ datastore/
 - **Dagger Hilt:** (Implied by `di/DataStoreModule.kt`) For dependency injection, making DataStore
   instances easily injectable into other components.
 
-## How it Works
-
-1. **Schema Definition:** `.proto` files define the structure of the data to be stored (e.g.,
-   `UserPreferences`, `UiThemeConfig`). Protobuf then generates corresponding Kotlin/Java classes.
-2. **Serialization:** For Proto DataStore, `UserPreferencesSerializer.kt` (or similar for
-   `UiThemeConfig`) handles the conversion of these generated Protobuf objects to and from byte
-   streams, ensuring efficient storage.
-3. **Data Access:** `PreferencesDataSource.kt` provides methods to interact with the DataStore.
-   These
-   methods typically return Flow<T>, allowing consumers to observe changes to the data in real-time.
-4. **Dependency Injection:** `DataStoreModule.kt` ensures that DataStore instances are properly
-   configured and provided to other parts of the application via Dagger Hilt, promoting loose
-   coupling and testability.
-
 ## Usage
 
 Other modules that need to read or write user preferences or UI theme configurations can inject the
