@@ -109,9 +109,8 @@ internal fun NoteScreen(
                             )
                         }
                     )
-
                     ...
-                },
+                }
                 ...
             )
         },
