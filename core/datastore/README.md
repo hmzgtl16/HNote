@@ -46,7 +46,7 @@ datastore/
 └── ...
 ```
 
-### Key Components:
+## Key Components:
 
 - `di/DataStoreModule.kt`: This file likely contains Dagger Hilt modules that define how DataStore
   instances (e.g., `DataStore<Preferences>`, `DataStore<UserPreferences>`) and related dependencies
