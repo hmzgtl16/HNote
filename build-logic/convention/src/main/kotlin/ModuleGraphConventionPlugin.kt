@@ -10,3 +10,4 @@ class ModuleGraphConventionPlugin : Plugin<Project> {
         }
     }
 }
+
