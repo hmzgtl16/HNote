@@ -23,6 +23,7 @@ dependencies {
     compileOnly(libs.com.android.tools.common)
     compileOnly(libs.com.google.devtools.ksp.gradle.plugin)
     compileOnly(libs.org.jetbrains.kotlin.gradle.plugin)
+    compileOnly(libs.com.jraska.modulegraph.gradle.plugin)
 }
 
 tasks {
@@ -69,6 +70,10 @@ gradlePlugin {
         register("jvmLibrary") {
             id = libs.plugins.hnotes.jvm.library.get().pluginId
             implementationClass = "JvmLibraryConventionPlugin"
+        }
+        register("kotlin") {
+            id = libs.plugins.hnotes.module.graph.get().pluginId
+            implementationClass = "ModuleGraphConventionPlugin"
         }
     }
 }

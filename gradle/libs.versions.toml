@@ -25,6 +25,7 @@ com-google-dagger = "2.56.2"
 com-google-devtools-ksp = "2.2.0-2.0.2"
 com-google-protobuf-plugin = "0.9.5"
 com-google-protobuf = "4.31.1"
+com-jraska-modulegraph = "2.9.0"
 org-jetbrains-kotlin = "2.2.0"
 org-jetbrains-kotlinx-coroutines = "1.10.2"
 org-jetbrains-kotlinx-datetime = "0.6.2"
@@ -98,6 +99,7 @@ com-android-tools-build-gradle-plugin = { group = "com.android.tools.build", nam
 com-android-tools-common = { group = "com.android.tools", name = "common", version.ref = "com-android-tools-common" }
 com-google-devtools-ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "com-google-devtools-ksp" }
 org-jetbrains-kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
+com-jraska-modulegraph-gradle-plugin = { group = "com.jraska.module.graph.assertion", name = "com.jraska.module.graph.assertion.gradle.plugin", version.ref = "com-jraska-modulegraph" }
 
 [plugins]
 androidx-room = { id = "androidx.room", version.ref = "androidx-room" }
@@ -109,6 +111,7 @@ com-android-test = { id = "com.android.test", version.ref = "android-gradle-plug
 com-google-dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "com-google-dagger" }
 com-google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "com-google-devtools-ksp" }
 com-google-protobuf = { id = "com.google.protobuf", version.ref = "com-google-protobuf-plugin" }
+com-jraska-modulegraph = { id = "com.jraska.module.graph.assertion", version.ref = "com-jraska-modulegraph" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "org-jetbrains-kotlin" }
@@ -124,3 +127,4 @@ hnotes-android-room = { id = "hnotes.android.room" }
 hnotes-android-test = { id = "hnotes.android.test" }
 hnotes-hilt = { id = "hnotes.hilt" }
 hnotes-jvm-library = { id = "hnotes.jvm.library" }
+hnotes-module-graph = { id = "hnotes.module.graph" }

@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.com.google.dagger.hilt) apply false
     alias(libs.plugins.com.google.devtools.ksp) apply false
     alias(libs.plugins.com.google.protobuf) apply false
+    alias(libs.plugins.com.jraska.modulegraph) apply false
     alias(libs.plugins.org.jetbrains.kotlin.android) apply false
     alias(libs.plugins.org.jetbrains.kotlin.compose) apply false
     alias(libs.plugins.org.jetbrains.kotlin.jvm) apply false
