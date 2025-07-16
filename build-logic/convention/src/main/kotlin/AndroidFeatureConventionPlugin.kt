@@ -1,6 +1,7 @@
 import com.android.build.gradle.LibraryExtension
 import com.example.hnotes.configureGradleManagedDevices
 import com.example.hnotes.libs
+import dev.iurysouza.modulegraph.gradle.ModuleGraphExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
@@ -10,33 +11,46 @@ import org.gradle.kotlin.dsl.dependencies
 class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            apply(plugin = libs.findPlugin("hnotes.android.library").get().get().pluginId)
-            apply(plugin = libs.findPlugin("hnotes.hilt").get().get().pluginId)
-            apply(
-                plugin = libs.findPlugin("org.jetbrains.kotlin.serialization").get().get().pluginId
-            )
+            apply(plugin = libs.findPlugin("hnotes-android-library").get().get().pluginId)
+            apply(plugin = libs.findPlugin("hnotes-hilt").get().get().pluginId)
+            apply(plugin = libs.findPlugin("hnotes-module-graph").get().get().pluginId)
 
             extensions.configure<LibraryExtension> {
                 testOptions.animationsDisabled = true
                 configureGradleManagedDevices(this)
             }
 
-            dependencies {
-                add("implementation", project(":core:ui"))
-                add("implementation", project(":core:design"))
-                add("implementation", project(":core:navigation"))
-
-                add("implementation", libs.findLibrary("androidx.hilt.navigation.compose").get())
-                add("implementation", libs.findLibrary("androidx.lifecycle.runtime.compose").get())
-                add(
-                    "implementation",
-                    libs.findLibrary("androidx.lifecycle.viewmodel.compose").get()
+            extensions.configure<ModuleGraphExtension> {
+                graph(
+                    readmePath = "${projectDir}/README.md",
+                    heading = "### Module Graph",
+                    setupConfig = {
+                        showFullPath = true
+                        setStyleByModuleType = true
+                    }
                 )
-                add("implementation", libs.findLibrary("androidx.navigation.compose").get())
-                add("implementation", libs.findLibrary("androidx.tracing.ktx").get())
+            }
+
+            dependencies {
                 add(
                     "implementation",
-                    libs.findLibrary("org.jetbrains.kotlinx.serialization.json").get()
+                    project(":core:data")
+                )
+                add(
+                    "implementation",
+                    project(":core:ui")
+                )
+                add(
+                    "implementation",
+                    libs.findLibrary("androidx-hilt-navigation-compose").get()
+                )
+                add(
+                    "implementation",
+                    libs.findLibrary("androidx-lifecycle-runtime-compose").get()
+                )
+                add(
+                    "implementation",
+                    libs.findLibrary("androidx-lifecycle-viewmodel-compose").get()
                 )
             }
         }

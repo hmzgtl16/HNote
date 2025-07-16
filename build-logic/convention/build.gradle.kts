@@ -23,7 +23,7 @@ dependencies {
     compileOnly(libs.com.android.tools.common)
     compileOnly(libs.com.google.devtools.ksp.gradle.plugin)
     compileOnly(libs.org.jetbrains.kotlin.gradle.plugin)
-    compileOnly(libs.com.jraska.modulegraph.gradle.plugin)
+    compileOnly(libs.dev.iurysouza.modulegraph.gradle.plugin)
 }
 
 tasks {

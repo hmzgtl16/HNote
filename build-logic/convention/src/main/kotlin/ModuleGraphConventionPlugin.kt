@@ -6,7 +6,7 @@ import org.gradle.kotlin.dsl.apply
 class ModuleGraphConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            apply(plugin = libs.findPlugin("com-jraska-modulegraph").get().get().pluginId)
+            apply(plugin = libs.findPlugin("dev-iurysouza-modulegraph").get().get().pluginId)
         }
     }
 }

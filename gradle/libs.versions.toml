@@ -4,13 +4,13 @@ junit = "4.13.2"
 junitVersion = "1.2.1"
 androidx-activity-compose = "1.10.1"
 androidx-benchmark-macro = "1.3.4"
-androidx-compose-bom = "2025.06.01"
+androidx-compose-bom = "2025.07.00"
 androidx-core = "1.16.0"
 androidx-core-splashscreen = "1.0.1"
 androidx-dataStore = "1.1.7"
 androidx-hilt = "1.2.0"
-androidx-lifecycle = "2.9.1"
-androidx-navigation = "2.9.1"
+androidx-lifecycle = "2.9.2"
+androidx-navigation = "2.9.2"
 androidx-room = "2.7.2"
 androidx-test-core = "1.6.1"
 androidx-test-runner = "1.6.2"
@@ -25,7 +25,7 @@ com-google-dagger = "2.56.2"
 com-google-devtools-ksp = "2.2.0-2.0.2"
 com-google-protobuf-plugin = "0.9.5"
 com-google-protobuf = "4.31.1"
-com-jraska-modulegraph = "2.9.0"
+dev-iurysouza-modulegraph = "0.12.0"
 org-jetbrains-kotlin = "2.2.0"
 org-jetbrains-kotlinx-coroutines = "1.10.2"
 org-jetbrains-kotlinx-datetime = "0.6.2"
@@ -99,7 +99,7 @@ com-android-tools-build-gradle-plugin = { group = "com.android.tools.build", nam
 com-android-tools-common = { group = "com.android.tools", name = "common", version.ref = "com-android-tools-common" }
 com-google-devtools-ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "com-google-devtools-ksp" }
 org-jetbrains-kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
-com-jraska-modulegraph-gradle-plugin = { group = "com.jraska.module.graph.assertion", name = "com.jraska.module.graph.assertion.gradle.plugin", version.ref = "com-jraska-modulegraph" }
+dev-iurysouza-modulegraph-gradle-plugin = { group = "dev.iurysouza.modulegraph", name = "dev.iurysouza.modulegraph.gradle.plugin", version.ref = "dev-iurysouza-modulegraph" }
 
 [plugins]
 androidx-room = { id = "androidx.room", version.ref = "androidx-room" }
@@ -111,7 +111,7 @@ com-android-test = { id = "com.android.test", version.ref = "android-gradle-plug
 com-google-dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "com-google-dagger" }
 com-google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "com-google-devtools-ksp" }
 com-google-protobuf = { id = "com.google.protobuf", version.ref = "com-google-protobuf-plugin" }
-com-jraska-modulegraph = { id = "com.jraska.module.graph.assertion", version.ref = "com-jraska-modulegraph" }
+dev-iurysouza-modulegraph = { id = "dev.iurysouza.modulegraph", version.ref = "dev-iurysouza-modulegraph" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "org-jetbrains-kotlin" }
