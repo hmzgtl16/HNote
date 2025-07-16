@@ -8,6 +8,6 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.model)
-    implementation(projects.core.notification)
+    api(projects.core.model)
+    api(projects.core.notification)
 }

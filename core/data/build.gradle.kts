@@ -15,11 +15,9 @@ android {
 }
 
 dependencies {
-    api(projects.core.common)
     api(projects.core.database)
     api(projects.core.datastore)
-
-    implementation(projects.core.alarm)
+    api(projects.core.alarm)
 
     testImplementation(libs.org.jetbrains.kotlinx.coroutines.test)
 }
