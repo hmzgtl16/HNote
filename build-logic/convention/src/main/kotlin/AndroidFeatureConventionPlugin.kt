@@ -1,7 +1,6 @@
 import com.android.build.gradle.LibraryExtension
 import com.example.hnotes.configureGradleManagedDevices
 import com.example.hnotes.libs
-import dev.iurysouza.modulegraph.gradle.ModuleGraphExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
@@ -18,17 +17,6 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             extensions.configure<LibraryExtension> {
                 testOptions.animationsDisabled = true
                 configureGradleManagedDevices(this)
-            }
-
-            extensions.configure<ModuleGraphExtension> {
-                graph(
-                    readmePath = "${projectDir}/README.md",
-                    heading = "### Module Graph",
-                    setupConfig = {
-                        showFullPath = true
-                        setStyleByModuleType = true
-                    }
-                )
             }
 
             dependencies {
