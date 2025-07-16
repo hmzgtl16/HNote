@@ -1,8 +1,6 @@
 package com.example.hnotes.core.datastore
 
 import androidx.datastore.core.DataStore
-import com.example.hnotes.core.datastore.UserPreferences
-import com.example.hnotes.core.datastore.copy
 import com.example.hnotes.core.model.Theme
 import com.example.hnotes.core.model.UserData
 import jakarta.inject.Inject

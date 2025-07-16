@@ -1,6 +1,5 @@
 package com.example.hnotes.core.datastore
 
-import com.example.hnotes.core.datastore.UiThemeConfigProto
 import com.example.hnotes.core.model.Theme
 
 fun UiThemeConfigProto.asTheme(): Theme = when (this) {
