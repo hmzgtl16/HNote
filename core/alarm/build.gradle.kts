@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.hnotes.android.library)
     alias(libs.plugins.hnotes.hilt)
+    alias(libs.plugins.hnotes.module.graph)
 }
 
 android {
@@ -9,5 +10,5 @@ android {
 
 dependencies {
     api(projects.core.model)
-    api(projects.core.notification)
+    implementation(projects.core.notification)
 }

@@ -1,5 +1,32 @@
 # `:core:alarm` Module
 
+```mermaid
+%%{
+  init: {
+    'theme': 'dark'
+  }
+}%%
+graph LR
+  subgraph :core
+    :core:alarm["alarm"]
+    :core:model["model"]
+    :core:notification["notification"]
+  end
+
+  :core:alarm --> :core:model
+  :core:alarm --> :core:notification
+  classDef android-library fill: #3BD482, stroke: #fff, stroke-width: 2px, color: #fff;
+  classDef unknown fill: #676767, stroke: #fff, stroke-width: 2px, color: #fff;
+  class :core:alarm android-library
+  class :core:model unknown
+  class :core:notification unknown
+
+```
+
+##   
+
+___
+
 The `:core:alarm` module is a core component responsible for scheduling and managing reminders
 within the application. It provides an abstracted and reliable way to interact with the Android
 `AlarmManager`, ensuring that time-sensitive events, such as reminders for notes, are triggered
