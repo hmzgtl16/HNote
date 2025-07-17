@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.hnotes.android.library)
     alias(libs.plugins.hnotes.android.room)
     alias(libs.plugins.hnotes.hilt)
+    alias(libs.plugins.hnotes.module.graph)
 }
 
 android {
