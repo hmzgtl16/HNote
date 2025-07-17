@@ -12,8 +12,8 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
         with(target) {
-            apply(plugin = libs.findPlugin("com.android.library").get().get().pluginId)
-            apply(plugin = libs.findPlugin("org.jetbrains.kotlin.android").get().get().pluginId)
+            apply(plugin = libs.findPlugin("com-android-library").get().get().pluginId)
+            apply(plugin = libs.findPlugin("org-jetbrains-kotlin-android").get().get().pluginId)
 
             extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
@@ -29,9 +29,12 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                         .lowercase() + "_"
             }
             dependencies {
-                add("androidTestImplementation", libs.findLibrary("org.jetbrains.kotlin.test").get())
-                add("testImplementation", libs.findLibrary("org.jetbrains.kotlin.test").get())
-                add("implementation", libs.findLibrary("androidx.tracing.ktx").get())
+                add(
+                    "androidTestImplementation",
+                    libs.findLibrary("org-jetbrains-kotlin-test").get()
+                )
+                add("testImplementation", libs.findLibrary("org-jetbrains-kotlin-test").get())
+                add("implementation", libs.findLibrary("androidx-tracing-ktx").get())
             }
         }
     }

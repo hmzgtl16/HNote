@@ -11,8 +11,8 @@ class AndroidTestConventionPlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
         with(target) {
-            apply(plugin = libs.findPlugin("com.android.test").get().get().pluginId)
-            apply(plugin = libs.findPlugin("org.jetbrains.kotlin.android").get().get().pluginId)
+            apply(plugin = libs.findPlugin("com-android-test").get().get().pluginId)
+            apply(plugin = libs.findPlugin("org-jetbrains-kotlin-android").get().get().pluginId)
 
             extensions.configure<TestExtension> {
                 configureKotlinAndroid(this)

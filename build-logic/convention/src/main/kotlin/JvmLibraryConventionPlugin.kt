@@ -8,11 +8,11 @@ import org.gradle.kotlin.dsl.dependencies
 class JvmLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            apply(plugin = libs.findPlugin("org.jetbrains.kotlin.jvm").get().get().pluginId)
+            apply(plugin = libs.findPlugin("org-jetbrains-kotlin-jvm").get().get().pluginId)
 
             configureKotlinJvm()
             dependencies {
-                add("testImplementation", libs.findLibrary("org.jetbrains.kotlin.test").get())
+                add("testImplementation", libs.findLibrary("org-jetbrains-kotlin-test").get())
             }
         }
     }

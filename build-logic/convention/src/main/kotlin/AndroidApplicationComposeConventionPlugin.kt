@@ -10,8 +10,8 @@ class AndroidApplicationComposeConventionPlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
         with(target) {
-            apply(plugin = libs.findPlugin("com.android.application").get().get().pluginId)
-            apply(plugin = libs.findPlugin("org.jetbrains.kotlin.compose").get().get().pluginId)
+            apply(plugin = libs.findPlugin("com-android-application").get().get().pluginId)
+            apply(plugin = libs.findPlugin("org-jetbrains-kotlin-compose").get().get().pluginId)
 
             val extension = extensions.getByType<ApplicationExtension>()
             configureAndroidCompose(commonExtension = extension)
