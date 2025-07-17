@@ -6,7 +6,3 @@ plugins {
 android {
     namespace = "com.example.hnotes.core.notification"
 }
-
-dependencies {
-    api(projects.core.navigation)
-}

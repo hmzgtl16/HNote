@@ -11,12 +11,13 @@ import android.net.Uri
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.net.toUri
-import com.example.hnotes.core.navigation.DEEP_LINK_SCHEME_AND_HOST
 
 
 private const val NOTIFICATION_CHANNEL_ID = "hnote_notification_channel"
 private const val NOTIFICATION_REQUEST_CODE = 0
 private const val TARGET_ACTIVITY_NAME = "com.example.hnotes.MainActivity"
+
+private val DEEP_LINK_SCHEME_AND_HOST = "http://www.example.com/hnotes"
 
 fun deepLink(id: Long): Uri = "$DEEP_LINK_SCHEME_AND_HOST/$id".toUri()
 
