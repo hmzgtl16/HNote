@@ -1,5 +1,32 @@
 # `:core:ui` Module
 
+```mermaid
+%%{
+  init: {
+    'theme': 'dark'
+  }
+}%%
+graph LR
+  subgraph :core
+    :core:ui["ui"]
+    :core:design["design"]
+    :core:model["model"]
+  end
+
+  :core:ui --> :core:design
+  :core:ui --> :core:model
+  classDef android-library fill: #3BD482, stroke: #fff, stroke-width: 2px, color: #fff;
+  classDef unknown fill: #676767, stroke: #fff, stroke-width: 2px, color: #fff;
+  class :core:ui android-library
+  class :core:design unknown
+  class :core:model unknown
+
+```
+
+##   
+
+___
+
 The `:core:ui` module is a dedicated component within the application responsible for housing
 reusable UI components that are specific to the application's domain but are not part of the core
 design system. These components often combine elements from the `:core:design` module with
@@ -88,4 +115,3 @@ fun RecentSearches(
     )
 }
 ```
-
