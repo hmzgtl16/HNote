@@ -30,6 +30,10 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 )
                 add(
                     "implementation",
+                    project(":core:navigation")
+                )
+                add(
+                    "implementation",
                     libs.findLibrary("androidx-hilt-navigation-compose").get()
                 )
                 add(
