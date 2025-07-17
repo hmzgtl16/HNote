@@ -19,6 +19,7 @@ androidx-test-ext = "1.2.1"
 androidx-test-rules = "1.6.1"
 androidx-test-uiautomator = "2.3.0"
 androidx-tracing = "1.3.0"
+com-android-compose-screenshot = "0.0.1-alpha10"
 com-android-tools-common = "31.11.1"
 com-github-commandiron-wheel-picker-compose = "1.1.11"
 com-google-dagger = "2.56.2"
@@ -79,6 +80,7 @@ androidx-test-ext = { group = "androidx.test.ext", name = "junit-ktx", version.r
 androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "androidx-test-rules" }
 androidx-test-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "androidx-test-uiautomator" }
 androidx-tracing-ktx = { group = "androidx.tracing", name = "tracing-ktx", version.ref = "androidx-tracing" }
+com-android-tools-screenshot-validation-api = { group = "com.android.tools.screenshot", name = "screenshot-validation-api", version.ref = "com-android-compose-screenshot" }
 com-github-commandiron-wheelPickerCompose = { group = "com.github.commandiron", name = "WheelPickerCompose", version.ref = "com-github-commandiron-wheel-picker-compose" }
 com-google-dagger-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "com-google-dagger" }
 com-google-dagger-hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "com-google-dagger" }
@@ -95,6 +97,7 @@ org-jetbrains-kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", na
 
 # Dependencies of the included build-logic
 androidx-room-gradle-plugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "androidx-room" }
+com-android-compose-screenshot-gradle-plugin = { group = "com.android.compose.screenshot", name = "com.android.compose.screenshot.gradle.plugin", version.ref = "com-android-compose-screenshot" }
 com-android-tools-build-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "android-gradle-plugin" }
 com-android-tools-common = { group = "com.android.tools", name = "common", version.ref = "com-android-tools-common" }
 com-google-devtools-ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "com-google-devtools-ksp" }
@@ -106,6 +109,7 @@ androidx-room = { id = "androidx.room", version.ref = "androidx-room" }
 androidx-baselineprofile = { id = "androidx.baselineprofile", version.ref = "androidx-benchmark-macro" }
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 com-android-base = { id = "com.android.base", version.ref = "android-gradle-plugin" }
+com-android-compose-screenshot = { id = "com.android.compose.screenshot", version.ref = "com-android-compose-screenshot" }
 com-android-library = { id = "com.android.library", version.ref = "android-gradle-plugin" }
 com-android-test = { id = "com.android.test", version.ref = "android-gradle-plugin" }
 com-google-dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "com-google-dagger" }
