@@ -19,6 +19,7 @@ kotlin {
 
 dependencies {
     compileOnly(libs.androidx.room.gradle.plugin)
+    compileOnly(libs.com.android.compose.screenshot.gradle.plugin)
     compileOnly(libs.com.android.tools.build.gradle.plugin)
     compileOnly(libs.com.android.tools.common)
     compileOnly(libs.com.google.devtools.ksp.gradle.plugin)

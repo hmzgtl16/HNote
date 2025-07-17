@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidx.room) apply false
     alias(libs.plugins.com.android.application) apply false
     alias(libs.plugins.com.android.library) apply false
+    alias(libs.plugins.com.android.compose.screenshot) apply false
     alias(libs.plugins.com.android.test) apply false
     alias(libs.plugins.com.google.dagger.hilt) apply false
     alias(libs.plugins.com.google.devtools.ksp) apply false
