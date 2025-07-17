@@ -1,5 +1,32 @@
 # `:core:datastore` Module
 
+```mermaid
+%%{
+  init: {
+    'theme': 'dark'
+  }
+}%%
+graph LR
+  subgraph :core
+    :core:datastore["datastore"]
+    :core:common["common"]
+    :core:model["model"]
+  end
+
+  :core:datastore --> :core:common
+  :core:datastore --> :core:model
+  classDef android-library fill: #3BD482, stroke: #fff, stroke-width: 2px, color: #fff;
+  classDef unknown fill: #676767, stroke: #fff, stroke-width: 2px, color: #fff;
+  class :core:datastore android-library
+  class :core:common unknown
+  class :core:model unknown
+
+```
+
+##   
+
+___
+
 The `:core:datastore` module is a core component responsible for managing application data
 persistence,
 specifically focusing on user preferences and UI theme configurations. It leverages Jetpack
