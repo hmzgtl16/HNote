@@ -26,7 +26,6 @@ graph LR
   class :core:alarm unknown
 
 ```
-
 ##  
 ___
 
