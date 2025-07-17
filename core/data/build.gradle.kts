@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.hnotes.android.library)
     alias(libs.plugins.hnotes.hilt)
+    alias(libs.plugins.hnotes.module.graph)
     alias(libs.plugins.org.jetbrains.kotlin.serialization)
 }
 

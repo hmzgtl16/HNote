@@ -1,5 +1,40 @@
 # `:core:data` Module
 
+```mermaid
+%%{
+  init: {
+    'theme': 'dark'
+  }
+}%%
+graph LR
+  subgraph :core
+    :core:data["data"]
+    :core:database["database"]
+    :core:datastore["datastore"]
+    :core:alarm["alarm"]
+  end
+
+  :core:data --> :core:database
+  :core:data --> :core:datastore
+  :core:data --> :core:alarm
+  classDef android-library fill: #3BD482, stroke: #fff, stroke-width: 2px, color: #fff;
+  classDef unknown fill: #676767, stroke: #fff, stroke-width: 2px, color: #fff;
+  class :core:data android-library
+  class :core:database unknown
+  class :core:datastore unknown
+  class :core:alarm unknown
+
+```
+
+##
+
+___
+
+The `:core:data` module serves as the application's repository layer, acting as a single source of
+truth for all data operations. It abstracts the underlying data sources (such as local databases,
+DataStore) and provides a clean, consistent API for the rest of the application to access and
+manipulate data.
+
 The `:core:data` module serves as the application's repository layer, acting as a single source of
 truth for all data operations. It abstracts the underlying data sources (such as local databases,
 DataStore) and provides a clean, consistent API for the rest of the application to access and
