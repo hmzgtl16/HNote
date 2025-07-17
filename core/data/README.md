@@ -6,6 +6,7 @@
     'theme': 'dark'
   }
 }%%
+
 graph LR
   subgraph :core
     :core:data["data"]
@@ -26,8 +27,7 @@ graph LR
 
 ```
 
-##
-
+##  
 ___
 
 The `:core:data` module serves as the application's repository layer, acting as a single source of
