@@ -6,7 +6,3 @@ plugins {
 android {
     namespace = "com.example.hnotes.feature.note"
 }
-
-dependencies {
-    implementation(projects.core.data)
-}

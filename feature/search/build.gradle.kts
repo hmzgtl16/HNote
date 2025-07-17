@@ -6,7 +6,3 @@ plugins {
 android {
     namespace = "com.example.hnotes.feature.search"
 }
-
-dependencies {
-    implementation(projects.core.data)
-}
