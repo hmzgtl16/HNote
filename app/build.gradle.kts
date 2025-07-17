@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.hnotes.android.application)
     alias(libs.plugins.hnotes.android.application.compose)
     alias(libs.plugins.hnotes.hilt)
+    alias(libs.plugins.hnotes.module.graph)
     alias(libs.plugins.androidx.baselineprofile)
     alias(libs.plugins.org.jetbrains.kotlin.serialization)
 }
@@ -54,7 +55,6 @@ dependencies {
     implementation(projects.feature.search)
     implementation(projects.feature.settings)
 
-    implementation(projects.core.alarm)
     implementation(projects.core.data)
     implementation(projects.core.design)
     implementation(projects.core.navigation)
