@@ -25,7 +25,7 @@ fun Context.createNotification(deepLink: Uri): Notification {
     ensureNotificationChannelExists()
     return NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
         .apply {
-            setSmallIcon(R.drawable.ic_notification)
+            setSmallIcon(R.drawable.core_notification_ic_notification)
             setContentTitle(getString(R.string.core_notification_notification_title))
             setContentText(getString(R.string.core_notification_notification_description))
             setContentIntent(taskPendingIntent(deepLink = deepLink))
