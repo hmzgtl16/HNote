@@ -19,7 +19,6 @@ androidx-test-ext = "1.2.1"
 androidx-test-rules = "1.6.1"
 androidx-test-uiautomator = "2.3.0"
 androidx-tracing = "1.3.0"
-com-android-compose-screenshot = "0.0.1-alpha10"
 com-android-tools-common = "31.11.1"
 com-github-commandiron-wheel-picker-compose = "1.1.11"
 com-google-dagger = "2.56.2"
@@ -27,10 +26,13 @@ com-google-devtools-ksp = "2.2.0-2.0.2"
 com-google-protobuf-plugin = "0.9.5"
 com-google-protobuf = "4.31.1"
 dev-iurysouza-modulegraph = "0.12.0"
+io-github-sergio-sastre-composable-preview-scanner = "0.5.0"
+io-github-takahirom-roborazzi = "1.46.1"
 org-jetbrains-kotlin = "2.2.0"
 org-jetbrains-kotlinx-coroutines = "1.10.2"
 org-jetbrains-kotlinx-datetime = "0.6.2"
 org-jetbrains-kotlinx-serialization = "1.9.0"
+org-robolectric = "4.15.1"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -43,7 +45,6 @@ androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout" }
@@ -80,36 +81,41 @@ androidx-test-ext = { group = "androidx.test.ext", name = "junit-ktx", version.r
 androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "androidx-test-rules" }
 androidx-test-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "androidx-test-uiautomator" }
 androidx-tracing-ktx = { group = "androidx.tracing", name = "tracing-ktx", version.ref = "androidx-tracing" }
-com-android-tools-screenshot-validation-api = { group = "com.android.tools.screenshot", name = "screenshot-validation-api", version.ref = "com-android-compose-screenshot" }
 com-github-commandiron-wheelPickerCompose = { group = "com.github.commandiron", name = "WheelPickerCompose", version.ref = "com-github-commandiron-wheel-picker-compose" }
 com-google-dagger-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "com-google-dagger" }
 com-google-dagger-hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "com-google-dagger" }
 com-google-dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "com-google-dagger" }
 com-google-dagger-hilt-core = { group = "com.google.dagger", name = "hilt-core", version.ref = "com-google-dagger" }
 com-google-protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "com-google-protobuf" }
-javax-inject = { module = "javax.inject:javax.inject", version = "1" }
 com-google-protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "com-google-protobuf" }
+io-github-sergio-sastre-composable-preview-scanner-android = { group = "io.github.sergio-sastre.ComposablePreviewScanner", name = "android", version.ref = "io-github-sergio-sastre-composable-preview-scanner" }
+io-github-takahirom-roborazzi = { group = "io.github.takahirom.roborazzi", name = "roborazzi", version.ref = "io-github-takahirom-roborazzi" }
+io-github-takahirom-roborazzi-accessibility-check = { group = "io.github.takahirom.roborazzi", name = "roborazzi-accessibility-check", version.ref = "io-github-takahirom-roborazzi" }
+io-github-takahirom-roborazzi-compose = { group = "io.github.takahirom.roborazzi", name = "roborazzi-compose", version.ref = "io-github-takahirom-roborazzi" }
+io-github-takahirom-roborazzi-compose-preview-scanner-support = { group = "io.github.takahirom.roborazzi", name = "roborazzi-compose-preview-scanner-support", version.ref = "io-github-takahirom-roborazzi" }
+io-github-takahirom-roborazzi-junit-rule = { group = "io.github.takahirom.roborazzi", name = "roborazzi-junit-rule", version.ref = "io-github-takahirom-roborazzi" }
 org-jetbrains-kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "org-jetbrains-kotlinx-coroutines" }
 org-jetbrains-kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "org-jetbrains-kotlinx-coroutines" }
 org-jetbrains-kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "org-jetbrains-kotlinx-datetime"}
 org-jetbrains-kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "org-jetbrains-kotlinx-serialization" }
+org-robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "org-robolectric" }
 
 # Dependencies of the included build-logic
 androidx-room-gradle-plugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "androidx-room" }
-com-android-compose-screenshot-gradle-plugin = { group = "com.android.compose.screenshot", name = "com.android.compose.screenshot.gradle.plugin", version.ref = "com-android-compose-screenshot" }
 com-android-tools-build-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "android-gradle-plugin" }
 com-android-tools-common = { group = "com.android.tools", name = "common", version.ref = "com-android-tools-common" }
 com-google-devtools-ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "com-google-devtools-ksp" }
-org-jetbrains-kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 dev-iurysouza-modulegraph-gradle-plugin = { group = "dev.iurysouza.modulegraph", name = "dev.iurysouza.modulegraph.gradle.plugin", version.ref = "dev-iurysouza-modulegraph" }
+io-github-takahirom-roborazzi-gradle-plugin = { group = "io.github.takahirom.roborazzi", name = "roborazzi-gradle-plugin", version.ref = "io-github-takahirom-roborazzi" }
+org-jetbrains-kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
+
 
 [plugins]
 androidx-room = { id = "androidx.room", version.ref = "androidx-room" }
 androidx-baselineprofile = { id = "androidx.baselineprofile", version.ref = "androidx-benchmark-macro" }
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 com-android-base = { id = "com.android.base", version.ref = "android-gradle-plugin" }
-com-android-compose-screenshot = { id = "com.android.compose.screenshot", version.ref = "com-android-compose-screenshot" }
 com-android-library = { id = "com.android.library", version.ref = "android-gradle-plugin" }
 com-android-test = { id = "com.android.test", version.ref = "android-gradle-plugin" }
 com-google-dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "com-google-dagger" }
@@ -120,6 +126,7 @@ org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.re
 org-jetbrains-kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "org-jetbrains-kotlin" }
+io-github-takahirom-roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "io-github-takahirom-roborazzi" }
 
 # Plugins defined by this project
 hnotes-android-application = { id = "hnotes.android.application" }
@@ -132,3 +139,4 @@ hnotes-android-test = { id = "hnotes.android.test" }
 hnotes-hilt = { id = "hnotes.hilt" }
 hnotes-jvm-library = { id = "hnotes.jvm.library" }
 hnotes-module-graph = { id = "hnotes.module.graph" }
+hnotes-screenshot-test = { id = "hnotes.screenshot.test" }
