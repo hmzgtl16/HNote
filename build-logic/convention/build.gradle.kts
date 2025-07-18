@@ -19,12 +19,12 @@ kotlin {
 
 dependencies {
     compileOnly(libs.androidx.room.gradle.plugin)
-    compileOnly(libs.com.android.compose.screenshot.gradle.plugin)
     compileOnly(libs.com.android.tools.build.gradle.plugin)
     compileOnly(libs.com.android.tools.common)
     compileOnly(libs.com.google.devtools.ksp.gradle.plugin)
-    compileOnly(libs.org.jetbrains.kotlin.gradle.plugin)
     compileOnly(libs.dev.iurysouza.modulegraph.gradle.plugin)
+    compileOnly(libs.io.github.takahirom.roborazzi.gradle.plugin)
+    compileOnly(libs.org.jetbrains.kotlin.gradle.plugin)
 }
 
 tasks {
@@ -72,9 +72,13 @@ gradlePlugin {
             id = libs.plugins.hnotes.jvm.library.get().pluginId
             implementationClass = "JvmLibraryConventionPlugin"
         }
-        register("kotlin") {
+        register("moduleGraph") {
             id = libs.plugins.hnotes.module.graph.get().pluginId
             implementationClass = "ModuleGraphConventionPlugin"
+        }
+        register("screenshotTest") {
+            id = libs.plugins.hnotes.screenshot.test.get().pluginId
+            implementationClass = "ScreenshotTestConventionPlugin"
         }
     }
 }
