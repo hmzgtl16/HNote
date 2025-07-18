@@ -13,12 +13,10 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             apply(plugin = libs.findPlugin("hnotes-android-library").get().get().pluginId)
             apply(plugin = libs.findPlugin("hnotes-hilt").get().get().pluginId)
             apply(plugin = libs.findPlugin("hnotes-module-graph").get().get().pluginId)
-            apply(plugin = libs.findPlugin("com-android-compose-screenshot").get().get().pluginId)
 
             extensions.configure<LibraryExtension> {
                 testOptions.animationsDisabled = true
                 configureGradleManagedDevices(this)
-                experimentalProperties["android.experimental.enableScreenshotTest"] = true
             }
 
             dependencies {
@@ -46,13 +44,14 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                     "implementation",
                     libs.findLibrary("androidx-lifecycle-viewmodel-compose").get()
                 )
+
                 add(
-                    "screenshotTestImplementation",
-                    libs.findLibrary("com-android-tools-screenshot-validation-api").get()
+                    "testImplementation",
+                    libs.findLibrary("androidx-navigation-testing").get()
                 )
                 add(
-                    "screenshotTestImplementation",
-                    libs.findLibrary("androidx-compose-ui-tooling").get()
+                    "androidTestImplementation",
+                    libs.findLibrary("androidx-lifecycle-runtime-testing").get()
                 )
             }
         }
