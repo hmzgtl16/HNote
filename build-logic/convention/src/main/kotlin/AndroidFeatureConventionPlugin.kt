@@ -51,6 +51,14 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 )
                 add(
                     "androidTestImplementation",
+                    libs.findLibrary("androidx-compose-ui-test").get()
+                )
+                add(
+                    "androidTestImplementation",
+                    libs.findLibrary("androidx-compose-ui-test-manifest").get()
+                )
+                add(
+                    "androidTestImplementation",
                     libs.findLibrary("androidx-lifecycle-runtime-testing").get()
                 )
             }
