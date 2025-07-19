@@ -139,4 +139,3 @@ hnotes-android-test = { id = "hnotes.android.test" }
 hnotes-hilt = { id = "hnotes.hilt" }
 hnotes-jvm-library = { id = "hnotes.jvm.library" }
 hnotes-module-graph = { id = "hnotes.module.graph" }
-hnotes-screenshot-test = { id = "hnotes.screenshot.test" }
