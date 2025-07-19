@@ -36,7 +36,7 @@ dependency and plugin version management.
 
 1. **Clone the repository:**
    ```sh
-   git clone <repository-url>
+   git clone https://github.com/hmzgtl16/HNote.git
    cd HNotes
    ```
 2. **Open in Android Studio** (recommended) or use the command line.
