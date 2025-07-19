@@ -1,4 +1,4 @@
-# HNote
+# HNotes
 
 HNote is a modular Android application designed for note-taking, reminders, and productivity
 enhancements. The project leverages a modern multi-module architecture, utilizing Gradle convention
@@ -37,7 +37,7 @@ dependency and plugin version management.
 1. **Clone the repository:**
    ```sh
    git clone <repository-url>
-   cd HNote
+   cd HNotes
    ```
 2. **Open in Android Studio** (recommended) or use the command line.
 3. **Build the project:**
