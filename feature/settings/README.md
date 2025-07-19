@@ -29,7 +29,6 @@ class :core:ui unknown
 class :core:navigation unknown
 
 ```
-
 ---
 
 ##
@@ -40,12 +39,6 @@ allowing users to customize their app experience and manage various preferences.
 ## Features
 
 - Theme selection (Light/Dark/System)
-- Note display preferences
-- Backup and restore options
-- App notification settings
-- Privacy and security settings
-- Data management options
-- App version information
 
 ## Dependencies
 
