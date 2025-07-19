@@ -10,21 +10,34 @@ class HiltConventionPlugin : Plugin<Project> {
             apply(plugin = libs.findPlugin("com-google-devtools-ksp").get().get().pluginId)
 
             dependencies {
-                add("ksp", libs.findLibrary("com-google-dagger-hilt-compiler").get())
+                add(
+                    "ksp",
+                    libs.findLibrary("com-google-dagger-hilt-compiler").get()
+                )
             }
 
             pluginManager.withPlugin(
                 libs.findPlugin("org-jetbrains-kotlin-jvm").get().get().pluginId
             ) {
                 dependencies {
-                    add("implementation", libs.findLibrary("com-google-dagger-hilt-core").get())
+                    add(
+                        "implementation",
+                        libs.findLibrary("com-google-dagger-hilt-core").get()
+                    )
                 }
             }
 
             pluginManager.withPlugin(libs.findPlugin("com-android-base").get().get().pluginId) {
                 apply(plugin = libs.findPlugin("com-google-dagger-hilt").get().get().pluginId)
                 dependencies {
-                    add("implementation", libs.findLibrary("com-google-dagger-hilt-android").get())
+                    add(
+                        "implementation",
+                        libs.findLibrary("com-google-dagger-hilt-android").get()
+                    )
+                    add(
+                        "testImplementation",
+                        libs.findLibrary("com-google-dagger-hilt-android-testing").get()
+                    )
                 }
             }
         }
