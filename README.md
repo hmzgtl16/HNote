@@ -47,7 +47,17 @@ dependency and plugin version management.
 
 ---
 
+## Screenshots
+
+Here are the main screens of the HNotes application:
+
+| Splash Screen                                            | Home                                                 | Search                                                   | Settings                                                     |
+|----------------------------------------------------------|------------------------------------------------------|----------------------------------------------------------|--------------------------------------------------------------|
+| ![Splash Screen](assets/screenshots/Splash%20Screen.png) | ![Home Screen](assets/screenshots/Home%20Screen.png) | ![Search Screen](assets/screenshots/Search%20Screen.png) | ![Settings Screen](assets/screenshots/Settings%20Dialog.png) |
+
+Each screen is designed following Material Design guidelines and provides a cohesive user experience
+throughout the application.
+
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE.md) file for details.
-
