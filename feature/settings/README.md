@@ -29,3 +29,31 @@ class :core:ui unknown
 class :core:navigation unknown
 
 ```
+
+---
+
+##
+
+This module implements the settings and configuration functionality for the HNotes application,
+allowing users to customize their app experience and manage various preferences.
+
+## Features
+
+- Theme selection (Light/Dark/System)
+- Note display preferences
+- Backup and restore options
+- App notification settings
+- Privacy and security settings
+- Data management options
+- App version information
+
+## Dependencies
+
+## Screenshots
+
+![Settings Interface](../../assets/screenshots/Settings%20Dialog.png)
+
+The settings module provides a user-friendly interface for configuring app preferences. It uses
+Material Design components to present settings in an organized, easy-to-navigate format. Users can
+customize their experience through various options while maintaining a clean and intuitive
+interface.
